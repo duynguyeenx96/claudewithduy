@@ -1,0 +1,8 @@
+{
+  "name": "ref-catalog",
+  "version": "1.0.0",
+  "description": "Catalog tài nguyên, đối chiếu video tham khảo và kế hoạch remake.",
+  "author": { "name": "Kệ Module" },
+  "homepage": "https://github.com/duynguyeenx96/ke-module/tree/main/plugins/ref-catalog",
+  "repository": "https://github.com/duynguyeenx96/ke-module"
+}

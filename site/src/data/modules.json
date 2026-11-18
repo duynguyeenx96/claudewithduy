@@ -1,0 +1,338 @@
+{
+  "site": {
+    "github": "duynguyeenx96/ke-module",
+    "marketplace": "ke-module",
+    "social": {
+      "tiktok": "",
+      "facebook": "",
+      "youtube": ""
+    }
+  },
+  "flow": [
+    "Footage thô",
+    "Chuẩn hoá giọng",
+    "Xoá logo Gemini",
+    "Dựng video",
+    "Hiệu ứng",
+    "Video xong"
+  ],
+  "modules": [
+    {
+      "id": "ref-catalog",
+      "name": "Nguồn tham khảo và catalog",
+      "desc": "Soạn catalog tài nguyên đang có, tải video tham khảo, rồi đối chiếu có, gần giống, thiếu và lập kế hoạch remake. Dùng cho mọi ngách.",
+      "chips": [
+        "Catalog tài nguyên",
+        "Đối chiếu",
+        "Kế hoạch remake"
+      ],
+      "video": {
+        "before": "",
+        "after": ""
+      },
+      "status": "ready",
+      "skill": {
+        "req": [
+          "Claude Code",
+          "Python 3",
+          "FFmpeg",
+          "yt-dlp"
+        ],
+        "cmd": "/ref-catalog:ref-catalog add <link video>",
+        "plugin": "ref-catalog",
+        "note": "Tuỳ chọn: whisper-cli + model ggml để nghe tiếng. Dữ liệu nằm hết trong thư mục workspace của bạn."
+      }
+    },
+    {
+      "id": "fx-pack",
+      "name": "FX Pack",
+      "desc": "59 hiệu ứng gắn lên video người nói. Tự bám theo mặt, chữ và ảnh chui được ra sau đầu.",
+      "chips": [
+        "59 hiệu ứng",
+        "Bám theo mặt",
+        "Sau đầu"
+      ],
+      "video": {
+        "before": "videos/modules/fx-pack-before.mp4",
+        "after": "videos/modules/fx-pack-after.mp4"
+      },
+      "status": "ready",
+      "skill": {
+        "req": [
+          "Claude Code",
+          "Python 3.12",
+          "FFmpeg"
+        ],
+        "cmd": "/fx-pack:effects video.mp4",
+        "plugin": "fx-pack",
+        "note": "Gốc từ claude-video-effects (MIT, Vibha Ramprakash), thêm 8 hiệu ứng riêng. Giữ file LICENSE khi chia sẻ lại."
+      }
+    },
+    {
+      "id": "chuan-hoa-giong",
+      "name": "Chuẩn hoá giọng",
+      "desc": "Kéo thả clip nói bị bé, nâng về -16 LUFS không vỡ tiếng, hình giữ nguyên.",
+      "chips": [
+        "-16 LUFS",
+        "Đo 2 lượt",
+        "Giữ nguyên hình"
+      ],
+      "video": {
+        "before": "videos/modules/chuan-hoa-giong-before.mp4",
+        "after": "videos/modules/chuan-hoa-giong-after.mp4"
+      },
+      "status": "ready",
+      "tool": {
+        "line": "Kéo thả video vào trình duyệt, nhận file đã chuẩn hoá về -16 LUFS.",
+        "req": [
+          "Python",
+          "FFmpeg"
+        ],
+        "zip": "chuan-hoa-giong"
+      }
+    },
+    {
+      "id": "xoa-logo-gemini",
+      "name": "Xoá logo Gemini",
+      "desc": "Kéo thả ảnh hoặc video có dấu sao Gemini/Veo, xoá ngay trên máy.",
+      "chips": [
+        "Kéo thả",
+        "Ảnh và video",
+        "Chạy local"
+      ],
+      "video": {
+        "before": "",
+        "after": ""
+      },
+      "status": "ready",
+      "tool": {
+        "line": "Kéo thả ảnh hoặc video vào trình duyệt. Chỉ xoá dấu sao nhìn thấy được, không thấy thì giữ nguyên.",
+        "req": [
+          "Python",
+          "Node.js"
+        ],
+        "zip": "xoa-logo-gemini"
+      }
+    },
+    {
+      "id": "capcut-auto-edit",
+      "name": "CapCut Auto-Edit",
+      "desc": "Đọc project CapCut, nghe lời thoại, thêm text theo lời nói và vài SFX, chỉ dùng hiệu ứng miễn phí.",
+      "chips": [
+        "Project CapCut",
+        "Text và SFX",
+        "Hiệu ứng miễn phí"
+      ],
+      "video": {
+        "before": "",
+        "after": ""
+      },
+      "status": "ready",
+      "skill": {
+        "req": [
+          "Claude Code",
+          "CapCut"
+        ],
+        "cmd": "/capcut-edit:capcut-edit <tên project>",
+        "plugin": "capcut-edit",
+        "note": "Chỉ macOS: CapCut lưu project ở đường dẫn riêng của macOS.",
+        "only": "macos"
+      }
+    },
+    {
+      "id": "tool-video",
+      "name": "Tool Video",
+      "desc": "Dựng short 9:16 giới thiệu hoặc review một phần mềm từ A-roll người nói và tư liệu thật, có 12 concept hình ảnh để mỗi video một kiểu.",
+      "chips": [
+        "9:16",
+        "12 concept",
+        "Review phần mềm"
+      ],
+      "video": {
+        "before": "videos/modules/tool-video-before.mp4",
+        "after": "videos/modules/tool-video-after.mp4"
+      },
+      "status": "soon",
+      "skill": {
+        "req": [
+          "Claude Code",
+          "HyperFrames",
+          "FFmpeg"
+        ],
+        "cmd": "/tool-video aroll.mp4 --tool \"Tên tool\""
+      },
+      "tool": {
+        "line": "Mở Content Creator Studio trên trình duyệt, chọn A-roll và tư liệu rồi dựng video.",
+        "req": [
+          "Python",
+          "HyperFrames",
+          "FFmpeg"
+        ]
+      }
+    },
+    {
+      "id": "ugc-video",
+      "name": "UGC Video",
+      "desc": "Dựng video UGC review 9:16 từ footage và kịch bản. Footage giữ nguyên, chữ và đồ hoạ canh theo lời nói, có 5 style.",
+      "chips": [
+        "Footage + kịch bản",
+        "Chữ canh theo lời",
+        "5 style"
+      ],
+      "video": {
+        "before": "videos/modules/ugc-video-before.mp4",
+        "after": "videos/modules/ugc-video-after.mp4"
+      },
+      "status": "soon",
+      "skill": {
+        "req": [
+          "Claude Code",
+          "HyperFrames",
+          "FFmpeg",
+          "Google Sheet"
+        ],
+        "cmd": "/ugc-video SP8-1"
+      }
+    },
+    {
+      "id": "video-aff-tool",
+      "name": "Video Aff Tool",
+      "desc": "Làm video quảng cáo sản phẩm aff: AI cắt và lên kịch bản từ loạt video, thu thoại, tạo clip bằng Google Flow, chạy Facebook Ads.",
+      "chips": [
+        "Kịch bản AI",
+        "Google Flow",
+        "Facebook Ads"
+      ],
+      "video": {
+        "before": "videos/modules/video-aff-tool-before.mp4",
+        "after": "videos/modules/video-aff-tool-after.mp4"
+      },
+      "status": "soon",
+      "tool": {
+        "line": "Đưa loạt video sản phẩm vào trình duyệt, AI cắt và lên kịch bản.",
+        "req": [
+          "Python",
+          "Node.js",
+          "FFmpeg"
+        ]
+      }
+    },
+    {
+      "id": "meme-studio",
+      "name": "Meme Studio",
+      "desc": "Làm kênh cat-meme: phân tích reel nguồn, viết kịch bản và ghép meme thành video.",
+      "chips": [
+        "Reel nguồn",
+        "Kịch bản",
+        "Cat-meme"
+      ],
+      "video": {
+        "before": "",
+        "after": ""
+      },
+      "status": "soon",
+      "skill": {
+        "req": [
+          "Claude Code",
+          "FFmpeg",
+          "Google Sheet"
+        ],
+        "cmd": "/meme-ref <link reel>"
+      },
+      "tool": {
+        "line": "Mở Meme Studio trên trình duyệt: kịch bản, tạo video và phân tích reel nguồn.",
+        "req": [
+          "Python",
+          "HyperFrames"
+        ]
+      }
+    }
+  ],
+  "topics": [
+    "Bất động sản",
+    "Talking-head",
+    "UGC",
+    "Giáo dục",
+    "Giới thiệu phần mềm"
+  ],
+  "templates": [
+    {
+      "topic": "Bất động sản",
+      "name": "Giới thiệu căn hộ",
+      "video": "videos/gioi-thieu-can-ho.mp4",
+      "href": ""
+    },
+    {
+      "topic": "Bất động sản",
+      "name": "Tour nhà mẫu",
+      "video": "videos/tour-nha-mau.mp4",
+      "href": ""
+    },
+    {
+      "topic": "Bất động sản",
+      "name": "Tin dự án mới",
+      "video": "videos/tin-du-an-moi.mp4",
+      "href": ""
+    },
+    {
+      "topic": "Talking-head",
+      "name": "Tiêu đề động",
+      "video": "videos/tieu-de-dong.mp4",
+      "href": ""
+    },
+    {
+      "topic": "Talking-head",
+      "name": "Lower-third và số liệu",
+      "video": "videos/lower-third-va-so-lieu.mp4",
+      "href": ""
+    },
+    {
+      "topic": "Talking-head",
+      "name": "Trích dẫn nổi bật",
+      "video": "videos/trich-dan-noi-bat.mp4",
+      "href": ""
+    },
+    {
+      "topic": "UGC",
+      "name": "Đánh giá sản phẩm",
+      "video": "videos/danh-gia-san-pham.mp4",
+      "href": ""
+    },
+    {
+      "topic": "UGC",
+      "name": "Mở hộp",
+      "video": "videos/mo-hop.mp4",
+      "href": ""
+    },
+    {
+      "topic": "UGC",
+      "name": "Trước và sau",
+      "video": "videos/truoc-va-sau.mp4",
+      "href": ""
+    },
+    {
+      "topic": "Giáo dục",
+      "name": "Giải thích 3 ý",
+      "video": "videos/giai-thich-3-y.mp4",
+      "href": ""
+    },
+    {
+      "topic": "Giáo dục",
+      "name": "Hướng dẫn từng bước",
+      "video": "videos/huong-dan-tung-buoc.mp4",
+      "href": ""
+    },
+    {
+      "topic": "Giới thiệu phần mềm",
+      "name": "Terminal",
+      "video": "videos/terminal.mp4",
+      "href": ""
+    },
+    {
+      "topic": "Giới thiệu phần mềm",
+      "name": "Split màn hình",
+      "video": "videos/split-man-hinh.mp4",
+      "href": ""
+    }
+  ]
+}

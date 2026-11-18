@@ -1,0 +1,17 @@
+---
+import { u } from '../lib';
+interface Props { before?: string; after?: string; minH?: number }
+const { before, after, minH = 320 } = Astro.props;
+---
+{(before || after) && (
+  <div data-demo style={`display:grid;grid-template-columns:1fr 1fr;gap:8px`}>
+    <div class="vframe" style={`min-height:${minH}px`}>
+      {before && <video src={u(before)} muted loop playsinline preload="metadata"></video>}
+      <span class="tag">TRƯỚC</span>
+    </div>
+    <div class="vframe dark" style={`min-height:${minH}px`}>
+      {after && <video src={u(after)} muted loop playsinline preload="metadata"></video>}
+      <span class="tag">SAU</span>
+    </div>
+  </div>
+)}

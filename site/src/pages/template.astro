@@ -1,0 +1,63 @@
+---
+import Base from '../layouts/Base.astro';
+import { topics, templates, u, pad } from '../lib';
+const counts = Object.fromEntries(topics.map(t => [t, templates.filter(x => x.topic === t).length]));
+---
+<Base title="Template theo chủ đề: Kệ Module" description="Mẫu video 9:16 theo chủ đề: bất động sản, talking-head, UGC, giáo dục, giới thiệu phần mềm." current="template" image="og.jpg">
+  <div class="wrap" style="padding-top:72px;padding-bottom:24px">
+    <div class="label" style="margin-bottom:16px">Template</div>
+    <h1 class="h1" style="font-size:clamp(36px,5vw,60px);margin:0">Template theo chủ đề</h1>
+  </div>
+  <div class="wrap layout">
+    <aside>
+      <div class="label" style="font-size:11px;padding:16px 0 8px">Chủ đề</div>
+      <button type="button" class="t on" data-t="all"><span>Tất cả</span><span class="n">{pad(templates.length)}</span></button>
+      {topics.map(t => <button type="button" class="t" data-t={t}><span>{t}</span><span class="n">{pad(counts[t])}</span></button>)}
+    </aside>
+    <div style="flex:1 1 320px;min-width:0">
+      <div class="bar"><h2 id="tt">Tất cả template</h2><span class="label" id="tn">{templates.length} template</span></div>
+      <div class="grid">
+        {templates.map(c => (
+          <article data-topic={c.topic}>
+            <div class="vframe card" data-demo>
+              {c.video && <video src={u(c.video)} muted loop playsinline preload="metadata"></video>}
+              <span class="tag">9:16</span>
+            </div>
+            <div class="label" style="font-size:11px">{c.topic}</div>
+            <h3>{c.name}</h3>
+            {c.href && <a class="btn sm" href={c.href} target="_blank" rel="noopener" style="align-self:flex-start">Mở thư mục</a>}
+          </article>
+        ))}
+      </div>
+    </div>
+  </div>
+  <script>
+    const btns = document.querySelectorAll<HTMLButtonElement>('.t');
+    const cards = document.querySelectorAll<HTMLElement>('article[data-topic]');
+    function pick(t: string) {
+      let n = 0;
+      cards.forEach(c => { const ok = t === 'all' || c.dataset.topic === t; c.hidden = !ok; if (ok) n++; });
+      btns.forEach(b => b.classList.toggle('on', b.dataset.t === t));
+      document.getElementById('tt')!.textContent = t === 'all' ? 'Tất cả template' : t;
+      document.getElementById('tn')!.textContent = n + ' template';
+    }
+    btns.forEach(b => b.addEventListener('click', () => { pick(b.dataset.t!); try { history.replaceState(null, '', b.dataset.t === 'all' ? location.pathname : '?topic=' + encodeURIComponent(b.dataset.t!)); } catch {} }));
+    const q = new URLSearchParams(location.search).get('topic');
+    if (q && [...btns].some(b => b.dataset.t === q)) pick(q);
+  </script>
+  <style>
+    .layout{padding-top:32px;padding-bottom:112px;display:flex;flex-wrap:wrap;gap:40px 56px;align-items:flex-start}
+    aside{flex:0 0 220px;position:sticky;top:90px;border-top:1px solid var(--ink);min-width:min(220px,100%)}
+    @media (max-width:700px){aside{position:static;flex-basis:100%}}
+    .t{all:unset;box-sizing:border-box;width:100%;cursor:pointer;display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:16px}
+    .t .n{font-family:var(--mono);font-size:12px;color:var(--mute)}
+    .t.on,.t.on .n{color:var(--accent);font-weight:600}
+    .t:focus-visible{outline:2px solid var(--accent)}
+    .bar{display:flex;justify-content:space-between;align-items:baseline;gap:12px;border-top:1px solid var(--ink);padding:16px 0 24px;flex-wrap:wrap}
+    .bar h2{font-family:var(--serif);font-weight:600;font-size:26px;margin:0}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(190px,100%),1fr));gap:32px 20px}
+    article{display:flex;flex-direction:column;gap:12px}
+    .card{aspect-ratio:9/16;border-radius:4px}
+    article h3{font-family:var(--serif);font-weight:600;font-size:20px;line-height:1.2;margin:-6px 0 0}
+  </style>
+</Base>

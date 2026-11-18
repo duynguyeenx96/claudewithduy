@@ -1,0 +1,17 @@
+# Kiểm tra site build được và manifest plugin hợp lệ trên mỗi lần push.
+# Deploy: nối repo với Cloudflare Pages (root: site, build: npm ci && npm run build, output: dist).
+name: site-check
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: site } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm, cache-dependency-path: site/package-lock.json }
+      - run: npm ci
+      - run: npm run build
+      - name: JSON manifests parse
+        working-directory: .
+        run: for f in .claude-plugin/marketplace.json plugins/*/.claude-plugin/plugin.json site/src/data/modules.json; do python3 -m json.tool "$f" >/dev/null && echo "ok $f"; done

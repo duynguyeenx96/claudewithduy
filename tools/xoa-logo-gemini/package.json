@@ -1,0 +1,11 @@
+{
+  "name": "xoa-logo-gemini",
+  "private": true,
+  "description": "Xoá dấu sao Gemini/Veo nhìn thấy được trên clip Google Flow (chạy cục bộ). Bản đã audit: commit ddd67a7, npm 1.0.46.",
+  "type": "module",
+  "dependencies": {
+    "@pilio/gemini-watermark-remover": "1.0.46",
+    "playwright": "1.63.0",
+    "sharp": "0.35.5"
+  }
+}

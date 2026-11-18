@@ -1,0 +1,95 @@
+{
+  "name": "Kho nguồn tham khảo của tôi",
+  "niche": "Mô tả ngắn ngách / kênh của bạn (Claude đọc dòng này để đánh giá reel hợp hay không)",
+  "sources": {
+    "cookies_browser": "chrome",
+    "note": "Reel giới hạn thì yt-dlp dùng phiên đăng nhập của trình duyệt này. Bỏ trống nếu không muốn."
+  },
+  "transcribe": {
+    "engine": "whisper-cli",
+    "model": "~/.cache/hyperframes/whisper/models/ggml-medium.bin",
+    "language": "vi",
+    "note": "engine: whisper-cli (whisper.cpp) | none. Không có model thì đặt none, Claude vẫn phân tích bằng khung hình."
+  },
+  "library": {
+    "dir": "library",
+    "extensions": [
+      ".mp4",
+      ".mov",
+      ".webm",
+      ".png",
+      ".jpg",
+      ".jpeg"
+    ],
+    "match_labels": [
+      "có",
+      "gần giống",
+      "thiếu"
+    ],
+    "note": "Bản đồ tài nguyên bạn đang có (clip, ảnh nền, nhạc, template…). Soạn TRƯỚC khi phân tích nguồn: chạy 'library', xem lưới, 'lib-set' mô tả + tag. match_labels theo thứ tự: [khớp đúng, thay được, thiếu]."
+  },
+  "analysis": {
+    "fields": [
+      {
+        "key": "summary",
+        "label": "Tóm tắt",
+        "type": "text",
+        "hint": "2-3 câu: video này là gì, kể gì"
+      },
+      {
+        "key": "hook",
+        "label": "Hook",
+        "type": "text",
+        "hint": "nguyên văn câu/hình mở đầu 3 giây đầu"
+      },
+      {
+        "key": "format",
+        "label": "Định dạng",
+        "type": "text",
+        "hint": "số cảnh, bố cục, nền, kiểu dựng"
+      },
+      {
+        "key": "script",
+        "label": "Kịch bản nguồn",
+        "type": "list",
+        "hint": "danh sách cảnh: {t, visual, text, speech}"
+      },
+      {
+        "key": "audio",
+        "label": "Âm thanh",
+        "type": "text",
+        "hint": "nhạc/tiếng gốc/lồng tiếng/TTS, cách lấy lại"
+      },
+      {
+        "key": "matches",
+        "label": "Đối chiếu kho",
+        "type": "list",
+        "hint": "mỗi thành phần của nguồn: {desc, time, match (id trong library.json, null nếu thiếu), status}; status theo library.match_labels"
+      },
+      {
+        "key": "resources",
+        "label": "Nguồn lực",
+        "type": "text",
+        "hint": "đã có gì, còn thiếu gì để làm lại"
+      },
+      {
+        "key": "why_works",
+        "label": "Vì sao ăn",
+        "type": "text",
+        "hint": "đối chiếu với niche ở trên"
+      },
+      {
+        "key": "remake",
+        "label": "Đề xuất làm lại",
+        "type": "text",
+        "hint": "giữ/đổi gì cho kênh của bạn, độ khó"
+      },
+      {
+        "key": "remake_plan",
+        "label": "Kế hoạch remake",
+        "type": "list",
+        "hint": "theo cảnh: {scene, t, use (id trong catalog hoặc null), gap (thiếu gì nếu use null), note}"
+      }
+    ]
+  }
+}

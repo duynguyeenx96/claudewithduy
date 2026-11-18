@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Xoá logo Gemini</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#f2f0e9; --panel:#fbfaf6; --panel2:#f6f4ed; --line:#e3e0d6; --line2:#cfcbbf; --text:#1a1a18; --mute:#76736a;
+    --acc:#3df0b4; --acc-ink:#0b8a5f; --soft:#e9f8f1; --err:#d4380d; --warn:#c77700; color-scheme: light; }
+  html, body { margin:0; background:var(--bg); color:var(--text); font:13px/1.5 "Be Vietnam Pro", system-ui, sans-serif; }
+  button { font:inherit; color:inherit; cursor:pointer; }
+  header { position:sticky; top:0; z-index:5; background:var(--panel); border-bottom:1px solid var(--line);
+    display:flex; align-items:center; gap:12px; padding:10px 16px; }
+  .brand { font-weight:700; font-size:14px; }
+  .sub { color:var(--mute); flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .btn { border:1px solid var(--line2); background:var(--panel); border-radius:7px; padding:5px 11px; }
+  .btn:hover { background:var(--panel2); }
+  .btn.pri { background:var(--text); color:#fff; border-color:var(--text); }
+  main { max-width:1100px; margin:0 auto; padding:16px; }
+  #drop { border:1.5px dashed var(--line2); border-radius:12px; background:var(--panel); padding:28px 16px; text-align:center; color:var(--mute); }
+  #drop.over { border-color:var(--acc-ink); background:var(--soft); color:var(--acc-ink); }
+  #drop b { color:var(--text); font-size:14px; display:block; margin-bottom:4px; }
+  #list { display:grid; gap:12px; margin-top:16px; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:10px 12px; }
+  .top { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .name { font-weight:600; flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .st { font-size:12px; padding:2px 8px; border-radius:20px; background:var(--panel2); color:var(--mute); }
+  .st.ok { background:var(--soft); color:var(--acc-ink); }
+  .st.skip { background:#fbf1de; color:var(--warn); }
+  .st.err { background:#fbe6df; color:var(--err); }
+  .pair { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px; }
+  .pair figure { margin:0; }
+  .pair figcaption { font-size:11px; color:var(--mute); margin-bottom:4px; }
+  .pair img, .pair video { width:100%; max-height:60vh; object-fit:contain; background:var(--panel2); border:1px solid var(--line); border-radius:6px; display:block; }
+  .zoom { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px; }
+  .zoom div { height:150px; border:1px solid var(--line); border-radius:6px; background-repeat:no-repeat; background-position:100% 100%; background-color:var(--panel2); }
+  .note { color:var(--mute); font-size:12px; margin-top:6px; }
+  @media (max-width:640px) { .pair, .zoom { grid-template-columns:1fr; } .sub { display:none; } }
+</style>
+</head>
+<body>
+<header>
+  <span class="brand">Xoá logo Gemini</span>
+  <span class="sub">Xoá dấu sao Gemini / Veo, chạy cục bộ bằng gwr. Ảnh vài giây, video 20–40 giây.</span>
+  <button class="btn" id="reveal">Mở thư mục kết quả</button>
+</header>
+<main>
+  <div id="drop">
+    <b>Kéo thả ảnh vào đây, hoặc dán (Cmd+V)</b>
+    png, jpg, webp, nhiều file một lúc. Video mp4 / mov cũng được.
+    <div style="margin-top:12px"><button class="btn pri" id="pick">Chọn file</button></div>
+    <input type="file" id="file" multiple accept="image/png,image/jpeg,image/webp,video/mp4,video/quicktime,video/webm" hidden>
+  </div>
+  <div id="list"></div>
+</main>
+<script>
+const $ = s => document.querySelector(s);
+const list = $("#list"), drop = $("#drop");
+const isVid = n => /\.(mp4|mov|webm|m4v)$/i.test(n);
+let queue = Promise.resolve();
+
+function esc(s) { return s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+
+function add(file) {
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML = `<div class="top"><span class="name">${esc(file.name)}</span><span class="st">Đang chờ</span></div>`;
+  list.prepend(card);
+  queue = queue.then(() => run(file, card));
+}
+
+async function run(file, card) {
+  const st = card.querySelector(".st");
+  st.textContent = "Đang xoá…";
+  try {
+    const r = await fetch("/api/remove?name=" + encodeURIComponent(file.name), { method: "POST", body: file });
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.error || r.status);
+    st.className = "st " + (j.applied ? "ok" : "skip");
+    st.textContent = j.applied ? "Đã xoá" : "Không đổi";
+    const o = "/out/" + encodeURIComponent(j.out), i = "/in/" + encodeURIComponent(j.src), v = Date.now();
+    const tag = isVid(j.out) ? (s => `<video src="${s}" controls muted playsinline></video>`) : (s => `<img src="${s}?v=${v}" alt="">`);
+    card.querySelector(".top").insertAdjacentHTML("beforeend", `<a class="btn pri" href="${o}?dl=1" download>Tải về</a>`);
+    card.insertAdjacentHTML("beforeend",
+      `<div class="pair"><figure><figcaption>Gốc</figcaption>${tag(i)}</figure><figure><figcaption>Sau khi xoá</figcaption>${tag(o)}</figure></div>` +
+      (isVid(j.out) ? "" : `<div class="zoom" title="Phóng góc dưới phải"><div style="background-image:url('${i}?v=${v}')"></div><div style="background-image:url('${o}?v=${v}')"></div></div>`) +
+      `<div class="note">${esc(j.note || "Lưu tại watermark-tool/output/" + j.out + " (tự xoá sau 7 ngày)")}</div>`);
+  } catch (e) {
+    st.className = "st err";
+    st.textContent = "Lỗi";
+    card.insertAdjacentHTML("beforeend", `<div class="note">${esc(String(e.message || e))}</div>`);
+  }
+}
+
+function take(files) { [...files].forEach(add); }
+$("#pick").onclick = () => $("#file").click();
+$("#file").onchange = e => { take(e.target.files); e.target.value = ""; };
+$("#reveal").onclick = () => fetch("/api/reveal", { method: "POST" });
+["dragenter", "dragover"].forEach(t => document.addEventListener(t, e => { e.preventDefault(); drop.classList.add("over"); }));
+["dragleave", "drop"].forEach(t => document.addEventListener(t, e => { e.preventDefault(); if (t === "drop" || !e.relatedTarget) drop.classList.remove("over"); }));
+document.addEventListener("drop", e => take(e.dataTransfer.files));
+document.addEventListener("paste", e => {
+  const fs = [...e.clipboardData.items].filter(x => x.kind === "file").map(x => x.getAsFile()).filter(Boolean)
+    .map((f, k) => f.name && f.name !== "image.png" ? f : new File([f], `paste-${Date.now()}-${k}.png`, { type: f.type }));
+  take(fs);
+});
+</script>
+</body>
+</html>

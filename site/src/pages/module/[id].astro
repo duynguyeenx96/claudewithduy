@@ -1,0 +1,72 @@
+---
+import Base from '../../layouts/Base.astro';
+import Blocks from '../../components/Blocks.astro';
+import BeforeAfter from '../../components/BeforeAfter.astro';
+import Cmd from '../../components/Cmd.astro';
+import { modules, u, marketplaceAdd, pluginInstall, type Mod } from '../../lib';
+
+export function getStaticPaths() {
+  return modules.map(m => ({ params: { id: m.id }, props: { m } }));
+}
+const { m } = Astro.props as { m: Mod };
+const i = modules.indexOf(m);
+const prev = modules[(i - 1 + modules.length) % modules.length];
+const next = modules[(i + 1) % modules.length];
+const ready = m.status === 'ready';
+---
+<Base title={`${m.name}: Kệ Module`} description={m.desc} current="module">
+  <article class="wrap" style="padding-top:64px;padding-bottom:96px">
+    <a class="label" href={u('#module')}>← Tất cả module</a>
+    <div class="head">
+      <div>
+        <h1 class="h1" style="font-size:clamp(36px,5vw,60px);margin:24px 0 20px">{m.name}</h1>
+        <p class="lead" style="margin:0 0 24px">{m.desc}</p>
+        <div class="chips">{m.chips.map(c => <span class="chip">{c}</span>)}{!ready && <span class="chip" style="border-color:var(--accent);color:var(--accent)">Sắp có</span>}</div>
+        <Blocks m={m} full />
+      </div>
+      <div>
+        {m.video.before || m.video.after
+          ? <BeforeAfter before={m.video.before} after={m.video.after} minH={420} />
+          : <div class="vframe" style="min-height:320px;display:flex;align-items:center;justify-content:center"><span class="label">Video demo đang làm</span></div>}
+      </div>
+    </div>
+
+    {ready && m.skill?.plugin && (
+      <section class="steps-sec">
+        <div class="label">Cài skill</div>
+        <ol>
+          <li><span>01</span><div>Mở Claude Code. Nếu chưa thêm kệ, chạy:<Cmd text={marketplaceAdd} /></div></li>
+          <li><span>02</span><div>Cài module:<Cmd text={pluginInstall(m.skill.plugin)} /></div></li>
+          <li><span>03</span><div>Gõ <code class="inl">{m.skill.cmd}</code> hoặc nói việc cần làm. Lần đầu Claude tự cài phần còn thiếu (FFmpeg, môi trường Python) nếu cần.</div></li>
+        </ol>
+      </section>
+    )}
+    {ready && m.tool?.zip && (
+      <section class="steps-sec">
+        <div class="label">Chạy tool</div>
+        <ol>
+          <li><span>01</span><div>Tải .zip ở trên, giải nén ra một thư mục.</div></li>
+          <li><span>02</span><div>Cài: {m.tool.req.join(', ')}.</div></li>
+          <li><span>03</span><div>macOS: bấm đúp <code class="inl">{m.tool.zip}.command</code> (lần đầu chuột phải, chọn Mở). Windows: bấm đúp <code class="inl">start.bat</code>. Linux: <code class="inl">bash start.sh</code>.</div></li>
+          <li><span>04</span><div>Trình duyệt mở ra, kéo thả file vào. Kết quả lưu trên máy, không tải lên đâu.</div></li>
+        </ol>
+      </section>
+    )}
+
+    <nav class="pn">
+      <a href={u(`module/${prev.id}/`)}><span class="label">← Trước</span>{prev.name}</a>
+      <a href={u(`module/${next.id}/`)} style="text-align:right"><span class="label">Tiếp →</span>{next.name}</a>
+    </nav>
+  </article>
+  <style>
+    .head{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr));gap:48px 64px;align-items:start}
+    .steps-sec{margin-top:72px;border-top:1px solid var(--ink);padding-top:20px;max-width:760px}
+    .steps-sec ol{list-style:none;margin:16px 0 0;padding:0}
+    .steps-sec li{display:grid;grid-template-columns:48px 1fr;padding:16px 0;border-bottom:1px solid var(--line);font-size:16px;line-height:1.6}
+    .steps-sec li>span{font-family:var(--mono);font-size:13px;color:var(--accent);padding-top:3px}
+    .steps-sec li>div{display:grid;gap:10px;min-width:0}
+    .inl{font-family:var(--mono);font-size:13px;color:var(--accent);background:var(--bg2);padding:1px 6px;border-radius:3px}
+    .pn{margin-top:96px;display:grid;grid-template-columns:1fr 1fr;gap:16px;border-top:1px solid var(--line);padding-top:24px}
+    .pn a{display:grid;gap:8px;font-family:var(--serif);font-size:22px}
+  </style>
+</Base>

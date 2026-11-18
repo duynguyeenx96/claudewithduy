@@ -1,0 +1,48 @@
+---
+import Cmd from './Cmd.astro';
+import { type Mod, pluginInstall, toolZip, sourceUrl } from '../lib';
+interface Props { m: Mod; full?: boolean }
+const { m, full = false } = Astro.props;
+const soon = m.status !== 'ready';
+const osName: Record<string, string> = { macos: 'macOS', windows: 'Windows', linux: 'Linux' };
+---
+<div class="blocks">
+  {m.skill && (
+    <div class="blk" data-kind="skill">
+      <div class="blk-head"><span>SKILL</span><span>Plugin cho Claude Code</span></div>
+      {soon ? <p class="blk-line">Đang tách khỏi hệ thống riêng để ai cũng cài được.</p> : (
+        <>
+          <Cmd text={pluginInstall(m.skill.plugin!)} />
+          {full && <p class="blk-line">Rồi gọi: <code class="inl">{m.skill.cmd}</code>, hoặc nói bằng lời, Claude tự nhận ra.</p>}
+        </>
+      )}
+      <div class="req"><span class="label" style="font-size:10px">Yêu cầu</span>{m.skill.req.map(r => <span class="chip sm">{r}</span>)}</div>
+      {m.skill.only && <p class="blk-note"><strong>Chỉ {osName[m.skill.only] ?? m.skill.only}.</strong></p>}
+      {full && m.skill.note && <p class="blk-note">{m.skill.note}</p>}
+    </div>
+  )}
+  {m.tool && (
+    <div class="blk" data-kind="tool">
+      <div class="blk-head"><span>TOOL</span><span>Kéo thả trên trình duyệt, chạy local</span></div>
+      <p class="blk-line">{m.tool.line}</p>
+      <div class="req"><span class="label" style="font-size:10px">Yêu cầu</span>{m.tool.req.map(r => <span class="chip sm">{r}</span>)}</div>
+      <div style="margin-top:auto">
+        {soon || !m.tool.zip
+          ? <span class="btn sm off">Sắp có</span>
+          : <a class="btn sm" href={toolZip(m.tool.zip)}>Tải tool (.zip)</a>}
+      </div>
+    </div>
+  )}
+</div>
+{full && !soon && <p style="margin:16px 0 0;font-size:14px"><a href={sourceUrl(m)} target="_blank" rel="noopener">Xem mã nguồn trên GitHub →</a></p>}
+
+<style>
+  .blocks{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin-top:24px}
+  .blk{border:1px solid var(--line2);border-radius:4px;padding:12px;display:flex;flex-direction:column;gap:10px;min-width:0}
+  .blk-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--mute)}
+  .blk-head span:first-child{color:var(--ink)}
+  .blk-line{margin:0;font-size:13px;line-height:1.5;text-wrap:pretty}
+  .blk-note{margin:0;font-size:12px;line-height:1.45;color:var(--ink2)}
+  .req{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+  .inl{font-family:var(--mono);font-size:12px;color:var(--accent);background:var(--bg2);padding:1px 5px;border-radius:3px}
+</style>

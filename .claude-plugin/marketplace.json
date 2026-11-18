@@ -1,0 +1,29 @@
+{
+  "name": "ke-module",
+  "owner": { "name": "Kệ Module", "url": "https://github.com/duynguyeenx96/ke-module" },
+  "description": "Các skill dựng video tách từ flow riêng: catalog nguồn tham khảo, hiệu ứng talking-head, auto-edit CapCut.",
+  "plugins": [
+    {
+      "name": "ref-catalog",
+      "source": "./plugins/ref-catalog",
+      "description": "Soạn catalog tài nguyên, tải video tham khảo, đối chiếu có / gần giống / thiếu và lập kế hoạch remake.",
+      "category": "video",
+      "keywords": ["video", "remake", "catalog", "yt-dlp"]
+    },
+    {
+      "name": "fx-pack",
+      "source": "./plugins/fx-pack",
+      "description": "59 hiệu ứng cho video người nói, bám theo mặt, chữ và ảnh chui ra sau đầu.",
+      "category": "video",
+      "license": "MIT",
+      "keywords": ["video", "effects", "talking-head", "ffmpeg"]
+    },
+    {
+      "name": "capcut-edit",
+      "source": "./plugins/capcut-edit",
+      "description": "Đọc project CapCut, nghe lời thoại, thêm text theo lời nói và vài SFX. Chỉ macOS.",
+      "category": "video",
+      "keywords": ["capcut", "video", "macos"]
+    }
+  ]
+}

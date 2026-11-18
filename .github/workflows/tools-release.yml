@@ -1,0 +1,26 @@
+# Đẩy tag dạng tools-v1.0.0 -> đóng gói từng thư mục trong tools/ thành <tên>.zip và đính vào GitHub Release.
+# Trang web trỏ tới releases/latest/download/<tên>.zip nên luôn lấy bản mới nhất.
+name: tools-release
+on:
+  push:
+    tags: ['tools-v*']
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Zip tools
+        run: |
+          mkdir -p dist
+          cd tools
+          for d in */; do
+            n="${d%/}"
+            zip -qr "../dist/$n.zip" "$n" -x "$n/node_modules/*" "$n/input/*" "$n/output/*" "*/.DS_Store" "*/__pycache__/*"
+          done
+          ls -la ../dist
+      - name: Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" dist/*.zip --title "$GITHUB_REF_NAME" --notes "Tool chạy local. macOS: bấm đúp .command, Windows: start.bat, Linux: bash start.sh."

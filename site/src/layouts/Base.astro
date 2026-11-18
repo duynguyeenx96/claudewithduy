@@ -1,0 +1,74 @@
+---
+import '../styles/global.css';
+import { u } from '../lib';
+interface Props { title: string; description: string; current?: 'module' | 'template' | 'install'; image?: string }
+const { title, description, current, image } = Astro.props;
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+const ogImage = image && Astro.site ? new URL(u(image), Astro.site).href : undefined;
+---
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  {canonical && <link rel="canonical" href={canonical} />}
+  {canonical && <meta property="og:url" content={canonical} />}
+  {ogImage && <meta property="og:image" content={ogImage} />}
+  <link rel="icon" href={u('favicon.svg')} type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Anton&family=Be+Vietnam+Pro:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap&subset=vietnamese" rel="stylesheet" />
+  <script is:inline>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <a class="brand" href={u('')}>KỆ MODULE</a>
+      <nav>
+        <a href={u('#module')} aria-current={current === 'module' ? 'page' : undefined}>Module</a>
+        <a href={u('template/')} aria-current={current === 'template' ? 'page' : undefined}>Template</a>
+        <a href={u('#cach-cai')} aria-current={current === 'install' ? 'page' : undefined}>Cách cài</a>
+        <a href={u('#faq')}>FAQ</a>
+        <a href={u('#lien-he')}>Liên hệ</a>
+      </nav>
+    </div>
+  </header>
+  <main><slot /></main>
+  <footer class="foot"><div class="wrap"><span>Kệ module / chạy local</span><slot name="foot" /></div></footer>
+  <script>
+    // Hiện dần khi cuộn tới
+    const els = document.querySelectorAll('[data-r]');
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: 0.08 });
+      els.forEach(e => io.observe(e));
+    } else els.forEach(e => e.classList.add('in'));
+    setTimeout(() => els.forEach(e => e.classList.add('in')), 4000);
+
+    // Video phát khi rê chuột (hoặc khi vào màn hình trên điện thoại)
+    const touch = matchMedia('(hover: none)').matches;
+    document.querySelectorAll<HTMLElement>('[data-demo]').forEach(box => {
+      const vids = () => box.querySelectorAll('video');
+      const play = () => vids().forEach(v => v.play().catch(() => {}));
+      const stop = () => vids().forEach(v => { v.pause(); v.currentTime = 0; });
+      if (touch && 'IntersectionObserver' in window) {
+        new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? play() : stop()), { threshold: 0.6 }).observe(box);
+      } else {
+        box.addEventListener('mouseenter', play);
+        box.addEventListener('mouseleave', stop);
+      }
+    });
+
+    // Nút chép lệnh
+    document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach(b => b.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(b.dataset.copy || ''); b.textContent = 'Đã chép'; }
+      catch { b.textContent = 'Chép tay nhé'; }
+      setTimeout(() => (b.textContent = 'Chép'), 1500);
+    }));
+  </script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+{
+  "style": {
+    "highlight": "#00E5FF",
+    "color": "#FFFFFF",
+    "size": 12,
+    "y": 0.55,
+    "in": "pop",
+    "in_dur": 0.3,
+    "out": "Blur Fade",
+    "out_dur": 0.25
+  },
+  "texts": [
+    {
+      "start": 0.2,
+      "end": 4.2,
+      "text": "Laptop chiếm hết\nDIỆN TÍCH BÀN?",
+      "hl": "DIỆN TÍCH BÀN?"
+    },
+    {
+      "start": 11.8,
+      "end": 14.6,
+      "text": "MacBook • Laptop gaming\n13\" | 15\" | 16\"",
+      "hl": "13\" | 15\" | 16\"",
+      "in": "Typewriter",
+      "in_dur": 0.45
+    },
+    {
+      "start": 49.65,
+      "end": 52.96,
+      "text": "BẤM GIỎ HÀNG GÓC TRÁI\nĐỂ CHỐT ĐƠN",
+      "hl": "BẤM GIỎ HÀNG GÓC TRÁI",
+      "y": 0.0,
+      "size": 13,
+      "out": "none"
+    }
+  ],
+  "sfx": [
+    {
+      "file": "UI Data Loading Sound Effect.mp3",
+      "start": 0.0,
+      "len": 1.2,
+      "off": 0.24,
+      "vol": 0.35,
+      "group": "accent"
+    },
+    {
+      "file": "whoosh_kopdinh.wav",
+      "start": 4.08,
+      "len": 0.6,
+      "off": 0.25,
+      "vol": 0.4,
+      "group": "whoosh"
+    },
+    {
+      "file": "mixkit-hard-pop-click-2364.wav",
+      "start": 0.6,
+      "len": 0.4,
+      "vol": 0.45,
+      "group": "pop"
+    },
+    {
+      "file": "keyboard press.mp3",
+      "start": 11.8,
+      "len": 0.39,
+      "vol": 0.5,
+      "group": "pop"
+    },
+    {
+      "file": "mouse click.mp3",
+      "start": 49.65,
+      "len": 0.34,
+      "vol": 0.6,
+      "group": "accent"
+    }
+  ]
+}

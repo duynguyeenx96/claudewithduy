@@ -1,0 +1,9 @@
+{
+  "name": "fx-pack",
+  "version": "1.0.0",
+  "description": "59 hiệu ứng cho video người nói, bám theo mặt.",
+  "author": { "name": "Kệ Module" },
+  "homepage": "https://github.com/duynguyeenx96/ke-module/tree/main/plugins/fx-pack",
+  "repository": "https://github.com/duynguyeenx96/ke-module",
+  "license": "MIT"
+}
