@@ -6,7 +6,7 @@ Các skill và tool dựng video tách ra từ flow riêng, đóng gói để ai
 
 ```
 /plugin marketplace add duynguyeenx96/ke-module
-/plugin install fx-pack@ke-module
+/plugin install fx-pack@claudewithduy
 ```
 
 | Plugin | Làm gì | Hệ điều hành |

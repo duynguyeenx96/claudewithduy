@@ -1,7 +1,7 @@
 {
   "site": {
     "github": "duynguyeenx96/ke-module",
-    "marketplace": "ke-module",
+    "marketplace": "claudewithduy",
     "social": {
       "tiktok": "",
       "facebook": "",
@@ -30,6 +30,29 @@
         "before": "",
         "after": ""
       },
+      "credits": [
+        {
+          "name": "yt-dlp",
+          "url": "https://github.com/yt-dlp/yt-dlp",
+          "by": "yt-dlp",
+          "license": "Unlicense",
+          "use": "tải video từ link"
+        },
+        {
+          "name": "whisper.cpp",
+          "url": "https://github.com/ggml-org/whisper.cpp",
+          "by": "ggml-org",
+          "license": "MIT",
+          "use": "chép lời trên máy"
+        },
+        {
+          "name": "FFmpeg",
+          "url": "https://github.com/FFmpeg/FFmpeg",
+          "by": "FFmpeg",
+          "license": "LGPL/GPL",
+          "use": "xử lý video, âm thanh"
+        }
+      ],
       "status": "ready",
       "skill": {
         "req": [
@@ -56,6 +79,36 @@
         "before": "videos/modules/fx-pack-before.mp4",
         "after": "videos/modules/fx-pack-after.mp4"
       },
+      "credits": [
+        {
+          "name": "claude-video-effects",
+          "url": "https://github.com/Vibha-Ramprakash/claude-video-effects",
+          "by": "Vibha Ramprakash",
+          "license": "MIT",
+          "use": "mã gốc của bộ hiệu ứng, Kệ thêm 8 hiệu ứng"
+        },
+        {
+          "name": "YuNet (opencv_zoo)",
+          "url": "https://github.com/opencv/opencv_zoo",
+          "by": "OpenCV",
+          "license": "MIT",
+          "use": "model dò mặt"
+        },
+        {
+          "name": "MediaPipe",
+          "url": "https://github.com/google-ai-edge/mediapipe",
+          "by": "Google",
+          "license": "Apache-2.0",
+          "use": "model tách người khỏi nền"
+        },
+        {
+          "name": "FFmpeg",
+          "url": "https://github.com/FFmpeg/FFmpeg",
+          "by": "FFmpeg",
+          "license": "LGPL/GPL",
+          "use": "xử lý video, âm thanh"
+        }
+      ],
       "status": "ready",
       "skill": {
         "req": [
@@ -81,6 +134,15 @@
         "before": "videos/modules/chuan-hoa-giong-before.mp4",
         "after": "videos/modules/chuan-hoa-giong-after.mp4"
       },
+      "credits": [
+        {
+          "name": "FFmpeg",
+          "url": "https://github.com/FFmpeg/FFmpeg",
+          "by": "FFmpeg",
+          "license": "LGPL/GPL",
+          "use": "xử lý video, âm thanh"
+        }
+      ],
       "status": "ready",
       "tool": {
         "line": "Kéo thả video vào trình duyệt, nhận file đã chuẩn hoá về -16 LUFS.",
@@ -104,6 +166,22 @@
         "before": "videos/modules/xoa-logo-gemini-before.mp4",
         "after": "videos/modules/xoa-logo-gemini-after.mp4"
       },
+      "credits": [
+        {
+          "name": "gemini-watermark-remover",
+          "url": "https://github.com/GargantuaX/gemini-watermark-remover",
+          "by": "GargantuaX",
+          "license": "MIT",
+          "use": "phần xoá dấu sao (CLI gwr)"
+        },
+        {
+          "name": "FFmpeg",
+          "url": "https://github.com/FFmpeg/FFmpeg",
+          "by": "FFmpeg",
+          "license": "LGPL/GPL",
+          "use": "xử lý video, âm thanh"
+        }
+      ],
       "status": "ready",
       "tool": {
         "line": "Kéo thả ảnh hoặc video vào trình duyệt. Chỉ xoá dấu sao nhìn thấy được, không thấy thì giữ nguyên.",
@@ -127,6 +205,22 @@
         "before": "",
         "after": ""
       },
+      "credits": [
+        {
+          "name": "whisper.cpp",
+          "url": "https://github.com/ggml-org/whisper.cpp",
+          "by": "ggml-org",
+          "license": "MIT",
+          "use": "chép lời trên máy"
+        },
+        {
+          "name": "FFmpeg",
+          "url": "https://github.com/FFmpeg/FFmpeg",
+          "by": "FFmpeg",
+          "license": "LGPL/GPL",
+          "use": "xử lý video, âm thanh"
+        }
+      ],
       "status": "ready",
       "skill": {
         "req": [
@@ -152,6 +246,71 @@
         "before": "videos/modules/tool-video-before.mp4",
         "after": "videos/modules/tool-video-after.mp4"
       },
+      "credits": [
+        {
+          "name": "HyperFrames",
+          "url": "https://github.com/heygen-com/hyperframes",
+          "by": "HeyGen",
+          "license": "Apache-2.0",
+          "use": "dựng và render video bằng HTML"
+        },
+        {
+          "name": "herk-edit-kit",
+          "url": "https://github.com/nateherkai/herk-edit-kit",
+          "by": "Nate Herk",
+          "license": "MIT",
+          "use": "script cắt khoảng lặng, nói vấp (đã vá cho tiếng Việt)"
+        },
+        {
+          "name": "EditAtlas skills",
+          "url": "https://github.com/EditAtlas/skills",
+          "by": "EditAtlas",
+          "license": "Apache-2.0",
+          "use": "script soát bản render, phân tích video mẫu"
+        },
+        {
+          "name": "GSAP",
+          "url": "https://github.com/greensock/GSAP",
+          "by": "GreenSock",
+          "license": "GSAP Standard License",
+          "use": "chuyển động"
+        },
+        {
+          "name": "Be Vietnam Pro",
+          "url": "https://github.com/bettergui/BeVietnamPro",
+          "by": "Be Vietnam Pro Project",
+          "license": "OFL-1.1",
+          "use": "phông chữ tiếng Việt"
+        },
+        {
+          "name": "Kenney audio",
+          "url": "https://kenney.nl/assets",
+          "by": "Kenney",
+          "license": "CC0",
+          "use": "hiệu ứng âm thanh"
+        },
+        {
+          "name": "Freesound",
+          "url": "https://freesound.org",
+          "by": "nhiều tác giả",
+          "license": "CC0",
+          "use": "hiệu ứng âm thanh (chỉ âm CC0)"
+        },
+        {
+          "name": "whisper.cpp",
+          "url": "https://github.com/ggml-org/whisper.cpp",
+          "by": "ggml-org",
+          "license": "MIT",
+          "use": "chép lời trên máy"
+        },
+        {
+          "name": "FFmpeg",
+          "url": "https://github.com/FFmpeg/FFmpeg",
+          "by": "FFmpeg",
+          "license": "LGPL/GPL",
+          "use": "xử lý video, âm thanh"
+        }
+      ],
       "status": "ready",
       "skill": {
         "req": [
@@ -186,6 +345,29 @@
         "before": "videos/modules/ugc-video-before.mp4",
         "after": "videos/modules/ugc-video-after.mp4"
       },
+      "credits": [
+        {
+          "name": "HyperFrames",
+          "url": "https://github.com/heygen-com/hyperframes",
+          "by": "HeyGen",
+          "license": "Apache-2.0",
+          "use": "dựng và render video bằng HTML"
+        },
+        {
+          "name": "whisper.cpp",
+          "url": "https://github.com/ggml-org/whisper.cpp",
+          "by": "ggml-org",
+          "license": "MIT",
+          "use": "chép lời trên máy"
+        },
+        {
+          "name": "FFmpeg",
+          "url": "https://github.com/FFmpeg/FFmpeg",
+          "by": "FFmpeg",
+          "license": "LGPL/GPL",
+          "use": "xử lý video, âm thanh"
+        }
+      ],
       "status": "soon",
       "skill": {
         "req": [
@@ -210,6 +392,15 @@
         "before": "videos/modules/video-aff-tool-before.mp4",
         "after": "videos/modules/video-aff-tool-after.mp4"
       },
+      "credits": [
+        {
+          "name": "FFmpeg",
+          "url": "https://github.com/FFmpeg/FFmpeg",
+          "by": "FFmpeg",
+          "license": "LGPL/GPL",
+          "use": "xử lý video, âm thanh"
+        }
+      ],
       "status": "soon",
       "tool": {
         "line": "Đưa loạt video sản phẩm vào trình duyệt, AI cắt và lên kịch bản.",
@@ -233,6 +424,36 @@
         "before": "videos/modules/meme-studio-before.mp4",
         "after": "videos/modules/meme-studio-after.mp4"
       },
+      "credits": [
+        {
+          "name": "HyperFrames",
+          "url": "https://github.com/heygen-com/hyperframes",
+          "by": "HeyGen",
+          "license": "Apache-2.0",
+          "use": "dựng và render video bằng HTML"
+        },
+        {
+          "name": "yt-dlp",
+          "url": "https://github.com/yt-dlp/yt-dlp",
+          "by": "yt-dlp",
+          "license": "Unlicense",
+          "use": "tải video từ link"
+        },
+        {
+          "name": "whisper.cpp",
+          "url": "https://github.com/ggml-org/whisper.cpp",
+          "by": "ggml-org",
+          "license": "MIT",
+          "use": "chép lời trên máy"
+        },
+        {
+          "name": "FFmpeg",
+          "url": "https://github.com/FFmpeg/FFmpeg",
+          "by": "FFmpeg",
+          "license": "LGPL/GPL",
+          "use": "xử lý video, âm thanh"
+        }
+      ],
       "status": "soon",
       "skill": {
         "req": [

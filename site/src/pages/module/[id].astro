@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import Blocks from '../../components/Blocks.astro';
 import BeforeAfter from '../../components/BeforeAfter.astro';
 import Cmd from '../../components/Cmd.astro';
+import Credits from '../../components/Credits.astro';
 import { modules, u, marketplaceAdd, pluginInstall, type Mod } from '../../lib';
 
 export function getStaticPaths() {
@@ -52,6 +53,8 @@ const ready = m.status === 'ready';
         </ol>
       </section>
     )}
+
+    {m.credits && m.credits.length > 0 && <Credits credits={m.credits} />}
 
     <nav class="pn">
       <a href={u(`module/${prev.id}/`)}><span class="label">← Trước</span>{prev.name}</a>

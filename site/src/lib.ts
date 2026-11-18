@@ -3,7 +3,9 @@ import data from './data/modules.json';
 export type Mod = (typeof data.modules)[number] & {
   skill?: { req: string[]; cmd: string; plugin?: string; note?: string; only?: string };
   tool?: { line: string; req: string[]; zip?: string };
+  credits?: Credit[];
 };
+export type Credit = { name: string; url: string; by: string; license: string; use: string };
 
 export const site = data.site;
 export const modules = data.modules as Mod[];

@@ -116,7 +116,7 @@ $T/history.json                [{"tool", "concept", "palette", "date", "output"}
   Sẽ tự cắt (mục 4, không có `--edit`/`--no-cut`/`--voice`): chép lời **clip gốc** trước, rồi gộp cắt + re-encode thành **một** lần encode
   (trim/atrim + concat theo `keep`, cùng thông số trên). Không encode A-roll hai lần.
 - **Hiệu ứng trên người nói (tuỳ chọn):** người dùng xin "chữ sau lưng", "tắt đèn chỉ còn người", "biển LED", "thông báo tin nhắn"…
-  → dùng plugin **fx-pack** cùng kệ (`/plugin install fx-pack@ke-module`, skill `effects`): đọc `README.md` và `SKILL.md` của nó.
+  → dùng plugin **fx-pack** cùng kệ (`/plugin install fx-pack@claudewithduy`, skill `effects`): đọc `README.md` và `SKILL.md` của nó.
   Chưa cài thì báo người dùng một dòng, làm tiếp không có hiệu ứng. fx-pack là **lần encode A-roll duy nhất**: chạy trên clip đã cắt lời, ra thẳng `public/aroll.mp4` (crf 12).
   Xuất khung kiểm (`--still`) cho từng hiệu ứng trước; chữ lọt ngoài `x 70–1010, y 250–1500` hoặc che mặt thì dời / đổi hiệu ứng. Đoạn có hiệu ứng thì build.py không chồng thêm chữ.
 
