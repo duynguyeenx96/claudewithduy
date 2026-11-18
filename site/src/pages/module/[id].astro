@@ -36,9 +36,9 @@ const ready = m.status === 'ready';
       <section class="steps-sec">
         <div class="label">Cài skill</div>
         <ol>
-          <li><span>01</span><div>Mở Claude Code. Nếu chưa thêm marketplace claudewithduy, chạy:<Cmd text={marketplaceAdd} /></div></li>
-          <li><span>02</span><div>Cài module:<Cmd text={pluginInstall(m.skill.plugin)} /></div></li>
-          <li><span>03</span><div>Gõ <code class="inl">{m.skill.cmd}</code> hoặc nói việc cần làm. Lần đầu Claude tự cài phần còn thiếu (FFmpeg, môi trường Python) nếu cần.</div></li>
+          <li><span>01</span><div>Thêm marketplace (một lần):<Cmd text={marketplaceAdd} /></div></li>
+          <li><span>02</span><div>Cài:<Cmd text={pluginInstall(m.skill.plugin)} /></div></li>
+          <li><span>03</span><div>Gõ <code class="inl">{m.skill.cmd}</code> hoặc nói việc cần làm.</div></li>
         </ol>
       </section>
     )}
@@ -46,10 +46,10 @@ const ready = m.status === 'ready';
       <section class="steps-sec">
         <div class="label">Chạy tool</div>
         <ol>
-          <li><span>01</span><div>Tải .zip ở trên, giải nén ra một thư mục.</div></li>
+          <li><span>01</span><div>Tải .zip, giải nén.</div></li>
           <li><span>02</span><div>Cài: {m.tool.req.join(', ')}.</div></li>
           <li><span>03</span><div>macOS: bấm đúp <code class="inl">{m.tool.zip}.command</code> (lần đầu chuột phải, chọn Mở). Windows: bấm đúp <code class="inl">start.bat</code>. Linux: <code class="inl">bash start.sh</code>.</div></li>
-          <li><span>04</span><div>Trình duyệt mở ra, kéo thả file vào. Kết quả lưu trên máy, không tải lên đâu.</div></li>
+          <li><span>04</span><div>Kéo file vào trang vừa mở.</div></li>
         </ol>
       </section>
     )}

@@ -21,7 +21,7 @@
     {
       "id": "ref-catalog",
       "name": "Nguồn tham khảo và catalog",
-      "desc": "Soạn catalog tài nguyên đang có, tải video tham khảo, rồi đối chiếu có, gần giống, thiếu và lập kế hoạch remake. Dùng cho mọi ngách.",
+      "desc": "Tải video tham khảo, đối chiếu với kho tài nguyên của bạn: cái nào có, gần giống, còn thiếu. Ra luôn kế hoạch làm lại.",
       "chips": [
         "Catalog tài nguyên",
         "Đối chiếu",
@@ -64,7 +64,7 @@
         ],
         "cmd": "/ref-catalog:ref-catalog add <link video>",
         "plugin": "ref-catalog",
-        "note": "Tuỳ chọn: whisper-cli + model ggml để nghe tiếng. Dữ liệu nằm hết trong thư mục workspace của bạn."
+        "note": "Muốn nghe được lời thoại thì cài thêm whisper-cli."
       }
     },
     {
@@ -86,7 +86,7 @@
           "url": "https://github.com/Vibha-Ramprakash/claude-video-effects",
           "by": "Vibha Ramprakash",
           "license": "MIT",
-          "use": "mã gốc của bộ hiệu ứng, Claude with Duy thêm 8 hiệu ứng"
+          "use": "mã gốc của bộ hiệu ứng"
         },
         {
           "name": "YuNet (opencv_zoo)",
@@ -119,13 +119,13 @@
         ],
         "cmd": "/fx-pack:effects video.mp4",
         "plugin": "fx-pack",
-        "note": "Gốc từ claude-video-effects (MIT, Vibha Ramprakash), thêm 8 hiệu ứng riêng. Giữ file LICENSE khi chia sẻ lại."
+        "note": "Gốc từ claude-video-effects, thêm 8 hiệu ứng."
       }
     },
     {
       "id": "chuan-hoa-giong",
       "name": "Chuẩn hoá giọng",
-      "desc": "Kéo thả clip nói bị bé, nâng về -16 LUFS không vỡ tiếng, hình giữ nguyên.",
+      "desc": "Clip nói bé quá thì kéo vào, ra đúng -16 LUFS, không vỡ tiếng.",
       "chips": [
         "-16 LUFS",
         "Đo 2 lượt",
@@ -146,7 +146,7 @@
       ],
       "status": "ready",
       "tool": {
-        "line": "Kéo thả video vào trình duyệt, nhận file đã chuẩn hoá về -16 LUFS.",
+        "line": "Kéo video vào, nhận file đã chuẩn hoá.",
         "req": [
           "Python",
           "FFmpeg"
@@ -157,7 +157,7 @@
     {
       "id": "xoa-logo-gemini",
       "name": "Xoá logo Gemini",
-      "desc": "Kéo thả ảnh hoặc video có dấu sao Gemini/Veo, xoá ngay trên máy.",
+      "desc": "Xoá dấu sao Gemini/Veo trên ảnh và video, ngay trên máy.",
       "chips": [
         "Kéo thả",
         "Ảnh và video",
@@ -185,7 +185,7 @@
       ],
       "status": "ready",
       "tool": {
-        "line": "Kéo thả ảnh hoặc video vào trình duyệt. Chỉ xoá dấu sao nhìn thấy được, không thấy thì giữ nguyên.",
+        "line": "Kéo ảnh hoặc video vào. Không thấy dấu sao thì giữ nguyên.",
         "req": [
           "Python",
           "Node.js"
@@ -196,7 +196,7 @@
     {
       "id": "capcut-auto-edit",
       "name": "CapCut Auto-Edit",
-      "desc": "Đọc project CapCut, nghe lời thoại, thêm text theo lời nói và vài SFX, chỉ dùng hiệu ứng miễn phí.",
+      "desc": "Mở project CapCut, nghe lời thoại, thêm chữ theo lời nói và vài SFX. Chỉ dùng hiệu ứng miễn phí.",
       "chips": [
         "Project CapCut",
         "Text và SFX",
@@ -230,14 +230,13 @@
         ],
         "cmd": "/capcut-edit:capcut-edit <tên project>",
         "plugin": "capcut-edit",
-        "note": "Chỉ macOS: CapCut lưu project ở đường dẫn riêng của macOS.",
         "only": "macos"
       }
     },
     {
       "id": "tool-video",
       "name": "Tool Video",
-      "desc": "Dựng short 9:16 giới thiệu hoặc review một phần mềm từ A-roll người nói và tư liệu thật, có 12 concept hình ảnh để mỗi video một kiểu.",
+      "desc": "Short 9:16 review phần mềm từ clip bạn nói và tư liệu thật. 12 concept, video nào cũng khác.",
       "chips": [
         "9:16",
         "12 concept",
@@ -322,10 +321,10 @@
         ],
         "cmd": "/tool-video:tool-video aroll.mp4 --tool \"Tên tool\"",
         "plugin": "tool-video",
-        "note": "Render bằng HyperFrames (tự tải qua npx). Tuỳ chọn: whisper-cli để tự chép lời, không có thì đưa kèm script hoặc .srt. Kèm bộ SFX CC0, không kèm nhạc nền: tự chọn bài có quyền dùng."
+        "note": "Không có whisper-cli thì đưa kèm script hoặc .srt. Không kèm nhạc nền."
       },
       "tool": {
-        "line": "Mở Content Creator Studio trên trình duyệt, chọn A-roll và tư liệu rồi dựng video. Bản web đang tách riêng, dùng skill trước.",
+        "line": "Bản web: chọn clip, chọn concept, bấm dựng.",
         "req": [
           "Python",
           "HyperFrames",
@@ -336,7 +335,7 @@
     {
       "id": "ugc-video",
       "name": "UGC Video",
-      "desc": "Dựng video UGC review 9:16 từ footage và kịch bản. Footage giữ nguyên, chữ và đồ hoạ canh theo lời nói, có 5 style.",
+      "desc": "Video UGC 9:16 từ footage và kịch bản. Chữ, đồ hoạ khớp lời nói, 5 style.",
       "chips": [
         "Footage + kịch bản",
         "Chữ canh theo lời",

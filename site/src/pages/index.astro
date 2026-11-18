@@ -8,13 +8,13 @@ import { modules, flow, site, u, pad, kinds, marketplaceAdd, pluginInstall, repo
 const ready = modules.filter(m => m.status === 'ready').length;
 const firstPlugin = modules.find(m => m.skill?.plugin)?.skill?.plugin ?? 'fx-pack';
 ---
-<Base title="Claude with Duy: skill và tool dựng video cho Claude Code" description="Flow dựng video chạy local, tách thành từng module: plugin cho Claude Code và tool kéo thả trên trình duyệt. Cài bằng một lệnh." image="og.jpg">
+<Base title="Claude with Duy: skill và tool dựng video cho Claude Code" description="Skill cho Claude Code và tool chạy local để dựng video. Cài bằng một lệnh." image="og.jpg">
 
 <section id="top" class="wrap hero">
   <div data-r>
     <div class="label" style="margin-bottom:28px">Claude with Duy / {pad(modules.length)} module, {pad(ready)} dùng được ngay</div>
     <h1 class="h1">Mình biến việc dựng video thành <span class="accent">code.</span></h1>
-    <p class="lead" style="margin:0 0 40px">Cả flow dựng video chạy local, tách thành từng module nhỏ. Cần cái nào lấy cái đó.</p>
+    <p class="lead" style="margin:0 0 40px">Skill cho Claude Code và tool chạy local, tách ra từ flow dựng video mình dùng hằng ngày.</p>
     <div style="display:flex;gap:12px;flex-wrap:wrap">
       <a class="btn solid" href="#module">Xem các module</a>
       <a class="btn" href="#cach-cai">Cách cài</a>
@@ -36,7 +36,6 @@ const firstPlugin = modules.find(m => m.skill?.plugin)?.skill?.plugin ?? 'fx-pac
     <ol class="flow" data-r>
       {flow.map((t, i) => <li style={i === flow.length - 1 ? 'border-top-color:var(--accent)' : ''}><span class="label">{pad(i + 1)}</span><span class="t">{t}</span></li>)}
     </ol>
-    <p data-r class="lead" style="margin:48px 0 0;font-size:17px">Trong hệ thống của mình các bước này nối liền nhau. Ở đây mình tách riêng từng bước cho bạn dùng.</p>
   </div>
 </section>
 
@@ -99,7 +98,7 @@ const firstPlugin = modules.find(m => m.skill?.plugin)?.skill?.plugin ?? 'fx-pac
   <div class="two" style="align-items:start">
     <div data-r>
       <h3 class="sub">Skill: hai lệnh trong Claude Code</h3>
-      <p class="p">Chạy được trên macOS, Windows và Linux. Lần đầu thêm marketplace <code class="inl">claudewithduy</code>, sau đó cài module nào tuỳ ý. Có bản mới thì gõ <code class="inl">/plugin update</code>.</p>
+      <p class="p">Thêm marketplace một lần, sau đó cài module nào cũng được.</p>
       <div style="display:grid;gap:8px;margin:20px 0">
         <Cmd text={marketplaceAdd} />
         <Cmd text={pluginInstall(firstPlugin)} />
@@ -118,14 +117,13 @@ const firstPlugin = modules.find(m => m.skill?.plugin)?.skill?.plugin ?? 'fx-pac
     <div data-r>
       <h3 class="sub">Tool: tải về, bấm đúp</h3>
       <ol class="steps light">
-        <li><span>01</span>Tải file .zip trên trang module, giải nén.</li>
-        <li><span>02</span>Cài công cụ nền ghi ở chip yêu cầu (Python, FFmpeg, Node.js).</li>
+        <li><span>01</span>Tải .zip, giải nén.</li>
+        <li><span>02</span>Cài Python, FFmpeg hoặc Node.js nếu module cần.</li>
         <li><span>03</span>macOS: bấm đúp file <code class="inl">.command</code> (lần đầu chuột phải, chọn Mở). Windows: bấm đúp <code class="inl">start.bat</code>. Linux: <code class="inl">bash start.sh</code>.</li>
-        <li><span>04</span>Trình duyệt tự mở, kéo thả file vào là xong.</li>
+        <li><span>04</span>Kéo file vào trang vừa mở.</li>
       </ol>
     </div>
   </div>
-  <p data-r style="margin:32px 0 0;font-size:14px;color:var(--ink2)">Mọi thứ chạy trên máy bạn. File video không bị tải lên đâu cả.</p>
 </section>
 
 <section id="faq" class="band">
@@ -133,11 +131,10 @@ const firstPlugin = modules.find(m => m.skill?.plugin)?.skill?.plugin ?? 'fx-pac
     <div class="label" data-r>05 / FAQ</div>
     <h2 class="h2" data-r>Hay hỏi</h2>
     <div class="faq" data-r>
-      <div><h3>Skill và Tool khác nhau thế nào?</h3><p>Skill là plugin cho Claude Code: cài bằng lệnh, rồi nói với Claude bằng lời hoặc gõ lệnh của skill. Tool là trang web kéo thả chạy trên máy bạn, không cần Claude.</p></div>
-      <div><h3>Cần gì để chạy?</h3><p>Skill cần Claude Code. Tool tuỳ module, xem chip yêu cầu trên từng tool.</p></div>
-      <div><h3>Chạy trên Windows được không?</h3><p>Skill cài được trên mọi hệ điều hành (trừ CapCut Auto-Edit chỉ có macOS). Tool có sẵn file chạy cho macOS, Windows và Linux.</p></div>
+      <div><h3>Skill và Tool khác nhau thế nào?</h3><p>Skill là plugin cho Claude Code. Tool là trang kéo thả chạy local, không cần Claude.</p></div>
+      <div><h3>Chạy trên Windows được không?</h3><p>Được, trừ CapCut Auto-Edit chỉ chạy trên macOS.</p></div>
       <div><h3>Cập nhật thế nào?</h3><p>Skill: gõ <code class="inl">/plugin update</code> trong Claude Code. Tool: tải lại file .zip mới.</p></div>
-      <div><h3>Mã nguồn ở đâu?</h3><p>Toàn bộ nằm công khai trên <a href={repoUrl} target="_blank" rel="noopener" style="text-decoration:underline">GitHub</a>, đọc được trước khi cài.</p></div>
+      <div><h3>Mã nguồn ở đâu?</h3><p>Trên <a href={repoUrl} target="_blank" rel="noopener" style="text-decoration:underline">GitHub</a>.</p></div>
     </div>
   </div>
 </section>
@@ -155,7 +152,7 @@ const firstPlugin = modules.find(m => m.skill?.plugin)?.skill?.plugin ?? 'fx-pac
     <div data-r>
       <div class="label">07 / Liên hệ</div>
       <h2 class="h2" style="margin-bottom:24px">Nhắn cho mình</h2>
-      <p class="p" style="max-width:380px">Cần module riêng, gặp lỗi hoặc muốn hỏi cách dùng: mở một issue trên GitHub{social.length > 0 && ', hoặc nhắn qua mạng xã hội'}.</p>
+      <p class="p" style="max-width:380px">Báo lỗi, góp ý hay cần module riêng: mở issue hoặc nhắn mình.</p>
     </div>
     <div data-r style="display:flex;flex-direction:column;gap:16px;align-items:flex-start;justify-content:center">
       <a class="btn solid" href={`${repoUrl}/issues/new`} target="_blank" rel="noopener">Mở issue trên GitHub</a>

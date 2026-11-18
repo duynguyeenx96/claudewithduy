@@ -10,10 +10,10 @@ const osName: Record<string, string> = { macos: 'macOS', windows: 'Windows', lin
   {m.skill && (
     <div class="blk" data-kind="skill">
       <div class="blk-head"><span>SKILL</span><span>Plugin cho Claude Code</span></div>
-      {soon ? <p class="blk-line">Đang tách khỏi hệ thống riêng để ai cũng cài được.</p> : (
+      {soon ? <p class="blk-line">Sắp có.</p> : (
         <>
           <Cmd text={pluginInstall(m.skill.plugin!)} />
-          {full && <p class="blk-line">Rồi gọi: <code class="inl">{m.skill.cmd}</code>, hoặc nói bằng lời, Claude tự nhận ra.</p>}
+          {full && <p class="blk-line">Gọi: <code class="inl">{m.skill.cmd}</code></p>}
         </>
       )}
       <div class="req"><span class="label" style="font-size:10px">Yêu cầu</span>{m.skill.req.map(r => <span class="chip sm">{r}</span>)}</div>
