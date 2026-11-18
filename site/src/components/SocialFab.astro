@@ -2,43 +2,26 @@
 import { social, socialIcons, socialName } from '../lib';
 ---
 {social.length > 0 && (
-  <div class="fab" id="fab" data-open="false">
-    <ul class="fab-list" id="fab-list" aria-label="Theo dõi Claude with Duy">
-      {social.map(([k, href], i) => (
-        <li style={`--i:${social.length - 1 - i}`}>
-          <a href={href} target="_blank" rel="noopener" aria-label={socialName[k] ?? k} tabindex="-1">
+  <nav class="fab" id="fab" aria-label="Theo dõi Claude with Duy">
+    <span class="fab-title">Follow</span>
+    <ul class="fab-list">
+      {social.map(([k, href]) => (
+        <li>
+          <a href={href} target="_blank" rel="noopener" aria-label={socialName[k] ?? k}>
             <span class="fab-name">{socialName[k] ?? k}</span>
-            <span class="fab-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={socialIcons[k]} /></svg></span>
+            <span class="fab-ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={socialIcons[k]} /></svg></span>
           </a>
         </li>
       ))}
     </ul>
-    <button class="fab-btn" id="fab-btn" type="button" aria-expanded="false" aria-controls="fab-list">
-      <span class="fab-label">Follow</span>
-      <svg class="fab-x" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
-    </button>
-  </div>
+  </nav>
 )}
 
 <script>
   const fab = document.getElementById('fab');
-  const btn = document.getElementById('fab-btn');
-  if (fab && btn) {
-    const links = fab.querySelectorAll<HTMLAnchorElement>('.fab-list a');
-    const setOpen = (open: boolean) => {
-      fab.dataset.open = String(open);
-      btn.setAttribute('aria-expanded', String(open));
-      links.forEach(a => (a.tabIndex = open ? 0 : -1));
-    };
-    btn.addEventListener('click', () => setOpen(fab.dataset.open !== 'true'));
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
-    document.addEventListener('click', e => { if (!fab.contains(e.target as Node)) setOpen(false); });
-    // Hiện nút khi đã cuộn qua phần đầu trang
-    const onScroll = () => {
-      const show = window.scrollY > Math.min(520, window.innerHeight * 0.6);
-      fab.classList.toggle('show', show);
-      if (!show) setOpen(false);
-    };
+  if (fab) {
+    // Hiện khi đã cuộn qua phần đầu trang; các nút luôn mở sẵn
+    const onScroll = () => fab.classList.toggle('show', window.scrollY > Math.min(520, window.innerHeight * 0.6));
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
   }
@@ -48,18 +31,19 @@ import { social, socialIcons, socialName } from '../lib';
   .fab{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));z-index:50;display:flex;flex-direction:column;align-items:flex-end;gap:10px;
     opacity:0;transform:translateY(16px);pointer-events:none;transition:opacity .25s ease,transform .25s ease}
   .fab.show{opacity:1;transform:none;pointer-events:auto}
-  .fab-btn{display:flex;align-items:center;gap:8px;height:48px;padding:0 18px 0 20px;border-radius:999px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);
-    font:500 14px/1 var(--sans);cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.18)}
-  .fab-btn:hover{background:var(--accent);border-color:var(--accent)}
-  .fab-btn:focus-visible,.fab-list a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
-  .fab-x{transition:transform .2s ease}
-  .fab[data-open="true"] .fab-x{transform:rotate(45deg)}
-  .fab-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
-  .fab-list li{opacity:0;transform:translateY(10px) scale(.9);transition:opacity .18s ease,transform .18s ease;transition-delay:calc(var(--i) * 30ms);pointer-events:none}
-  .fab[data-open="true"] .fab-list li{opacity:1;transform:none;pointer-events:auto}
+  .fab-title{font:500 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--bg);background:var(--ink);padding:6px 10px;border-radius:999px}
+  .fab-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
   .fab-list a{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none}
-  .fab-name{font:500 13px/1 var(--sans);background:var(--bg);border:1px solid var(--line2);padding:7px 10px;border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-  .fab-ico{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--bg);border:1px solid var(--ink);box-shadow:0 4px 14px rgba(0,0,0,.12)}
-  .fab-list a:hover .fab-ico{background:var(--ink);color:var(--bg)}
-  @media (prefers-reduced-motion: reduce){.fab,.fab-list li,.fab-x{transition:none}}
+  .fab-name{font:500 14px/1 var(--sans);background:var(--bg);border:1px solid var(--line2);padding:8px 12px;border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+  .fab-ico{width:60px;height:60px;border-radius:50%;display:grid;place-items:center;background:var(--bg);border:1.5px solid var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.16);transition:background .15s ease,color .15s ease,transform .15s ease}
+  .fab-list a:hover .fab-ico{background:var(--ink);color:var(--bg);transform:scale(1.06)}
+  .fab-list a:focus-visible{outline:none}
+  .fab-list a:focus-visible .fab-ico{outline:2px solid var(--accent);outline-offset:3px}
+  /* điện thoại: chỉ giữ icon cho gọn, vẫn đủ lớn để bấm */
+  @media (max-width: 640px){
+    .fab-name{display:none}
+    .fab-ico{width:52px;height:52px}
+    .fab-ico svg{width:24px;height:24px}
+  }
+  @media (prefers-reduced-motion: reduce){.fab,.fab-ico{transition:none}}
 </style>
