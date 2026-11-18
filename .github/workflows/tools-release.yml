@@ -23,4 +23,6 @@ jobs:
       - name: Release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" dist/*.zip --title "$GITHUB_REF_NAME" --notes "Tool chạy local. macOS: bấm đúp .command, Windows: start.bat, Linux: bash start.sh."
+        run: |
+          gh release create "$GITHUB_REF_NAME" dist/*.zip --title "$GITHUB_REF_NAME" \
+            --notes "Tool chạy local. macOS: bấm đúp .command. Windows: start.bat. Linux: bash start.sh."
