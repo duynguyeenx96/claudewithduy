@@ -1,0 +1,9 @@
+// Cloudflare Workers (static assets). Build: npm ci && npm run build, deploy: npx wrangler deploy
+{
+  "name": "ke-module",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}
