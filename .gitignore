@@ -7,3 +7,7 @@ site/dist/
 site/.astro/
 tools/*/input/
 tools/*/output/
+
+# ghi chú nội bộ, không đưa lên repo
+PROGRESS.md
+QUAY-VIDEO.md
