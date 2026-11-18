@@ -10,12 +10,12 @@
     }
   },
   "flow": [
-    "Footage thô",
-    "Chuẩn hoá giọng",
-    "Xoá logo Gemini",
-    "Dựng video",
+    "Quay",
+    "Chuẩn giọng",
+    "Xoá logo",
+    "Dựng",
     "Hiệu ứng",
-    "Video xong"
+    "Đăng"
   ],
   "modules": [
     {
@@ -381,13 +381,134 @@
     }
   ],
   "topics": [
+    "Tool Video",
+    "UGC Video",
     "Bất động sản",
     "Talking-head",
-    "UGC",
+    "Review sản phẩm",
     "Giáo dục",
     "Giới thiệu phần mềm"
   ],
   "templates": [
+    {
+      "topic": "Tool Video",
+      "name": "ui",
+      "desc": "Card giao diện trồi lên trên mặt, khung chat gõ prompt.",
+      "video": "videos/style/tool-video-ui.mp4",
+      "href": ""
+    },
+    {
+      "topic": "Tool Video",
+      "name": "split",
+      "desc": "Đồ hoạ nửa trên, mặt nửa dưới, bung full ở câu nhấn.",
+      "video": "",
+      "href": ""
+    },
+    {
+      "topic": "Tool Video",
+      "name": "screen",
+      "desc": "Quay màn hình trong khung laptop, zoom theo con trỏ, mặt trong bong bóng.",
+      "video": "",
+      "href": ""
+    },
+    {
+      "topic": "Tool Video",
+      "name": "tutorial",
+      "desc": "Màn hình ngang full khung, mặt trong ô vuông, phụ đề đối diện.",
+      "video": "videos/style/tool-video-tutorial.mp4",
+      "href": ""
+    },
+    {
+      "topic": "Tool Video",
+      "name": "terminal",
+      "desc": "Cửa sổ terminal, gõ lệnh, log chạy.",
+      "video": "",
+      "href": ""
+    },
+    {
+      "topic": "Tool Video",
+      "name": "retro",
+      "desc": "Windows 95: cửa sổ bật chồng, hộp thoại lỗi.",
+      "video": "",
+      "href": ""
+    },
+    {
+      "topic": "Tool Video",
+      "name": "notebook",
+      "desc": "Trang sổ, polaroid dán băng keo, nét bút vẽ dần.",
+      "video": "",
+      "href": ""
+    },
+    {
+      "topic": "Tool Video",
+      "name": "ranking",
+      "desc": "Số đếm ngược, card từng tool, bảng xếp hạng.",
+      "video": "",
+      "href": ""
+    },
+    {
+      "topic": "Tool Video",
+      "name": "versus",
+      "desc": "Chia đôi màn hình, VS, bảng điểm.",
+      "video": "",
+      "href": ""
+    },
+    {
+      "topic": "Tool Video",
+      "name": "glide",
+      "desc": "Người trượt sang một bên, chữ và từ khoá hiện cạnh đầu.",
+      "video": "videos/style/tool-video-glide.mp4",
+      "href": ""
+    },
+    {
+      "topic": "Tool Video",
+      "name": "fxreel",
+      "desc": "Mỗi giây một hiệu ứng chạy ngay trên người.",
+      "video": "",
+      "href": ""
+    },
+    {
+      "topic": "Tool Video",
+      "name": "depth",
+      "desc": "Chữ khổng lồ nằm sau người, đổi khung bằng whip-zoom.",
+      "video": "",
+      "href": ""
+    },
+    {
+      "topic": "UGC Video",
+      "name": "xhs",
+      "desc": "Nền kem, hồng đậm, chip và hashtag.",
+      "video": "",
+      "href": ""
+    },
+    {
+      "topic": "UGC Video",
+      "name": "spotlight",
+      "desc": "Tím đậm, phát sáng, kịch tính.",
+      "video": "",
+      "href": ""
+    },
+    {
+      "topic": "UGC Video",
+      "name": "geom",
+      "desc": "Vàng chanh, hồng, đen va nhau.",
+      "video": "",
+      "href": ""
+    },
+    {
+      "topic": "UGC Video",
+      "name": "editorial",
+      "desc": "Nền kem, khối san hô, trích dẫn chữ nghiêng lớn.",
+      "video": "",
+      "href": ""
+    },
+    {
+      "topic": "UGC Video",
+      "name": "minimal",
+      "desc": "Đen trắng, chữ thật to, nhiều khoảng trống.",
+      "video": "",
+      "href": ""
+    },
     {
       "topic": "Bất động sản",
       "name": "Giới thiệu căn hộ",
@@ -425,19 +546,19 @@
       "href": ""
     },
     {
-      "topic": "UGC",
+      "topic": "Review sản phẩm",
       "name": "Đánh giá sản phẩm",
       "video": "videos/danh-gia-san-pham.mp4",
       "href": ""
     },
     {
-      "topic": "UGC",
+      "topic": "Review sản phẩm",
       "name": "Mở hộp",
       "video": "videos/mo-hop.mp4",
       "href": ""
     },
     {
-      "topic": "UGC",
+      "topic": "Review sản phẩm",
       "name": "Trước và sau",
       "video": "videos/truoc-va-sau.mp4",
       "href": ""

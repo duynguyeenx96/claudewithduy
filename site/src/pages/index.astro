@@ -31,8 +31,8 @@ const firstPlugin = modules.find(m => m.skill?.plugin)?.skill?.plugin ?? 'fx-pac
 
 <section class="band" style="border-bottom:1px solid var(--line)">
   <div class="wrap pad-s">
-    <div class="label" data-r>01 / Flow tổng thể</div>
-    <h2 class="h2" data-r>Bức tranh lớn</h2>
+    <div class="label" data-r>01 / Flow</div>
+    <h2 class="h2" data-r>Từ clip thô tới lúc đăng</h2>
     <ol class="flow" data-r>
       {flow.map((t, i) => <li style={i === flow.length - 1 ? 'border-top-color:var(--accent)' : ''}><span class="label">{pad(i + 1)}</span><span class="t">{t}</span></li>)}
     </ol>
@@ -68,7 +68,7 @@ const firstPlugin = modules.find(m => m.skill?.plugin)?.skill?.plugin ?? 'fx-pac
           <div style="direction:ltr;align-self:stretch">
             {m.video.before || m.video.after
               ? <BeforeAfter before={m.video.before} after={m.video.after} />
-              : <div class="vframe novid"><span class="label">Video demo đang làm</span></div>}
+              : <div class="vframe novid"><span class="label">Chưa có video</span></div>}
           </div>
         </div>
       </article>

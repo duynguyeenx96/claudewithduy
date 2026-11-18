@@ -4,7 +4,7 @@ import Blocks from '../../components/Blocks.astro';
 import BeforeAfter from '../../components/BeforeAfter.astro';
 import Cmd from '../../components/Cmd.astro';
 import Credits from '../../components/Credits.astro';
-import { modules, u, marketplaceAdd, pluginInstall, type Mod } from '../../lib';
+import { modules, templates, u, marketplaceAdd, pluginInstall, type Mod } from '../../lib';
 
 export function getStaticPaths() {
   return modules.map(m => ({ params: { id: m.id }, props: { m } }));
@@ -14,6 +14,7 @@ const i = modules.indexOf(m);
 const prev = modules[(i - 1 + modules.length) % modules.length];
 const next = modules[(i + 1) % modules.length];
 const ready = m.status === 'ready';
+const styleCount = templates.filter(t => t.topic === m.name).length;
 ---
 <Base title={`${m.name}: Claude with Duy`} description={m.desc} current="module">
   <article class="wrap" style="padding-top:64px;padding-bottom:96px">
@@ -24,11 +25,12 @@ const ready = m.status === 'ready';
         <p class="lead" style="margin:0 0 24px">{m.desc}</p>
         <div class="chips">{m.chips.map(c => <span class="chip">{c}</span>)}{!ready && <span class="chip" style="border-color:var(--accent);color:var(--accent)">Sắp có</span>}</div>
         <Blocks m={m} full />
+        {styleCount > 0 && <p style="margin:12px 0 0;font-size:14px"><a href={u(`template/?topic=${encodeURIComponent(m.name)}`)}>Xem {styleCount} style →</a></p>}
       </div>
       <div>
         {m.video.before || m.video.after
           ? <BeforeAfter before={m.video.before} after={m.video.after} minH={420} />
-          : <div class="vframe" style="min-height:320px;display:flex;align-items:center;justify-content:center"><span class="label">Video demo đang làm</span></div>}
+          : <div class="vframe" style="min-height:320px;display:flex;align-items:center;justify-content:center"><span class="label">Chưa có video</span></div>}
       </div>
     </div>
 

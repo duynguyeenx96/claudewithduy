@@ -3,28 +3,29 @@ import Base from '../layouts/Base.astro';
 import { topics, templates, u, pad } from '../lib';
 const counts = Object.fromEntries(topics.map(t => [t, templates.filter(x => x.topic === t).length]));
 ---
-<Base title="Template theo chủ đề: Claude with Duy" description="Mẫu video 9:16 theo chủ đề: bất động sản, talking-head, UGC, giáo dục, giới thiệu phần mềm." current="template" image="og.jpg">
+<Base title="Style video: Claude with Duy" description="Các style dựng video 9:16 của Tool Video, UGC Video và các mẫu khác." current="template" image="og.jpg">
   <div class="wrap" style="padding-top:72px;padding-bottom:24px">
-    <div class="label" style="margin-bottom:16px">Template</div>
-    <h1 class="h1" style="font-size:clamp(36px,5vw,60px);margin:0">Template theo chủ đề</h1>
+    <div class="label" style="margin-bottom:16px">Style</div>
+    <h1 class="h1" style="font-size:clamp(36px,5vw,60px);margin:0">Style video</h1>
   </div>
   <div class="wrap layout">
     <aside>
-      <div class="label" style="font-size:11px;padding:16px 0 8px">Chủ đề</div>
+      <div class="label" style="font-size:11px;padding:16px 0 8px">Nhóm</div>
       <button type="button" class="t on" data-t="all"><span>Tất cả</span><span class="n">{pad(templates.length)}</span></button>
       {topics.map(t => <button type="button" class="t" data-t={t}><span>{t}</span><span class="n">{pad(counts[t])}</span></button>)}
     </aside>
     <div style="flex:1 1 320px;min-width:0">
-      <div class="bar"><h2 id="tt">Tất cả template</h2><span class="label" id="tn">{templates.length} template</span></div>
+      <div class="bar"><h2 id="tt">Tất cả</h2><span class="label" id="tn">{templates.length} mẫu</span></div>
       <div class="grid">
         {templates.map(c => (
           <article data-topic={c.topic}>
             <div class="vframe card" data-demo>
-              {c.video && <video src={u(c.video)} muted loop playsinline preload="metadata"></video>}
+              {c.video ? <video src={u(c.video)} muted loop playsinline preload="metadata"></video> : <span class="label empty">Chưa có mẫu</span>}
               <span class="tag">9:16</span>
             </div>
             <div class="label" style="font-size:11px">{c.topic}</div>
             <h3>{c.name}</h3>
+            {c.desc && <p class="desc">{c.desc}</p>}
             {c.href && <a class="btn sm" href={c.href} target="_blank" rel="noopener" style="align-self:flex-start">Mở thư mục</a>}
           </article>
         ))}
@@ -38,8 +39,8 @@ const counts = Object.fromEntries(topics.map(t => [t, templates.filter(x => x.to
       let n = 0;
       cards.forEach(c => { const ok = t === 'all' || c.dataset.topic === t; c.hidden = !ok; if (ok) n++; });
       btns.forEach(b => b.classList.toggle('on', b.dataset.t === t));
-      document.getElementById('tt')!.textContent = t === 'all' ? 'Tất cả template' : t;
-      document.getElementById('tn')!.textContent = n + ' template';
+      document.getElementById('tt')!.textContent = t === 'all' ? 'Tất cả' : t;
+      document.getElementById('tn')!.textContent = n + ' mẫu';
     }
     btns.forEach(b => b.addEventListener('click', () => { pick(b.dataset.t!); try { history.replaceState(null, '', b.dataset.t === 'all' ? location.pathname : '?topic=' + encodeURIComponent(b.dataset.t!)); } catch {} }));
     const q = new URLSearchParams(location.search).get('topic');
@@ -59,5 +60,8 @@ const counts = Object.fromEntries(topics.map(t => [t, templates.filter(x => x.to
     article{display:flex;flex-direction:column;gap:12px}
     .card{aspect-ratio:9/16;border-radius:4px}
     article h3{font-family:var(--serif);font-weight:600;font-size:20px;line-height:1.2;margin:-6px 0 0}
+    .desc{margin:-4px 0 0;font-size:14px;line-height:1.45;color:var(--ink2)}
+    .card{display:flex;align-items:center;justify-content:center}
+    .empty{font-size:11px}
   </style>
 </Base>

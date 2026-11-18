@@ -32,7 +32,7 @@ const ogImage = image && Astro.site ? new URL(u(image), Astro.site).href : undef
       <a class="brand" href={u('')}>CLAUDE WITH DUY</a>
       <nav>
         <a href={u('#module')} aria-current={current === 'module' ? 'page' : undefined}>Module</a>
-        <a href={u('template/')} aria-current={current === 'template' ? 'page' : undefined}>Template</a>
+        <a href={u('template/')} aria-current={current === 'template' ? 'page' : undefined}>Style</a>
         <a href={u('#cach-cai')} aria-current={current === 'install' ? 'page' : undefined}>Cách cài</a>
         <a href={u('#faq')}>FAQ</a>
         <a href={u('#lien-he')}>Liên hệ</a>
@@ -41,7 +41,7 @@ const ogImage = image && Astro.site ? new URL(u(image), Astro.site).href : undef
   </header>
   <main><slot /></main>
   <SocialFab />
-  <footer class="foot"><div class="wrap"><span>Claude with Duy / chạy local</span><slot name="foot" /></div></footer>
+  <footer class="foot"><div class="wrap"><span>Claude with Duy</span><slot name="foot" /></div></footer>
   <script>
     // Hiện dần khi cuộn tới
     const els = document.querySelectorAll('[data-r]');
