@@ -2,7 +2,7 @@
   "name": "capcut-edit",
   "version": "1.0.0",
   "description": "Auto-edit project CapCut: text theo lời thoại và SFX. Chỉ macOS.",
-  "author": { "name": "Kệ Module" },
-  "homepage": "https://github.com/duynguyeenx96/ke-module/tree/main/plugins/capcut-edit",
-  "repository": "https://github.com/duynguyeenx96/ke-module"
+  "author": { "name": "Claude with Duy" },
+  "homepage": "https://github.com/duynguyeenx96/claudewithduy/tree/main/plugins/capcut-edit",
+  "repository": "https://github.com/duynguyeenx96/claudewithduy"
 }

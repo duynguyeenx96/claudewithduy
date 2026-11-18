@@ -1,10 +1,11 @@
 {
   "site": {
-    "github": "duynguyeenx96/ke-module",
+    "github": "duynguyeenx96/claudewithduy",
     "marketplace": "claudewithduy",
     "social": {
-      "tiktok": "",
+      "github": "https://github.com/duynguyeenx96",
       "facebook": "",
+      "tiktok": "",
       "youtube": ""
     }
   },
@@ -85,7 +86,7 @@
           "url": "https://github.com/Vibha-Ramprakash/claude-video-effects",
           "by": "Vibha Ramprakash",
           "license": "MIT",
-          "use": "mã gốc của bộ hiệu ứng, Kệ thêm 8 hiệu ứng"
+          "use": "mã gốc của bộ hiệu ứng, Claude with Duy thêm 8 hiệu ứng"
         },
         {
           "name": "YuNet (opencv_zoo)",

@@ -1,8 +1,8 @@
 {
   "name": "claudewithduy",
   "owner": {
-    "name": "Kệ Module",
-    "url": "https://github.com/duynguyeenx96/ke-module"
+    "name": "Claude with Duy",
+    "url": "https://github.com/duynguyeenx96/claudewithduy"
   },
   "description": "Các skill dựng video tách từ flow riêng: catalog nguồn tham khảo, hiệu ứng talking-head, auto-edit CapCut, short review phần mềm.",
   "plugins": [

@@ -8,5 +8,5 @@
 | `assets/fonts/BeVietnamPro-*.ttf` | github.com/bettergui/BeVietnamPro | SIL OFL 1.1, xem `assets/fonts/OFL.txt` |
 | `assets/vendor/gsap.min.js` | GSAP 3 (gsap.com) | GSAP Standard License (miễn phí, kể cả thương mại) |
 
-Phần còn lại (SKILL.md, concepts, templates, scripts khác) là của Kệ Module.
+Phần còn lại (SKILL.md, concepts, templates, scripts khác) là của Claude with Duy.
 Không kèm nhạc nền: người dùng tự đưa bài có quyền dùng qua `--music`.

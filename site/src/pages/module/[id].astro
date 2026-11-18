@@ -15,7 +15,7 @@ const prev = modules[(i - 1 + modules.length) % modules.length];
 const next = modules[(i + 1) % modules.length];
 const ready = m.status === 'ready';
 ---
-<Base title={`${m.name}: Kệ Module`} description={m.desc} current="module">
+<Base title={`${m.name}: Claude with Duy`} description={m.desc} current="module">
   <article class="wrap" style="padding-top:64px;padding-bottom:96px">
     <a class="label" href={u('#module')}>← Tất cả module</a>
     <div class="head">
@@ -36,7 +36,7 @@ const ready = m.status === 'ready';
       <section class="steps-sec">
         <div class="label">Cài skill</div>
         <ol>
-          <li><span>01</span><div>Mở Claude Code. Nếu chưa thêm kệ, chạy:<Cmd text={marketplaceAdd} /></div></li>
+          <li><span>01</span><div>Mở Claude Code. Nếu chưa thêm marketplace claudewithduy, chạy:<Cmd text={marketplaceAdd} /></div></li>
           <li><span>02</span><div>Cài module:<Cmd text={pluginInstall(m.skill.plugin)} /></div></li>
           <li><span>03</span><div>Gõ <code class="inl">{m.skill.cmd}</code> hoặc nói việc cần làm. Lần đầu Claude tự cài phần còn thiếu (FFmpeg, môi trường Python) nếu cần.</div></li>
         </ol>

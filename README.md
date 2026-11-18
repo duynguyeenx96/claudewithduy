@@ -1,11 +1,11 @@
-# Kệ Module
+# Claude with Duy
 
 Các skill và tool dựng video tách ra từ flow riêng, đóng gói để ai cũng cài được. Mọi thứ chạy trên máy người dùng.
 
 ## Skill (plugin cho Claude Code)
 
 ```
-/plugin marketplace add duynguyeenx96/ke-module
+/plugin marketplace add duynguyeenx96/claudewithduy
 /plugin install fx-pack@claudewithduy
 ```
 
@@ -20,7 +20,7 @@ Cập nhật: `/plugin update`.
 
 ## Tool (kéo thả trên trình duyệt)
 
-Tải `.zip` ở [Releases](https://github.com/duynguyeenx96/ke-module/releases/latest), giải nén, rồi:
+Tải `.zip` ở [Releases](https://github.com/duynguyeenx96/claudewithduy/releases/latest), giải nén, rồi:
 macOS bấm đúp `*.command` · Windows bấm đúp `start.bat` · Linux `bash start.sh`.
 
 | Tool | Làm gì | Cần |
