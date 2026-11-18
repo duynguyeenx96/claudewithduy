@@ -14,6 +14,7 @@ Các skill và tool dựng video tách ra từ flow riêng, đóng gói để ai
 | `ref-catalog` | Catalog tài nguyên, đối chiếu video tham khảo, kế hoạch remake | mọi HĐH |
 | `fx-pack` | 59 hiệu ứng cho video người nói, bám theo mặt | mọi HĐH |
 | `capcut-edit` | Auto-edit project CapCut: text theo lời thoại, SFX | chỉ macOS |
+| `tool-video` | Short 9:16 review / giới thiệu phần mềm từ A-roll và tư liệu thật, 12 concept, render bằng HyperFrames | mọi HĐH (cần Node.js, FFmpeg) |
 
 Cập nhật: `/plugin update`.
 
@@ -47,3 +48,5 @@ site/                             trang giới thiệu (Astro), dữ liệu ở 
 ## Giấy phép
 
 `fx-pack` gốc từ claude-video-effects (MIT, Vibha Ramprakash), giữ `LICENSE` khi chia sẻ lại. Model và phông kèm theo giấy phép riêng trong `models/NOTICE.md` và `fonts/`.
+
+`tool-video` kèm script của herk-edit-kit (MIT) và EditAtlas (Apache-2.0), bộ SFX CC0 (Kenney, Freesound) và phông Be Vietnam Pro (OFL), xem `plugins/tool-video/skills/tool-video/NOTICE.md`.

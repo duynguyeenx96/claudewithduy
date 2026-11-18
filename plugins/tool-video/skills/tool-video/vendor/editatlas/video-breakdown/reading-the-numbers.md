@@ -1,0 +1,260 @@
+# Reading the numbers
+
+`analyze.py` works on small grey frames (about 96 px on the short side) at up to 30 frames a second and on mono
+audio at 22 kHz. Everything below is what each field means, how far it was right on videos where the answer was
+known, and what to search for in EditAtlas.
+
+## How well it was measured (2026-11-09 and 2026-11-10, versions 0.1.0 to 0.4.0)
+
+On the 24 EditAtlas transition demos (two shots joined by one known FFmpeg transition, 16:9, 24 fps):
+
+- The join was found at the right time (within 0.35 s of its middle) in 23 of 24. The miss was a dark blur
+  dissolve, which the analyzer called a short zoom transition at the wrong time.
+- The kind was right in 17 of 24: cross-dissolve, dip to black, dip to white, push left, slide up, iris open, barn
+  doors, and the linear, diagonal, clock, radial, slice, smooth and wind wipes (all as `wipe`), zoom in, squeeze (as
+  a wipe from the edges) and distance melt (as a dissolve, which is what it looks like).
+- Wrong or vague in 7: cover slide (called a zoom transition), fade through grey (called a cut), horizontal blur
+  and pixel dissolve (called wipes), pixelate (`wipe`, side unclear), iris close (a wipe, but "from bottom"
+  instead of "edges inward") and the blur dissolve above.
+- About one demo in three had one extra join: most are real cuts or dissolves inside the source footage.
+
+On three full EditAtlas edits (17 to 33 s, 5 to 7 shots each):
+
+- Every designed join was found. In the comedy edit the analyzer called a crash zoom a join and an iris a dip to
+  black; the frames showed both at once.
+- A silent film with heavy exposure flicker produced 14 joins for 5 real ones. **Flicker, strobe, and flashing
+  lights over-count joins.** Look at the shots sheet before trusting the count.
+
+On four 9:16 product reels cut on the beat by design (12 to 18 s, 8 to 13 cuts):
+
+- Cuts on the beat: 9 of 9, 10 of 13, 5 of 8 and 0 of 10. In the last one the cuts fall every 0.93 s, two beats
+  of a 129 BPM track, while the analyzer fitted a 127.8 BPM grid that drifts off them. So "cuts do not follow a
+  beat grid" can be wrong; compare the cut spacing (`pacing.regularity` low, shot lengths alike) with 60/BPM.
+- On the drink reel, the four flash cuts checked in the frames (a light frame on each cut) were all called
+  `bright flash`.
+
+Speech-like share on three talking-head previews: 0.13, 0.41 and 0.45; on four music-only reels: 0.0. But a 13 s film
+phone call with music under it measured 0.0, and a cartoon with music and no words reached 0.3 in some windows. So 0
+does not mean nobody talks: captions that follow speech, moving lips and faces turned to each other are the evidence.
+For the words, use the `transcribe` skill.
+
+Run time: 9 to 15 s for a 12 to 34 s 720x1280 video on one desktop CPU, sheets included.
+
+On 12 public motion-graphics demos from a design-tool maker (2026-11-10, version 0.4.0; logos, titles, a chart, a
+brand-guideline reel, looping banners, 3 to 82 s):
+
+- Before 0.4.0, the three brand-shape transitions of the guideline reel (a star, a star inside a circle, a paper
+  panel opening from the middle) came out as `dip through a bright colour` and two `zoom transition`s. They are now
+  `shape wipe`, with the side right in 3 of 3 and the outline right in 3 of 3.
+- Two cuts from a red card to a white page were called `white flash`; they are now `cut`. A flash must be brighter
+  than the pictures on both sides.
+- The timing of a logo sting matched what the frames show: comes in over 0.7 s, fast then settles, still 71 % of
+  the shot, leaves over 0.8 s speeding up, the exit the entrance backwards.
+- The three banners whose last frame is their first were marked `loops`; none of the others was.
+- On the 24 transition demos, the full EditAtlas edits and the five live-action test videos no join changed. An
+  early version also called a fade over pillarbox bars and a flickering silent film `shape wipe`; a shape now has
+  to keep its colours while it grows and only grow. `timing` words appeared on 5 of 33 live-action shots, all
+  freeze frames, title cards or locked-off shots that hold still.
+
+## Joins
+
+| Field | Meaning |
+|---|---|
+| `start`, `end`, `at` | first and last changed frame, and the middle, in seconds |
+| `seconds` | length of the join; a cut is one or two frames (0.03 to 0.08 s) |
+| `kind` | see below |
+| `from` | wipes: the side the new picture comes from, or `center outward` / `edges inward`; shape wipes: where the shape starts |
+| `shape` | shape wipes: `a straight-edged panel or bar`, `a curved or pointed shape`, or unclear |
+| `cover_seconds` | shape wipes: from the first growth to the frame most covered |
+| `moves` | pushes: the direction the picture travels |
+| `scale` | snap zoom or punch-in: how much closer the new frame is |
+| `blend_fit` | how well the middle frames are a mix of the two pictures (low = a dissolve) |
+| `split_share` | share of changed pixels that are clearly one picture or the other (high = a wipe or a shape) |
+| `blur_ratio` | sharpness in the middle of the join against the shots on either side (low = blurred) |
+
+| `kind` | What it usually is | Search terms that work |
+|---|---|---|
+| `cut` | a straight cut | none needed; `cut on beat` if it hits the music |
+| `cross-dissolve` | one picture fades through the other | `cross dissolve`, `blur dissolve` |
+| `dip to black`, `black flash` | fade through black, or a few black frames | `dip to black`, `fade to black`; check for an iris |
+| `dip to white`, `white flash`, `bright flash` | fade through white, or a flash frame on the cut | `white flash transition`, `flash cut` |
+| `dip through a flat colour` | fades through grey or a colour | `fade through color` |
+| `wipe` + `from` | a line or shape reveals the new picture | `wipe from right`, `iris open`, `barn door`, `clock wipe` |
+| `shape wipe` + `shape`, `from` | a flat shape grows over the old picture until it covers it; often the brand's own mark | `shape mask wipe`, `logo transition`, `ink stamp transition` for a rough one |
+| `push or slide` + `moves` | the picture travels across the frame | `push left`, `slide up`, `cover slide` |
+| `whip or push` | the picture travels and blurs | `whip pan transition` |
+| `zoom transition` | scale change across the join | `zoom in transition`; often a crash zoom inside one shot |
+| `blur transition` | the join goes soft | `blur transition` |
+| `snap zoom or punch-in` | same picture, suddenly closer | `snap zoom`, `punch in` |
+| `jump cut` | same scene, small jump | `jump cut` |
+| `gradual (...)` | something else: look at the frames | describe what you see |
+
+## Shots
+
+| Field | Meaning |
+|---|---|
+| `camera` | words built from the numbers below |
+| `pan_x_pct`, `pan_y_pct` | how far the content travelled over the shot, in % of the frame width; negative x = moves left (the camera pans right) |
+| `zoom` | total scale change over the shot (1.10 = 10 % closer) |
+| `fastest_zoom_0_3s`, `fastest_zoom_at` | biggest scale change in any 0.3 s, and when: 1.25 or more is a crash or snap zoom |
+| `roll_deg` | rotation; only reported when the fit is clean |
+| `shake_pct` | jitter of the picture, % of width; 0.25 or more reads as handheld or added shake |
+| `steadiness` | 0 to 1 per axis: 1 = the move keeps one direction; under 0.5 the "move" is jitter or subject motion |
+| `fit_residual` | how badly the frame moves as one flat picture; high (0.3 or more) = people or objects move a lot, so camera words are unreliable |
+| `activity` | how much the picture changes per frame, any cause |
+| `hold` | a run of still frames after movement: a freeze frame, or a subject that stops |
+| `speed_change` | motion 4 or more times faster in one part of the shot than another: a speed ramp, slow motion, or just action |
+| `timing` | shots that hold still for 0.2 s or more: `still_share`, `enter_s` and `enter` (how long until the first hold, and `fast, then settles`, `slow, then speeds up` or `even speed`), `exit_s` and `exit`, `moves_while_holding`, `exit_mirrors_entrance`; `words` when the shot is still 20 % of the time or more |
+| `look` | median brightness, contrast, saturation, warmth; words for black and white, warm, cool, dark, flat, black bars, dark corners (vignette) |
+
+Search terms: `crash zoom`, `snap zoom`, `slow push in`, `Ken Burns`, `camera shake`, `freeze frame`,
+`speed ramp`, `slow motion`, `letterbox`, `vignette`, `teal and orange`, `black and white`, `film grain`.
+
+The camera numbers cannot tell a real camera move from a zoom added in the edit, and they read subject motion as
+camera motion when the subject fills the frame. Grain, light leaks, glitches, colour shifts and most filters are
+not measured; name them from the frames.
+
+## Designed motion: titles, logos, charts, graphic videos
+
+What makes motion graphics read as polished is mostly timing, and `timing` measures it. On the demos above:
+things come in within 0.3 to 0.9 s, fast at first and settling; the picture then holds completely still for half
+to nine tenths of the shot; it leaves by playing the entrance backwards, speeding up; words and pieces come in
+about 0.15 s apart; and banners end on their first frame so they loop. Put these numbers in the recipe ("comes in
+over 0.7 s, fast then settles, holds 3.8 s, leaves over 0.6 s"); they are what a remake usually gets wrong.
+
+`fast, then settles` is an ease-out (or a spring that settles); `slow, then speeds up` an ease-in; `even speed`
+is linear, which is normal for a counter or a bar that grows. The numbers are durations and a shape, not the
+curve: say "about" and check the frames with `frames.py --step 0.04`.
+
+On a plain background, a graphic that appears or grows is not a join but the analyzer may report one: a card
+growing from a line reads as `jump cut`, `snap zoom or punch-in` or `zoom transition`, a burst coming in as
+`dip through a bright colour`. Look at `joins_NN.png`; if the background stays and an element changes, write a
+`corrections` line and name the element's entrance instead (`pop in`, `scale in`, `logo reveal`).
+
+`format.loops: true` means the last frame is the first again after something moved: the piece was made to loop
+(a banner, a sticker, a background). Search `looping`, `seamless loop`.
+
+Search terms: `logo reveal`, `logo morph`, `shape mask wipe`, `per-word stagger`, `focus pull text`, `animated
+bar chart`, `counter`, `stroke to fill`, `looping abstract plate`, `kinetic typography`.
+
+### Each element (elements.py)
+
+`elements.py` reads the video at 360 px wide, finds the background of each shot (flat or a smooth gradient), and
+follows everything in front of it, split by colour, from frame to frame. For each element: the box (x, y, width,
+height in % of the frame, taken in the middle of its hold), `in_s` and how it comes in, `holds_s`, `out_s` and how
+it leaves.
+
+- **how**: `slides from <side>` (with `from outside the frame` when it starts beyond the edge), `scales up from
+  about N %`, `wipes or types on`, `fades in`, `cuts on`, or `there when the shot starts`. A scale up that also
+  fades says both. `over_s` is from the first visible frame to the start of the hold, so it reads short for moves
+  that start outside the frame or from a tiny size: say "about".
+- **stagger**: three or more elements coming in the same way one after another, with a steady gap. Words of one
+  line that come in together are one element. Search `per-word stagger`, `staggered entrance`.
+- **carried across the cut**: an element in the same place and size on both sides of a cut while the rest
+  changes. Search `graphic match cut`, `shape match cut`.
+- **not read**: shots whose background is footage or texture. For graphics over footage use `events.png` and
+  `frames.py`.
+
+Where it fails: a graphic in the background's own colour, thin lines (2 px or less at 360 px are dropped), text
+that changes colour as it comes in, and shapes that cross each other with the same colour (they merge). Check every
+entrance you name with `frames.py --step 0.04`.
+
+### Backgrounds (background.py)
+
+`background.py` samples a grid of colours at each `--at` time, drops cells that look like text or shapes, and fits
+a flat colour, a straight gradient or a radial glow. It prints the kind, the hex colours, the direction in words
+(`top-left to bottom-right`) and a CSS line; the CSS angle follows CSS (0deg points up, 90deg right). Pick still
+moments: a graphic moving across the frame bends the fit. On a filmed background it says so and gives average
+colours only. Put the hex values in the look element and the recipe; they beat colour names.
+
+## Overlays
+
+`events`: a moment where one horizontal band (`top`, `upper`, `upper middle`, `lower middle`, `lower`, `bottom`)
+changes while the rest of the frame holds. `edge_change` positive means more detail appeared (text or a graphic
+in), negative means it went. Word-by-word captions show as a run of events in one band a few tenths of a second
+apart. On moving footage, events are missed; on a talking head they also fire when the speaker's hands move into
+a band. Check every one in `events.png` or with `frames.py --crop`.
+
+`persistent`: blocks of the frame that stayed the same through at least 60 % of the joins: a logo, a frame, a
+fixed caption bar, a burned-in credit.
+
+Search terms: `meme caption`, `word by word pop`, `bouncing words`, `typewriter caption`, `karaoke`,
+`tilted sticker`, `lower third`, `callout label`, `progress bar`, `logo watermark`.
+
+On a 4 s vertical ad with a slow push in, analyze.py found 1 overlay event where eight words or titles came in.
+The overview sheet (24 frames or more) is where those show; open it before trusting `events`.
+
+Search terms for how text comes in and where it sits: `text behind subject` (Text behind object), `word slides in
+with motion blur` (Whip In), `word drops in from above` (Drop Down), `words appear one by one` (Per-Word
+Stagger), `bouncing words`, `gradient sweep text` (only for a gradient that moves). EditAtlas has no technique for
+a still gradient fill on its own; give its colours in the text style and say so in `gap` if it is the element.
+
+## Text colours and fonts (text_look.py)
+
+`text_look.py` splits a crop into colour clusters and takes as text the clusters that do not touch the crop's
+edge. Colours the background shares (white text over a white shirt) only count inside the line of text, found
+from rows dense with sharp edges.
+
+- **fill**: the median colour of the text in five bands top to bottom and five left to right. A change of 0.1 or
+  more is a gradient; the direction with the larger change names it. "Both axes" is a diagonal gradient, a
+  gradient per letter, or words in different colours: look at the crop.
+- **outline or shadow**: a cluster that forms the outer layer of the letters. Offset by more than 4 % of the text
+  height, it is a shadow. A soft glow often comes out as a thick outline; the halo line says which.
+- **halo**: the ring just outside the letters against the background further out: brighter is a glow, darker
+  below is a drop shadow.
+- **lean**: the shear that makes stems upright, in 2 degree steps. 6 degrees or more is italic or slanted.
+- **strokes**: weight is the median stroke width over the text height; contrast is thick strokes over thin. Drawn
+  about 100 px tall, brush, marker and casual scripts measured 1.2 to 1.9; Arizonia, Playball, Lobster and Alex
+  Brush 2.3 to 4.3; but thin formal scripts (Great Vibes, Pinyon Script, Petit Formal Script) only 1.0 to 1.7,
+  because their hairlines are one pixel. So 2.2 or more says thick and thin; a low number does not rule out a
+  formal script. A glow thickens the reference's strokes, so its weight reads high.
+- **size**: how tall the letters are in px of the source frame. With `--text`, it also prints the font size in
+  each lookalike, because the same letters need a different font size in each font (capitals take about 0.85 of
+  the size in a tall condensed font such as Anton and about 0.7 in Bebas Neue or Montserrat). Give the size with
+  the font you name. Without a font, it prints a range for capitals only and an estimate for lowercase; do not
+  scale from the x-height.
+- **match**: overlap of the letter shapes, scaled to the same box, weighed by stroke contrast and weight. On a
+  bold italic title with a gradient and a drop shadow it put Montserrat Black Italic first, which matched letter
+  for letter. On a glowing calligraphic script partly hidden by other words, it ranked brush scripts first, the
+  same mistake a remake made by eye. Judge scripts by the letters: the capitals, the loops, thick downstrokes.
+
+Where it fails: busy backgrounds in the text's colours (raise `--k`, pick clusters with `--text-clusters`), text
+still moving or fading in (pick a later time), text smaller than about 20 px tall (use a higher resolution source).
+`--before` takes the frame before the text came in and keeps only what changed; it helps on a still shot and fails
+when the camera or the subject moves.
+
+## Comparing a remake (compare.py)
+
+`compare.py REFERENCE REMAKE` matches the two videos second for second (`--offset` moves the remake) and prints,
+largest first:
+
+- **length and cuts**: different lengths, cuts missing or moved.
+- **timing**: stretches where something moves; a move that takes longer or shorter in the remake ("the move at
+  3.5 s takes 0.8 s in the reference and 1.4 s in the remake").
+- **rows**: rows of text or shapes in a still moment of each shot; how many, how tall (`drawn smaller`), and,
+  per shot, how far apart the rows come in (`stagger`). A missing row is usually a missing word or line.
+- **background and look**: the edge colour, brightness, contrast, colour and detail at each matching moment.
+
+Rows, size and place are compared only at moments when neither video moves; it lists the moments it skipped.
+A pair in `compare.png` caught mid-move differs because of the timing, not the layout: do not report it twice.
+
+These are measurements, not faults: a change the person made on purpose stays. Check each in `compare.png`
+(reference left, remake right). With `--region x,y,w,h` it also compares one area, such as a logo. Two videos with
+different footage compare only on timing and layout.
+
+## Audio
+
+| Field | Meaning |
+|---|---|
+| `lufs` | integrated loudness of the whole video (EBU R128) |
+| `silent_share` | share of 50 ms windows under -50 dBFS |
+| `speech_like_share` | share of 2 s windows whose voice band rises and falls at syllable rate; a hint only, it misses dialogue under music |
+| `music.tempo_candidates` | up to three tempos, strongest first, each refined to 0.1 BPM, with how many cuts land within 70 ms of its beats and how many would by chance |
+| `music.cuts_follow_beat` | present when one candidate holds at least 60 % of the cuts and twice the chance rate |
+| `transients` | sudden sounds: time, a rough kind from brightness (`low hit or boom`, `hit`, `bright hit or whoosh`, `click, tick or pop`), tail length, `on_beat`, and `near_visual` (a join, overlay event or fast zoom within 0.2 s) |
+| `swells` | the level rising steadily 12 dB or more over 0.3 to 2.5 s: a riser, a whoosh into a moment, or a music build |
+
+A transient with `near_visual` is likely a sound effect placed on that moment; one with `on_beat` and no
+`near_visual` is likely the music. Drum hits and speech also make transients; the kind is a guess from brightness.
+Do not name a sound from these numbers. Suggest an EditAtlas sound for the moment instead (`search_sfx`), and say
+it is a suggestion.

@@ -101,8 +101,8 @@
         "Chạy local"
       ],
       "video": {
-        "before": "",
-        "after": ""
+        "before": "videos/modules/xoa-logo-gemini-before.mp4",
+        "after": "videos/modules/xoa-logo-gemini-after.mp4"
       },
       "status": "ready",
       "tool": {
@@ -152,17 +152,20 @@
         "before": "videos/modules/tool-video-before.mp4",
         "after": "videos/modules/tool-video-after.mp4"
       },
-      "status": "soon",
+      "status": "ready",
       "skill": {
         "req": [
           "Claude Code",
-          "HyperFrames",
+          "Node.js",
+          "Python 3",
           "FFmpeg"
         ],
-        "cmd": "/tool-video aroll.mp4 --tool \"Tên tool\""
+        "cmd": "/tool-video:tool-video aroll.mp4 --tool \"Tên tool\"",
+        "plugin": "tool-video",
+        "note": "Render bằng HyperFrames (tự tải qua npx). Tuỳ chọn: whisper-cli để tự chép lời, không có thì đưa kèm script hoặc .srt. Kèm bộ SFX CC0, không kèm nhạc nền: tự chọn bài có quyền dùng."
       },
       "tool": {
-        "line": "Mở Content Creator Studio trên trình duyệt, chọn A-roll và tư liệu rồi dựng video.",
+        "line": "Mở Content Creator Studio trên trình duyệt, chọn A-roll và tư liệu rồi dựng video. Bản web đang tách riêng, dùng skill trước.",
         "req": [
           "Python",
           "HyperFrames",
@@ -227,8 +230,8 @@
         "Cat-meme"
       ],
       "video": {
-        "before": "",
-        "after": ""
+        "before": "videos/modules/meme-studio-before.mp4",
+        "after": "videos/modules/meme-studio-after.mp4"
       },
       "status": "soon",
       "skill": {
