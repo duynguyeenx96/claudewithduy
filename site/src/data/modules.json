@@ -609,6 +609,13 @@
     },
     {
       "topic": "Bất động sản",
+      "name": "Bản đồ 3D vị trí",
+      "desc": "Bản đồ vệ tinh nghiêng, camera bay tới từng tiện ích, kèm tuyến đường, km và phút. Làm bằng Re Map Video.",
+      "video": "videos/style/re-map-video.mp4",
+      "href": ""
+    },
+    {
+      "topic": "Bất động sản",
       "name": "Giới thiệu căn hộ",
       "video": "videos/gioi-thieu-can-ho.mp4",
       "href": ""
