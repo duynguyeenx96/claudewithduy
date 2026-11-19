@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="vi" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Real-estate location map</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script src="assets/data.js"></script>
+    <script src="assets/timing.js"></script>
+    <style>
+      @font-face { font-family: "Playfair"; src: url("assets/fonts/PlayfairDisplay.ttf") format("truetype"); font-weight: 400 900; }
+      @font-face { font-family: "BeVN"; src: url("assets/fonts/BeVietnamPro-Medium.ttf") format("truetype"); font-weight: 500; }
+      @font-face { font-family: "BeVN"; src: url("assets/fonts/BeVietnamPro-Bold.ttf") format("truetype"); font-weight: 700; }
+      @font-face { font-family: "BeVN"; src: url("assets/fonts/BeVietnamPro-ExtraBold.ttf") format("truetype"); font-weight: 800; }
+      :root {
+        --ground: #17231c;
+        --ink: #ffffff;
+        --gold: #e2c27d;
+        --gold-deep: #b8914a;
+        --panel: #0f3a31;
+        --panel-edge: rgba(226, 194, 125, 0.55);
+        --pin: #e0262f;
+        --route: #ffffff;
+        --metro: #3d9dff;
+        --font-display: "Playfair", serif;
+        --font-ui: "BeVN", sans-serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: var(--font-ui); color: var(--ink); }
+      .layer { position: absolute; inset: 0; width: 100%; height: 100%; }
+      #map-canvas { display: block; }
+      #vignette {
+        background:
+          linear-gradient(180deg, rgba(8, 18, 14, 0.75) 0%, rgba(8, 18, 14, 0.35) 11%, rgba(8, 18, 14, 0) 18%),
+          linear-gradient(0deg, rgba(8, 18, 14, 0.85) 0%, rgba(8, 18, 14, 0.55) 34%, rgba(8, 18, 14, 0) 58%);
+        pointer-events: none;
+      }
+      #overlay-svg { overflow: visible; }
+      .route { fill: none; stroke: var(--route); stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 8px rgba(255,255,255,0.9)); }
+      .metro-under { fill: none; stroke: rgba(255,255,255,0.85); stroke-width: 13; stroke-linecap: round; stroke-linejoin: round; }
+      .metro { fill: none; stroke: var(--metro); stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }
+      .connector { stroke: rgba(255,255,255,0.92); stroke-width: 4; filter: drop-shadow(0 0 6px rgba(255,255,255,0.8)); }
+
+      .pin { position: absolute; left: 0; top: 0; width: 64px; height: 80px; opacity: 0; }
+      .pin svg { width: 100%; height: 100%; display: block; filter: drop-shadow(0 6px 8px rgba(0,0,0,0.45)); }
+      .ring { position: absolute; left: 0; top: 0; width: 120px; height: 120px; border-radius: 50%; border: 4px solid rgba(224, 38, 47, 0.9); opacity: 0; }
+
+      .tag {
+        position: absolute; left: 0; top: 0; padding: 10px 18px 12px; border-radius: 10px; text-align: center; white-space: nowrap;
+        background: var(--panel); border: 2px solid var(--panel-edge); box-shadow: 0 8px 22px rgba(0,0,0,0.35); opacity: 0;
+      }
+      .tag .t1 { display: block; font-size: 17px; font-weight: 700; letter-spacing: 0.06em; color: rgba(255,255,255,0.78); }
+      .tag .t2 { display: block; font-size: 25px; font-weight: 800; letter-spacing: 0.03em; color: #fff; }
+      .tag.active { background: linear-gradient(180deg, #f1d9a0, #c9a35c); border-color: #fff3d6; }
+      .tag.active .t1 { color: #5a4318; }
+      .tag.active .t2 { color: #2d200a; }
+      .tag.project { padding: 14px 26px 14px; border-width: 2px; }
+      .tag.project .t2 { font-family: var(--font-display); font-weight: 700; font-size: 34px; letter-spacing: 0.08em; }
+      .tag.project .t1 { font-size: 15px; letter-spacing: 0.22em; color: var(--gold); order: 2; }
+
+      .metro-label { position: absolute; left: 0; top: 0; padding: 6px 14px; border-radius: 8px; background: #1a63c4; border: 2px solid #fff; font-size: 20px; font-weight: 800; letter-spacing: 0.04em; white-space: nowrap; opacity: 0; }
+
+      .card {
+        position: absolute; left: 130px; top: 240px; width: 820px; height: 500px; border-radius: 22px; overflow: hidden;
+        border: 3px solid var(--gold); box-shadow: 0 24px 60px rgba(0,0,0,0.55); opacity: 0; background: #222;
+      }
+      .card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+      .card .shade { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(5,20,15,0.85) 0%, rgba(5,20,15,0) 45%); }
+      .card .cap { position: absolute; left: 34px; bottom: 26px; }
+      .card .cap .t1 { display: block; font-size: 22px; font-weight: 700; letter-spacing: 0.08em; color: var(--gold); }
+      .card .cap .t2 { display: block; font-size: 42px; font-weight: 800; letter-spacing: 0.02em; }
+
+      .headline { position: absolute; left: 96px; right: 96px; top: 1040px; opacity: 1; }
+      .headline .l1, .headline .l2 { display: block; font-family: var(--font-display); font-weight: 700; font-size: 96px; line-height: 1.02; letter-spacing: 0.01em; text-shadow: 0 6px 24px rgba(0,0,0,0.5); }
+      .headline .l2 { color: var(--gold); }
+      .headline .rule { display: block; width: 120px; height: 3px; margin: 26px 0 20px; background: var(--gold); }
+      .headline .sub { display: block; font-size: 34px; font-weight: 700; color: rgba(255,255,255,0.95); text-shadow: 0 2px 10px rgba(0,0,0,0.6); }
+      .headline .cta { display: inline-block; margin-top: 30px; padding: 20px 44px; border-radius: 999px; background: linear-gradient(180deg, #f3dca6, #c9a35c); color: #2a1e08; font-size: 34px; font-weight: 800; letter-spacing: 0.03em; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+
+      #brand { position: absolute; right: 120px; top: 160px; text-align: right; opacity: 0; }
+      #brand .b1 { display: block; font-family: var(--font-display); font-weight: 700; font-size: 34px; letter-spacing: 0.1em; text-shadow: 0 2px 10px rgba(0,0,0,0.6); }
+      #brand .b2 { display: block; font-size: 17px; font-weight: 700; letter-spacing: 0.24em; color: #f6e2b0; text-shadow: 0 1px 6px rgba(0,0,0,0.9); margin-top: 4px; }
+
+      #intro { position: absolute; left: 96px; right: 96px; top: 1000px; text-align: left; }
+      #intro .n { display: block; font-family: var(--font-display); font-weight: 700; font-size: 100px; line-height: 1.0; letter-spacing: 0.04em; text-shadow: 0 6px 30px rgba(0,0,0,0.55); }
+      #intro .tg { display: block; font-family: var(--font-display); font-style: italic; font-size: 40px; color: var(--gold); margin-top: 18px; }
+      #intro .rule { display: block; width: 120px; height: 3px; margin: 26px 0 20px; background: var(--gold); }
+      #intro .ad { display: block; font-size: 34px; font-weight: 700; }
+
+      #hero { position: absolute; inset: 0; opacity: 0; }
+      #hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+      #credits { position: absolute; left: 96px; right: 96px; bottom: 330px; font-size: 15px; line-height: 1.45; color: rgba(255,255,255,0.6); opacity: 0; }
+
+      #aroll { position: absolute; right: 60px; bottom: 300px; width: 330px; height: 330px; border-radius: 50%; overflow: hidden; border: 5px solid var(--gold); box-shadow: 0 16px 40px rgba(0,0,0,0.5); background: #000; }
+      #aroll.rect { border-radius: 26px; width: 330px; height: 440px; }
+      #aroll video { width: 100%; height: 100%; object-fit: cover; display: block; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="__DUR__" data-width="1080" data-height="1920">
+      <canvas id="map-canvas" class="layer" width="1080" height="1920"></canvas>
+      <div id="vignette" class="layer"></div>
+      <svg id="overlay-svg" class="layer" viewBox="0 0 1080 1920"></svg>
+      <div id="markers" class="layer"></div>
+      <div id="cards" class="layer"></div>
+      <div id="texts" class="layer"></div>
+      <div id="brand"><span class="b1"></span><span class="b2"></span></div>
+      <div id="credits"></div>
+      <!--HERO-->
+      <!--AROLL-->
+      <!--AUDIO-->
+    </div>
+
+    <script type="module">
+      import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.181.2/+esm";
+
+      const D = window.RE_DATA;
+      const T = window.RE_TIMING;
+      const W = 1080, H = 1920;
+      const $ = (s) => document.querySelector(s);
+      const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
+      const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+      const lerp = (a, b, k) => a + (b - a) * k;
+      const easeIO = (k) => (k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2);
+      const easeOut = (k) => 1 - Math.pow(1 - k, 3);
+      const backOut = (k) => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(k - 1, 3) + c1 * Math.pow(k - 1, 2); };
+      const ramp = (t, a, b) => clamp((t - a) / (b - a), 0, 1);
+      // visible window with fades: 0 before a, 1 between a+fi and b-fo, 0 after b
+      const win = (t, a, b, fi = 0.35, fo = 0.35) => Math.min(easeOut(ramp(t, a, a + fi)), 1 - easeIO(ramp(t, b - fo, b)));
+      function rng(seed) { let s = seed >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); }
+
+      // ---------------- three.js map ----------------
+      const canvas = $("#map-canvas");
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
+      renderer.setPixelRatio(1);
+      renderer.setSize(W, H, false);
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      const scene = new THREE.Scene();
+      const HAZE = new THREE.Color("#7f8f86");
+      scene.background = HAZE;
+      scene.fog = new THREE.Fog(HAZE, 1, 2);
+      const camera = new THREE.PerspectiveCamera(40, W / H, 10, 1e6);
+      const loader = new THREE.TextureLoader();
+      const maxAniso = renderer.capabilities.getMaxAnisotropy();
+
+      // soft-edge mask so detail patches blend into coarser layers
+      const maskCanvas = document.createElement("canvas");
+      maskCanvas.width = maskCanvas.height = 256;
+      {
+        const g = maskCanvas.getContext("2d");
+        const img = g.createImageData(256, 256);
+        for (let y = 0; y < 256; y++) for (let x = 0; x < 256; x++) {
+          const e = Math.min(x, y, 255 - x, 255 - y) / 255;
+          const v = Math.round(255 * clamp(e / 0.12, 0, 1));
+          const i = (y * 256 + x) * 4; img.data[i] = img.data[i + 1] = img.data[i + 2] = v; img.data[i + 3] = 255;
+        }
+        g.putImageData(img, 0, 0);
+      }
+      const edgeMask = new THREE.CanvasTexture(maskCanvas);
+
+      D.layers.forEach((L, i) => {
+        const tex = loader.load(L.src);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.anisotropy = maxAniso;
+        const w = L.x1 - L.x0, h = L.z1 - L.z0;
+        const mat = new THREE.MeshBasicMaterial({ map: tex, depthTest: false, depthWrite: false, transparent: i > 0, alphaMap: i > 0 ? edgeMask : null, fog: true });
+        const mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat);
+        mesh.rotation.x = -Math.PI / 2;
+        mesh.position.set(L.x0 + w / 2, 0, L.z0 + h / 2);
+        mesh.renderOrder = i;
+        scene.add(mesh);
+      });
+
+      // clouds: seeded sprites at two altitude bands
+      const cloudTex = [0, 1, 2].map((k) => { const t = loader.load(`assets/fx/cloud${k}.png`); t.colorSpace = THREE.SRGBColorSpace; return t; });
+      const clouds = [];
+      {
+        const r = rng(42);
+        const spots = [[0, 0], ...D.pois.map((p) => p.pos)];
+        spots.forEach(([cx, cz], si) => {
+          const n = si === 0 ? 7 : 4;
+          for (let k = 0; k < n; k++) {
+            const size = 500 + r() * 700;
+            clouds.push({ x: cx + (r() - 0.5) * 3800, z: cz + (r() - 0.5) * 3800, y: 380 + r() * 520, size, tex: (k + si) % 3, drift: 6 + r() * 10 });
+          }
+        });
+        for (let k = 0; k < 26; k++) {
+          clouds.push({ x: (r() - 0.5) * 60000, z: (r() - 0.5) * 60000 - 6000, y: 2600 + r() * 2400, size: 3500 + r() * 4500, tex: k % 3, drift: 25 + r() * 25 });
+        }
+        clouds.forEach((c, i) => {
+          const m = new THREE.SpriteMaterial({ map: cloudTex[c.tex], transparent: true, depthTest: false, depthWrite: false, fog: false, opacity: 0.9 });
+          const s = new THREE.Sprite(m);
+          s.scale.set(c.size, c.size * 0.62, 1);
+          s.renderOrder = 100 + i;
+          c.sprite = s;
+          scene.add(s);
+        });
+      }
+
+      // ---------------- camera keyframes ----------------
+      function fit(pts, pad = 1.35, minD = 3200) {
+        let x0 = Infinity, x1 = -Infinity, z0 = Infinity, z1 = -Infinity;
+        pts.forEach(([x, z]) => { x0 = Math.min(x0, x); x1 = Math.max(x1, x); z0 = Math.min(z0, z); z1 = Math.max(z1, z); });
+        const dx = x1 - x0, dz = z1 - z0;
+        const d = Math.max(dx / 0.41, dz / 0.52, minD) * pad;
+        return { x: (x0 + x1) / 2, z: (z0 + z1) / 2 + d * 0.05, d };
+      }
+      const allPts = [[0, 0], ...D.pois.map((p) => p.pos)];
+      const ov = fit(allPts, 1.25);
+      const shot = (x, z, d, tilt, bearing) => ({ x, z, d, tilt, bearing });
+      const K = []; // {t, s}
+      const key = (t, s) => K.push({ t, s });
+      const near = (p) => (p.dist < 9000 ? 1500 : 3000);
+
+      key(0, shot(ov.x, ov.z, ov.d * 1.7, 12, -14));
+      key(T.intro.start + T.intro.dur * 0.55, shot(ov.x * 0.4, ov.z * 0.4, ov.d * 0.75, 30, -6));
+      key(T.intro.start + T.intro.dur, shot(0, 0, 4200, 44, 0));
+      T.beats.forEach((b) => {
+        const p = D.pois[b.i];
+        const pr = fit([[0, 0], p.pos], 1.3, 3600);
+        const brg = (b.i % 2 ? 1 : -1) * 10;
+        key(b.start + Math.min(2.0, b.dur * 0.3), shot(pr.x, pr.z, pr.d, 40, brg * 0.5));
+        key(b.start + Math.min(4.3, b.dur * 0.62), shot(p.pos[0], p.pos[1] - near(p) * 0.04, near(p), 50, brg));
+        key(b.start + b.dur, shot(p.pos[0], p.pos[1] - near(p) * 0.04, near(p) * 0.86, 52, brg + 7));
+      });
+      key(T.outro.start + Math.min(2.6, T.outro.dur * 0.45), shot(ov.x, ov.z, ov.d, 34, 0));
+      key(T.outro.start + T.outro.dur, shot(ov.x, ov.z, ov.d * 0.9, 38, 6));
+
+      function camAt(t) {
+        if (t <= K[0].t) return K[0].s;
+        for (let i = 1; i < K.length; i++) {
+          if (t <= K[i].t) {
+            const a = K[i - 1].s, b = K[i].s;
+            const k = easeIO(ramp(t, K[i - 1].t, K[i].t));
+            return { x: lerp(a.x, b.x, k), z: lerp(a.z, b.z, k), d: Math.exp(lerp(Math.log(a.d), Math.log(b.d), k)), tilt: lerp(a.tilt, b.tilt, k), bearing: lerp(a.bearing, b.bearing, k) };
+          }
+        }
+        return K[K.length - 1].s;
+      }
+
+      function placeCamera(c) {
+        const tl = THREE.MathUtils.degToRad(c.tilt), br = THREE.MathUtils.degToRad(c.bearing);
+        camera.position.set(c.x + c.d * Math.sin(tl) * Math.sin(br), c.d * Math.cos(tl), c.z + c.d * Math.sin(tl) * Math.cos(br));
+        camera.near = Math.max(5, c.d * 0.02);
+        camera.far = c.d * 30;
+        camera.updateProjectionMatrix();
+        camera.lookAt(c.x, 0, c.z);
+        camera.updateMatrixWorld();
+        scene.fog.near = c.d * 1.25;
+        scene.fog.far = c.d * 4.2;
+      }
+
+      const v3 = new THREE.Vector3();
+      function proj(x, z, y = 0) {
+        v3.set(x, y, z).project(camera);
+        return { x: (v3.x + 1) * 0.5 * W, y: (1 - v3.y) * 0.5 * H, ok: v3.z < 1 && v3.z > -1 };
+      }
+
+      // ---------------- overlays ----------------
+      const svg = $("#overlay-svg");
+      const NS = "http://www.w3.org/2000/svg";
+      const mkPath = (cls) => { const p = document.createElementNS(NS, "path"); p.setAttribute("class", cls); svg.appendChild(p); return p; };
+      const metroUnder = D.metro && D.metro.pts ? mkPath("metro-under") : null;
+      const metroPath = D.metro && D.metro.pts ? mkPath("metro") : null;
+      const routes = D.pois.map(() => mkPath("route"));
+      const connector = document.createElementNS(NS, "line"); connector.setAttribute("class", "connector"); svg.appendChild(connector);
+
+      const ICON = {
+        metro: '<rect x="-9" y="-11" width="18" height="17" rx="4" fill="#fff"/><rect x="-6" y="-8" width="12" height="6" rx="1.5" fill="#e0262f"/><circle cx="-4.5" cy="2" r="1.8" fill="#e0262f"/><circle cx="4.5" cy="2" r="1.8" fill="#e0262f"/><path d="M-7 10 L-4 6 M7 10 L4 6" stroke="#fff" stroke-width="2.4"/>',
+        hospital: '<path d="M-3.5 -11h7v7.5h7.5v7h-7.5V11h-7V3.5H-11v-7h7.5z" fill="#fff"/>',
+        school: '<path d="M0 -10 L13 -3 L0 4 L-13 -3Z" fill="#fff"/><path d="M-7 1 v6 q7 5 14 0 v-6 L0 5Z" fill="#fff"/>',
+        shop: '<path d="M-9 -4h18l-1.5 15h-15z" fill="#fff"/><path d="M-4.5 -4v-3a4.5 4.5 0 0 1 9 0v3" stroke="#fff" stroke-width="2.6" fill="none"/>',
+        plane: '<path d="M0 -12 C2 -12 2.4 -9 2.4 -7 V-2 L12 4 V7 L2.4 4 V9 L5.5 11.5 V13.5 L0 12 L-5.5 13.5 V11.5 L-2.4 9 V4 L-12 7 V4 L-2.4 -2 V-7 C-2.4 -9 -2 -12 0 -12Z" fill="#fff"/>',
+        city: '<path d="M-11 11V-2h6v13zM-3 11V-11h7V11zM6 11V-5h6v16z" fill="#fff"/>',
+        home: '<path d="M0 -11 L12 0 H8 V11 H-8 V0 H-12Z" fill="#fff"/>',
+      };
+      const pinSVG = (icon, color) => `<svg viewBox="-32 -36 64 80"><path d="M0 42 C-6 30 -28 14 -28 -6 A28 28 0 0 1 28 -6 C28 14 6 30 0 42Z" fill="${color}" stroke="#fff" stroke-width="3"/><circle cx="0" cy="-6" r="19" fill="rgba(0,0,0,0.12)"/><g transform="translate(0,-6)">${ICON[icon] || ICON.home}</g></svg>`;
+
+      const markers = $("#markers");
+      const items = []; // {kind, poi, pin, ring, tag}
+      const projItem = { pos: [0, 0], pin: el("div", "pin", pinSVG("home", "#0f3a31")), ring: el("div", "ring"), tag: el("div", "tag project", `<span class="t2">${D.name}</span>${D.address ? `<span class="t1">${D.address.toUpperCase()}</span>` : ""}`) };
+      projItem.ring.style.borderColor = "rgba(226,194,125,0.95)";
+      const poiItems = D.pois.map((p) => ({ p, pos: p.pos, pin: el("div", "pin", pinSVG(p.icon, "var(--pin)")), ring: el("div", "ring"), tag: el("div", "tag", `<span class="t1">${p.top}</span><span class="t2">${p.label}</span>`) }));
+      [projItem, ...poiItems].forEach((it) => { markers.append(it.ring, it.pin, it.tag); });
+      const metroLabel = D.metro && D.metro.pts ? el("div", "metro-label", D.metro.label) : null;
+      if (metroLabel) markers.append(metroLabel);
+
+      // cards (photo per poi)
+      const cards = $("#cards");
+      const cardEls = D.pois.map((p) => {
+        if (!p.photo_src) return null;
+        const c = el("div", "card", `<img src="${p.photo_src}" alt=""><div class="shade"></div><div class="cap"><span class="t1">${p.top}</span><span class="t2">${p.label}</span></div>`);
+        cards.append(c);
+        return c;
+      });
+
+      const beatOf = (t) => T.beats.find((b) => t >= b.start && t < b.start + b.dur);
+      const pinAppear = (i) => T.intro.start + T.intro.dur * 0.45 + i * 0.22;
+
+      function place(e, x, y) { e.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`; }
+
+      // world polyline -> SVG path: cut to fraction f of its real length, clip at the camera near plane
+      // (points behind the camera would project mirrored and draw lines across the frame)
+      function partial(pts, f) {
+        if (f >= 1) return pts;
+        let total = 0;
+        const seg = [];
+        for (let i = 1; i < pts.length; i++) { const l = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); seg.push(l); total += l; }
+        let left = total * Math.max(0, f);
+        const out = [pts[0]];
+        for (let i = 1; i < pts.length; i++) {
+          if (left >= seg[i - 1]) { out.push(pts[i]); left -= seg[i - 1]; continue; }
+          const k = seg[i - 1] ? left / seg[i - 1] : 0;
+          out.push([lerp(pts[i - 1][0], pts[i][0], k), lerp(pts[i - 1][1], pts[i][1], k)]);
+          break;
+        }
+        return out;
+      }
+      function polyD(pts, f = 1) {
+        const P = partial(pts, f);
+        if (P.length < 2) return "M0 0";
+        const nearZ = -camera.near * 1.05; // view space looks down -Z
+        const view = P.map(([x, z]) => new THREE.Vector3(x, 0, z).applyMatrix4(camera.matrixWorldInverse));
+        let d = "", pen = false;
+        const emit = (v, move) => {
+          const c = v.clone().applyMatrix4(camera.projectionMatrix);
+          d += (move ? "M" : "L") + ((c.x + 1) * 0.5 * W).toFixed(1) + " " + ((1 - c.y) * 0.5 * H).toFixed(1);
+        };
+        for (let i = 0; i < view.length; i++) {
+          const b = view[i], bin = b.z < nearZ;
+          if (i === 0) { if (bin) { emit(b, true); pen = true; } continue; }
+          const a = view[i - 1], ain = a.z < nearZ;
+          if (ain && bin) { emit(b, !pen); pen = true; }
+          else if (ain && !bin) { emit(a.clone().lerp(b, (nearZ - a.z) / (b.z - a.z)), !pen); pen = false; }
+          else if (!ain && bin) { emit(a.clone().lerp(b, (nearZ - a.z) / (b.z - a.z)), true); emit(b, false); pen = true; }
+        }
+        return d || "M0 0";
+      }
+
+      function renderOverlays(t) {
+        const beat = beatOf(t);
+        const outroK = win(t, T.outro.start + 0.6, T.outro.start + T.outro.dur + 5, 0.8, 0.1);
+        const mapK = T.hero ? ramp(t, T.hero.dur - 0.5, T.hero.dur + 0.3) : 1;
+
+        // metro
+        if (metroPath) {
+          const firstMetro = T.beats.find((b) => D.pois[b.i].icon === "metro");
+          const mOn = firstMetro ? ramp(t, firstMetro.start + 0.4, firstMetro.start + 2.6) : ramp(t, T.intro.start + T.intro.dur, T.intro.start + T.intro.dur + 2);
+          const d = polyD(D.metro.pts, easeIO(mOn));
+          [metroUnder, metroPath].forEach((p) => { p.setAttribute("d", d); p.style.opacity = mOn > 0 ? mapK : 0; });
+          const mi = D.metro.pts[Math.floor(D.metro.pts.length * 0.72)];
+          const ms = proj(mi[0], mi[1]);
+          place(metroLabel, clamp(ms.x + 14, 90, W - 260), clamp(ms.y - 18, 260, 1000));
+          const lx = clamp(ms.x + 14, 90, W - 260), ly = clamp(ms.y - 18, 260, 1000);
+          const mInText = ly + 44 > 1000 && lx < 940;
+          metroLabel.style.opacity = (mOn >= 1 && ms.ok && !mInText && !(beat && cardEls[beat.i] && ly < 760) ? 1 : 0) * mapK;
+        }
+
+        // routes
+        T.beats.forEach((b) => {
+          const p = D.pois[b.i];
+          const r = routes[b.i];
+          const draw = easeIO(ramp(t, b.start + 0.5, b.start + Math.min(2.6, b.dur * 0.4)));
+          if (draw <= 0) { r.style.opacity = 0; return; }
+          r.setAttribute("d", polyD(p.route, draw));
+          const active = beat === b;
+          const after = t >= b.start + b.dur;
+          r.style.opacity = active ? 1 : after ? Math.max(0.0, outroK * 0.75) : 1;
+          r.style.strokeWidth = active ? 7 : 4.5;
+        });
+
+        // pins + tags with collision culling
+        const placed = [];
+        const order = [];
+        const activeItem = beat ? poiItems[beat.i] : null;
+        if (activeItem) order.push(activeItem);
+        order.push(projItem);
+        poiItems.forEach((it) => { if (it !== activeItem) order.push(it); });
+        order.forEach((it) => {
+          const s = proj(it.pos[0], it.pos[1]);
+          const isProj = it === projItem;
+          const idx = isProj ? -1 : poiItems.indexOf(it);
+          const ap = isProj ? T.intro.start + T.intro.dur * 0.3 : pinAppear(idx);
+          const k = ramp(t, ap, ap + 0.5);
+          const sc = k > 0 ? backOut(k) : 0;
+          const vis = (s.ok && s.x > -80 && s.x < W + 80 && s.y > -80 && s.y < H + 80 ? 1 : 0) * mapK;
+          place(it.pin, s.x - 32, s.y - 78);
+          it.pin.style.opacity = vis * clamp(k * 2, 0, 1);
+          it.pin.style.scale = sc;
+          it.pin.style.transformOrigin = "50% 100%";
+          // ring pulse on active
+          const isActive = it === activeItem;
+          if (isActive) {
+            const ph = ((t - beat.start) % 1.6) / 1.6;
+            place(it.ring, s.x - 60, s.y - 60);
+            it.ring.style.scale = 0.3 + ph * 0.9;
+            it.ring.style.opacity = (1 - ph) * vis;
+          } else it.ring.style.opacity = 0;
+
+          // tag
+          const tag = it.tag;
+          tag.classList.toggle("active", isActive);
+          const tw = it.tw, th = it.th;
+          const tx = clamp(s.x - tw / 2, 90, W - 90 - tw), ty = s.y - 92 - th;
+          const rect = { x0: tx - 6, y0: ty - 6, x1: tx + tw + 6, y1: s.y + 4 };
+          // keep the headline block (bottom-left) and the top brand strip clear
+          const inText = rect.y1 > 1000 && rect.y0 < 1560 && rect.x0 < 940;
+          const inBrand = rect.y0 < 250 && rect.x1 > 560;
+          const hidden = isActive && cardEls[idx] && win(t, beat.start + 2.4, beat.start + beat.dur - 0.3) > 0.5;
+          const clash = placed.some((q) => rect.x0 < q.x1 && rect.x1 > q.x0 && rect.y0 < q.y1 && rect.y1 > q.y0);
+          const show = !clash && !hidden && !inBrand && !inText && vis > 0 && k >= 1;
+          if (show) placed.push(rect);
+          place(tag, tx, ty);
+          tag.style.opacity = show ? vis : 0;
+        });
+
+        // photo card + connector
+        let cardOn = 0;
+        cardEls.forEach((c, i) => { if (c) c.style.opacity = 0; });
+        connector.style.opacity = 0;
+        if (beat && cardEls[beat.i]) {
+          const c = cardEls[beat.i];
+          const a = beat.start + Math.min(2.4, beat.dur * 0.36), b = beat.start + beat.dur - 0.3;
+          cardOn = win(t, a, b, 0.5, 0.4);
+          const pop = backOut(ramp(t, a, a + 0.6));
+          c.style.opacity = cardOn;
+          c.style.scale = 0.86 + 0.14 * pop;
+          const s = proj(D.pois[beat.i].pos[0], D.pois[beat.i].pos[1]);
+          const cx = 540, cy = 240 + 500;
+          const k = easeOut(ramp(t, a + 0.25, a + 0.8));
+          connector.setAttribute("x1", cx); connector.setAttribute("y1", cy);
+          connector.setAttribute("x2", lerp(cx, s.x, k)); connector.setAttribute("y2", lerp(cy, s.y - 80, k));
+          connector.style.opacity = cardOn;
+        }
+      }
+
+      // clouds per frame: drift + fade near camera / above camera
+      function renderClouds(t) {
+        clouds.forEach((c) => {
+          const x = c.x + c.drift * t * 6;
+          c.sprite.position.set(x, c.y, c.z);
+          const dc = camera.position.distanceTo(c.sprite.position);
+          const above = c.y > camera.position.y * 0.92 ? 0 : 1;
+          const nearFade = clamp((dc - c.size * 0.35) / (c.size * 0.9), 0, 1);
+          const farFade = 1 - clamp((dc - camera.far * 0.25) / (camera.far * 0.2), 0, 1);
+          c.sprite.material.opacity = 0.88 * above * nearFade * farFade;
+        });
+      }
+
+      function renderAt(t) {
+        placeCamera(camAt(t));
+        renderClouds(t);
+        renderer.render(scene, camera);
+        renderOverlays(t);
+      }
+
+      // ---------------- text (GSAP) ----------------
+      const texts = $("#texts");
+      const tl = gsap.timeline({ paused: true });
+      const fmtKm = (v) => String(v).replace(".", ",");
+
+      $("#brand .b1").textContent = D.name;
+      $("#brand .b2").textContent = (D.tagline || "").toUpperCase();
+      tl.fromTo("#brand", { opacity: 0, y: -16 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, T.intro.start + T.intro.dur);
+
+      const intro = el("div", "", `<span class="n">${D.name}</span>${D.tagline ? `<span class="tg">${D.tagline}</span>` : ""}<span class="rule"></span><span class="ad">${D.address || ""}</span>`);
+      intro.id = "intro";
+      texts.append(intro);
+      tl.fromTo("#intro .n", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, T.intro.start + 0.3);
+      tl.fromTo("#intro .tg", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, T.intro.start + 0.6);
+      tl.fromTo("#intro .rule", { scaleX: 0 }, { scaleX: 1, transformOrigin: "0 50%", duration: 0.5, ease: "power2.out" }, T.intro.start + 0.8);
+      tl.fromTo("#intro .ad", { opacity: 0 }, { opacity: 1, duration: 0.5 }, T.intro.start + 0.95);
+      tl.to("#intro", { opacity: 0, y: -20, duration: 0.45, ease: "power2.in" }, T.intro.start + T.intro.dur - 0.45);
+
+      T.beats.forEach((b, n) => {
+        const p = D.pois[b.i];
+        const h = el("div", "headline", `<span class="l1">${p.headline[0]}</span><span class="l2">${p.headline[1] || ""}</span><span class="rule"></span><span class="sub">${p.short} · ${fmtKm(p.km)} km · ~${p.min} phút</span>`);
+        h.id = `hl-${n}`;
+        texts.append(h);
+        const s = b.start, e = b.start + b.dur;
+        tl.fromTo(`#hl-${n}`, { opacity: 0 }, { opacity: 1, duration: 0.01 }, s);
+        tl.fromTo(`#hl-${n} .l1`, { opacity: 0, y: 46 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, s + 0.3);
+        tl.fromTo(`#hl-${n} .l2`, { opacity: 0, y: 46 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, s + 0.45);
+        tl.fromTo(`#hl-${n} .rule`, { scaleX: 0 }, { scaleX: 1, transformOrigin: "0 50%", duration: 0.5, ease: "power2.out" }, s + 0.7);
+        tl.fromTo(`#hl-${n} .sub`, { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.5, ease: "power2.out" }, s + 0.85);
+        tl.to(`#hl-${n}`, { opacity: 0, duration: 0.4, ease: "power1.in" }, e - 0.45);
+      });
+
+      const out = el("div", "headline", `<span class="l1">${D.outro_title[0]}</span><span class="l2">${D.outro_title[1] || ""}</span><span class="rule"></span><span class="sub">${D.tagline || ""}</span>${D.cta ? `<span class="cta">${D.cta}</span>` : ""}`);
+      out.id = "hl-out";
+      texts.append(out);
+      const o = T.outro.start;
+      tl.fromTo("#hl-out", { opacity: 0 }, { opacity: 1, duration: 0.01 }, o);
+      tl.fromTo("#hl-out .l1", { opacity: 0, y: 46 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, o + 0.5);
+      tl.fromTo("#hl-out .l2", { opacity: 0, y: 46 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, o + 0.65);
+      tl.fromTo("#hl-out .rule", { scaleX: 0 }, { scaleX: 1, transformOrigin: "0 50%", duration: 0.5 }, o + 0.9);
+      tl.fromTo("#hl-out .sub", { opacity: 0 }, { opacity: 1, duration: 0.5 }, o + 1.0);
+      if (D.cta) {
+        tl.fromTo("#hl-out .cta", { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(2)" }, o + 1.3);
+        tl.to("#hl-out .cta", { scale: 1.06, duration: 0.5, yoyo: true, repeat: 3, ease: "sine.inOut" }, o + 2.2);
+      }
+      const credits = $("#credits");
+      credits.textContent = "Bản đồ: Esri World Imagery · Dữ liệu: © OpenStreetMap, OSRM · Ảnh: Wikimedia Commons" + (D.credits_extra ? " · " + D.credits_extra : "") + ". Thời gian di chuyển ước tính.";
+      tl.fromTo("#credits", { opacity: 0 }, { opacity: 1, duration: 0.6 }, o + 1.5);
+
+      if (T.hero) {
+        tl.fromTo("#hero", { opacity: 1 }, { opacity: 1, duration: 0.01 }, 0);
+        tl.fromTo("#hero img", { scale: 1.12 }, { scale: 1, duration: T.hero.dur + 0.5, ease: "none" }, 0);
+        tl.to("#hero", { opacity: 0, duration: 0.7, ease: "power1.inOut" }, T.hero.dur - 0.4);
+      }
+
+      // drive the map from the same clock: a proxy tween + the hf-seek event
+      const clock = { t: 0 };
+      tl.fromTo(clock, { t: 0 }, { t: T.total, duration: T.total, ease: "none", onUpdate: () => renderAt(clock.t) }, 0);
+      window.addEventListener("hf-seek", (e) => renderAt(e.detail.time));
+
+      // measure label boxes once (fonts loaded), then register the timeline
+      window.__hf = window.__hf || {};
+      window.__hf.buildReady = window.__hf.buildReady || {};
+      window.__hf.buildReady["re-map"] = document.fonts.ready.then(() => {
+        [projItem, ...poiItems].forEach((it) => { it.tw = it.tag.offsetWidth; it.th = it.tag.offsetHeight; });
+        renderAt(window.__hfThreeTime || 0);
+        window.__timelines["main"] = tl;
+        tl.seek(0);
+        if (window.__hfForceTimelineRebind) window.__hfForceTimelineRebind();
+      });
+    </script>
+  </body>
+</html>

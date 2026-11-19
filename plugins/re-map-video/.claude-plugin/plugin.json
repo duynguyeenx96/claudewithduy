@@ -1,0 +1,8 @@
+{
+  "name": "re-map-video",
+  "version": "1.0.0",
+  "description": "Video vị trí bất động sản 9:16 dạng bản đồ 3D từ tên dự án hoặc link Google Maps: camera bay tới từng tiện ích, tuyến đường, km/phút, Metro, CTA. Nhạc nền, AI voice hoặc A-roll sale nói ở góc.",
+  "author": { "name": "Claude with Duy" },
+  "homepage": "https://github.com/duynguyeenx96/claudewithduy/tree/main/plugins/re-map-video",
+  "repository": "https://github.com/duynguyeenx96/claudewithduy"
+}

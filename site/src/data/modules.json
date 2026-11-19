@@ -333,6 +333,104 @@
       }
     },
     {
+      "id": "re-map-video",
+      "name": "Re Map Video",
+      "desc": "Video vị trí dự án BĐS 9:16 dạng bản đồ 3D, chỉ cần tên dự án hoặc link Google Maps.",
+      "chips": [
+        "9:16",
+        "Bản đồ 3D",
+        "Link Google Maps"
+      ],
+      "video": {
+        "before": "videos/modules/re-map-video-before.mp4",
+        "after": "videos/modules/re-map-video-after.mp4"
+      },
+      "credits": [
+        {
+          "name": "HyperFrames",
+          "url": "https://github.com/heygen-com/hyperframes",
+          "by": "HeyGen",
+          "license": "Apache-2.0",
+          "use": "dựng và render video bằng HTML"
+        },
+        {
+          "name": "three.js",
+          "url": "https://github.com/mrdoob/three.js",
+          "by": "three.js authors",
+          "license": "MIT",
+          "use": "camera 3D trên bản đồ"
+        },
+        {
+          "name": "GSAP",
+          "url": "https://github.com/greensock/GSAP",
+          "by": "GreenSock",
+          "license": "GSAP Standard License",
+          "use": "chuyển động chữ"
+        },
+        {
+          "name": "Esri World Imagery",
+          "url": "https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9",
+          "by": "Esri, Maxar, Earthstar Geographics",
+          "license": "Esri Terms of Use",
+          "use": "ảnh vệ tinh"
+        },
+        {
+          "name": "OpenStreetMap",
+          "url": "https://www.openstreetmap.org/copyright",
+          "by": "OpenStreetMap contributors",
+          "license": "ODbL",
+          "use": "địa điểm, đường Metro"
+        },
+        {
+          "name": "OSRM",
+          "url": "https://github.com/Project-OSRM/osrm-backend",
+          "by": "Project OSRM",
+          "license": "BSD-2-Clause",
+          "use": "tuyến đường, quãng đường"
+        },
+        {
+          "name": "Wikimedia Commons",
+          "url": "https://commons.wikimedia.org",
+          "by": "nhiều tác giả",
+          "license": "CC0 / CC BY / CC BY-SA",
+          "use": "ảnh tiện ích, ghi nguồn trong video"
+        },
+        {
+          "name": "Playfair Display",
+          "url": "https://github.com/clauseggers/Playfair",
+          "by": "Claus Eggers Sørensen",
+          "license": "OFL-1.1",
+          "use": "phông tiêu đề"
+        },
+        {
+          "name": "Be Vietnam Pro",
+          "url": "https://github.com/bettergui/BeVietnamPro",
+          "by": "Be Vietnam Pro Project",
+          "license": "OFL-1.1",
+          "use": "phông chữ tiếng Việt"
+        },
+        {
+          "name": "FFmpeg",
+          "url": "https://github.com/FFmpeg/FFmpeg",
+          "by": "FFmpeg",
+          "license": "LGPL/GPL",
+          "use": "xử lý video"
+        }
+      ],
+      "status": "ready",
+      "skill": {
+        "req": [
+          "Claude Code",
+          "Node.js",
+          "Python 3",
+          "FFmpeg"
+        ],
+        "cmd": "/re-map-video:re-map-video https://maps.app.goo.gl/…",
+        "plugin": "re-map-video",
+        "note": "Không kèm mặt bằng căn hộ. Ảnh phối cảnh dự án do bạn đưa vào. Thời gian di chuyển là ước tính."
+      }
+    },
+    {
       "id": "ugc-video",
       "name": "UGC Video",
       "desc": "Video UGC 9:16 từ footage và kịch bản. Chữ, đồ hoạ khớp lời nói, 5 style.",

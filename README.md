@@ -15,6 +15,7 @@ Các skill và tool dựng video tách ra từ flow riêng, đóng gói để ai
 | `fx-pack` | 59 hiệu ứng cho video người nói, bám theo mặt | mọi HĐH |
 | `capcut-edit` | Auto-edit project CapCut: text theo lời thoại, SFX | chỉ macOS |
 | `tool-video` | Short 9:16 review / giới thiệu phần mềm từ A-roll và tư liệu thật, 12 concept, render bằng HyperFrames | mọi HĐH (cần Node.js, FFmpeg) |
+| `re-map-video` | Video vị trí dự án BĐS 9:16 dạng bản đồ 3D từ tên dự án hoặc link Google Maps | mọi HĐH (cần Node.js, Python 3, FFmpeg) |
 
 Cập nhật: `/plugin update`.
 
