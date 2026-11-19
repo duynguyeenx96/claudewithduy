@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import Blocks from '../components/Blocks.astro';
 import BeforeAfter from '../components/BeforeAfter.astro';
 import Cmd from '../components/Cmd.astro';
-import { modules, flow, site, u, pad, kinds, marketplaceAdd, pluginInstall, repoUrl, social, socialIcons as icons } from '../lib';
+import { requirements as rq, modules, flow, site, u, pad, kinds, marketplaceAdd, pluginInstall, repoUrl, social, socialIcons as icons } from '../lib';
 
 const ready = modules.filter(m => m.status === 'ready').length;
 const firstPlugin = modules.find(m => m.skill?.plugin)?.skill?.plugin ?? 'fx-pack';
@@ -126,9 +126,37 @@ const firstPlugin = modules.find(m => m.skill?.plugin)?.skill?.plugin ?? 'fx-pac
   </div>
 </section>
 
+<section id="cau-hinh" class="band">
+  <div class="wrap pad">
+    <div class="label" data-r>05 / Cấu hình</div>
+    <h2 class="h2" data-r>Cần gì để chạy</h2>
+    <h3 class="sub" data-r>Gói đăng ký</h3>
+    <div class="rq-plans" data-r>
+      {rq.plans.map(p => <div><div class="label" style="font-size:11px">{p.need}</div><h4>{p.name}</h4><p>{p.for}</p></div>)}
+    </div>
+    <p class="p rq-note" data-r>{rq.plans_note}</p>
+    <div class="two" style="margin-top:64px;align-items:start" data-r>
+      <div>
+        <h3 class="sub">Máy tối thiểu</h3>
+        <ul class="rq-list">{rq.machine.min.map(x => <li>{x}</li>)}</ul>
+      </div>
+      <div>
+        <h3 class="sub">Máy đề nghị</h3>
+        <ul class="rq-list acc">{rq.machine.rec.map(x => <li>{x}</li>)}</ul>
+      </div>
+    </div>
+    <p class="p rq-note" data-r>{rq.machine.note}</p>
+    <h3 class="sub" style="margin-top:64px" data-r>Phần mềm</h3>
+    <p class="p" style="margin-bottom:20px" data-r>Chỉ cài những gì module bạn dùng cần. Mỗi module ghi rõ yêu cầu riêng ở mục Yêu cầu.</p>
+    <div class="rq-table" data-r>
+      {rq.software.map(s => <div><b>{s.name}</b><span>{s.for}</span><code class="inl">{s.install}</code></div>)}
+    </div>
+  </div>
+</section>
+
 <section id="faq" class="band">
   <div class="wrap pad">
-    <div class="label" data-r>05 / FAQ</div>
+    <div class="label" data-r>06 / FAQ</div>
     <h2 class="h2" data-r>Hay hỏi</h2>
     <div class="faq" data-r>
       <div><h3>Skill và Tool khác nhau thế nào?</h3><p>Skill là plugin cho Claude Code. Tool là trang kéo thả chạy local, không cần Claude.</p></div>
@@ -141,7 +169,7 @@ const firstPlugin = modules.find(m => m.skill?.plugin)?.skill?.plugin ?? 'fx-pac
 
 <section class="band">
   <div class="wrap pad-s">
-    <div class="label" data-r>06 / Công nghệ</div>
+    <div class="label" data-r>07 / Công nghệ</div>
     <h2 class="h2" data-r>Dùng những gì</h2>
     <div class="chips" data-r>{['Claude Code', 'HyperFrames', 'Python', 'FFmpeg', 'MediaPipe', 'Three.js'].map(t => <span class="chip" style="font-size:15px;padding:10px 18px;border-color:var(--ink);color:var(--ink)">{t}</span>)}</div>
   </div>
@@ -150,7 +178,7 @@ const firstPlugin = modules.find(m => m.skill?.plugin)?.skill?.plugin ?? 'fx-pac
 <section id="lien-he" class="village" style="border-bottom:0">
   <div class="wrap pad two">
     <div data-r>
-      <div class="label">07 / Liên hệ</div>
+      <div class="label">08 / Liên hệ</div>
       <h2 class="h2" style="margin-bottom:24px">Nhắn cho mình</h2>
       <p class="p" style="max-width:380px">Báo lỗi, góp ý hay cần module riêng: mở issue hoặc nhắn mình.</p>
     </div>
@@ -213,6 +241,19 @@ const firstPlugin = modules.find(m => m.skill?.plugin)?.skill?.plugin ?? 'fx-pac
   .sub{font-family:var(--serif);font-weight:500;font-size:24px;margin:0 0 12px}
   .p{font-size:16px;line-height:1.6;color:var(--ink2);margin:0}
   .inl{font-family:var(--mono);font-size:13px;color:var(--accent);background:var(--bg2);padding:1px 6px;border-radius:3px}
+  .rq-plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr));gap:0;border-top:1px solid var(--ink)}
+  .rq-plans>div{padding:20px 20px 24px 0;border-bottom:1px solid var(--line)}
+  .rq-plans h4{font-family:var(--serif);font-weight:500;font-size:20px;margin:8px 0}
+  .rq-plans p{margin:0;font-size:15px;line-height:1.55;color:var(--ink2)}
+  .rq-note{margin-top:16px;font-size:14px;color:var(--mute)}
+  .rq-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--ink)}
+  .rq-list li{padding:12px 0;border-bottom:1px solid var(--line);font-size:16px;color:var(--ink2)}
+  .rq-list.acc{border-top-color:var(--accent)}
+  .rq-table{border-top:1px solid var(--ink)}
+  .rq-table>div{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1.4fr) minmax(0,1fr);gap:8px 24px;padding:14px 0;border-bottom:1px solid var(--line);align-items:baseline;font-size:15px}
+  .rq-table span{color:var(--ink2)}
+  .rq-table code{justify-self:start;overflow-wrap:anywhere}
+  @media (max-width:700px){.rq-table>div{grid-template-columns:1fr}}
   .faq{border-top:1px solid var(--ink)}
   .faq>div{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:12px 56px;padding:28px 0;border-bottom:1px solid var(--line)}
   .faq h3{font-family:var(--serif);font-weight:500;font-size:22px;margin:0}

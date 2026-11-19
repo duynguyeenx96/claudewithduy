@@ -12,6 +12,7 @@ export const modules = data.modules as Mod[];
 export const flow = data.flow;
 export const topics = data.topics;
 export const templates = data.templates;
+export const requirements = data.requirements;
 
 /** Đường dẫn nội bộ có tính base (GitHub Pages dạng /claudewithduy/). */
 export function u(path: string) {

@@ -226,7 +226,8 @@
       "skill": {
         "req": [
           "Claude Code",
-          "CapCut"
+          "CapCut",
+          "macOS"
         ],
         "cmd": "/capcut-edit:capcut-edit <tên project>",
         "plugin": "capcut-edit",
@@ -315,9 +316,10 @@
       "skill": {
         "req": [
           "Claude Code",
-          "Node.js",
+          "Node.js 22+",
           "Python 3",
-          "FFmpeg"
+          "FFmpeg",
+          "whisper-cpp"
         ],
         "cmd": "/tool-video:tool-video aroll.mp4 --tool \"Tên tool\"",
         "plugin": "tool-video",
@@ -421,9 +423,10 @@
       "skill": {
         "req": [
           "Claude Code",
-          "Node.js",
+          "Node.js 22+",
           "Python 3",
-          "FFmpeg"
+          "FFmpeg",
+          "Internet"
         ],
         "cmd": "/re-map-video:re-map-video https://maps.app.goo.gl/…",
         "plugin": "re-map-video",
@@ -470,7 +473,7 @@
       "skill": {
         "req": [
           "Claude Code",
-          "HyperFrames",
+          "Node.js 22+",
           "FFmpeg",
           "Google Sheet"
         ],
@@ -692,5 +695,98 @@
       "video": "videos/split-man-hinh.mp4",
       "href": ""
     }
-  ]
+  ],
+  "requirements": {
+    "plans": [
+      {
+        "name": "Tool kéo thả",
+        "need": "Không cần tài khoản nào",
+        "for": "Chuẩn hoá giọng, Xoá logo Gemini"
+      },
+      {
+        "name": "Claude Pro",
+        "need": "Tối thiểu cho mọi skill",
+        "for": "Đủ để thử và làm vài video mỗi tuần. Skill dựng video đọc ảnh khung kiểm và lời thoại nên tốn lượt hơn chat thường."
+      },
+      {
+        "name": "Claude Max",
+        "need": "Đề nghị nếu làm video hằng ngày",
+        "for": "Ít bị chạm giới hạn giữa chừng khi render nhiều bản."
+      },
+      {
+        "name": "API key Anthropic",
+        "need": "Thay cho gói tháng",
+        "for": "Trả theo lượng dùng, hợp khi chạy tự động."
+      },
+      {
+        "name": "Tài khoản HyperFrames",
+        "need": "Miễn phí, tuỳ chọn",
+        "for": "Chỉ cần khi muốn lấy nhạc nền hoặc giọng đọc trong thư viện của HyperFrames."
+      }
+    ],
+    "plans_note": "Giá và hạn mức từng gói xem tại claude.com/pricing. Các module, dữ liệu bản đồ và giọng đọc ZeroTTS đều miễn phí.",
+    "machine": {
+      "min": [
+        "macOS 12 hoặc Windows 10 trở lên",
+        "CPU 4 nhân",
+        "RAM 8 GB",
+        "Ổ trống 15 GB",
+        "Có Internet khi cài và khi dùng re-map-video"
+      ],
+      "rec": [
+        "Mac chip M1 trở lên, hoặc CPU 8 nhân",
+        "RAM 16 GB",
+        "SSD trống 40 GB",
+        "Mạng ổn định để tải model lần đầu (khoảng 3 GB)"
+      ],
+      "note": "Đo trên MacBook M1 Pro 16 GB: render 1 phút video 9:16 mất khoảng 1,5 phút. Máy 8 GB vẫn chạy được nhưng chậm hơn và nên đóng bớt ứng dụng khi render."
+    },
+    "software": [
+      {
+        "name": "Claude Code",
+        "for": "Mọi skill",
+        "install": "claude.com/claude-code"
+      },
+      {
+        "name": "Node.js 22+",
+        "for": "Tool Video, Re Map Video, UGC Video (HyperFrames)",
+        "install": "nodejs.org"
+      },
+      {
+        "name": "Python 3.12",
+        "for": "FX Pack, Re Map Video, Chuẩn hoá giọng, ref-catalog",
+        "install": "python.org"
+      },
+      {
+        "name": "FFmpeg",
+        "for": "Gần như mọi module",
+        "install": "brew install ffmpeg · winget install ffmpeg"
+      },
+      {
+        "name": "whisper-cpp + model medium (1,5 GB)",
+        "for": "Phụ đề, chép lời (Tool Video)",
+        "install": "brew install whisper-cpp"
+      },
+      {
+        "name": "Chrome headless (khoảng 400 MB)",
+        "for": "Render HyperFrames",
+        "install": "Tự tải ở lần render đầu"
+      },
+      {
+        "name": "yt-dlp",
+        "for": "ref-catalog",
+        "install": "brew install yt-dlp"
+      },
+      {
+        "name": "CapCut bản desktop",
+        "for": "CapCut Auto-Edit (chỉ macOS)",
+        "install": "capcut.com"
+      },
+      {
+        "name": "ZeroTTS (khoảng 870 MB)",
+        "for": "Giọng đọc AI tiếng Việt, tuỳ chọn",
+        "install": "pip install zerotts"
+      }
+    ]
+  }
 }
