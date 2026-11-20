@@ -323,7 +323,7 @@
         ],
         "cmd": "/tool-video:tool-video aroll.mp4 --tool \"Tên tool\"",
         "plugin": "tool-video",
-        "note": "Không có whisper-cli thì đưa kèm script hoặc .srt. Không kèm nhạc nền."
+        "note": "Không có whisper-cli thì đưa kèm script hoặc .srt. Không kèm nhạc nền. Muốn lấy nhạc nền hoặc giọng đọc trong thư viện HyperFrames thì cần tài khoản HyperFrames (miễn phí)."
       },
       "tool": {
         "line": "Bản web: chọn clip, chọn concept, bấm dựng.",
@@ -337,7 +337,7 @@
     {
       "id": "re-map-video",
       "name": "Re Map Video",
-      "desc": "Video vị trí dự án BĐS 9:16 dạng bản đồ 3D, chỉ cần tên dự án hoặc link Google Maps.",
+      "desc": "Video vị trí dự án BĐS 9:16 dạng bản đồ 3D, chỉ cần tên dự án hoặc link Google Maps. Chọn nhạc nền, giọng đọc AI, hoặc clip sale nói thu nhỏ ở góc.",
       "chips": [
         "9:16",
         "Bản đồ 3D",
@@ -430,60 +430,12 @@
         ],
         "cmd": "/re-map-video:re-map-video https://maps.app.goo.gl/…",
         "plugin": "re-map-video",
-        "note": "Không kèm mặt bằng căn hộ. Ảnh phối cảnh dự án do bạn đưa vào. Thời gian di chuyển là ước tính."
-      }
-    },
-    {
-      "id": "ugc-video",
-      "name": "UGC Video",
-      "desc": "Video UGC 9:16 từ footage và kịch bản. Chữ, đồ hoạ khớp lời nói, 5 style.",
-      "chips": [
-        "Footage + kịch bản",
-        "Chữ canh theo lời",
-        "5 style"
-      ],
-      "video": {
-        "before": "videos/modules/ugc-video-before.mp4",
-        "after": "videos/modules/ugc-video-after.mp4"
-      },
-      "credits": [
-        {
-          "name": "HyperFrames",
-          "url": "https://github.com/heygen-com/hyperframes",
-          "by": "HeyGen",
-          "license": "Apache-2.0",
-          "use": "dựng và render video bằng HTML"
-        },
-        {
-          "name": "whisper.cpp",
-          "url": "https://github.com/ggml-org/whisper.cpp",
-          "by": "ggml-org",
-          "license": "MIT",
-          "use": "chép lời trên máy"
-        },
-        {
-          "name": "FFmpeg",
-          "url": "https://github.com/FFmpeg/FFmpeg",
-          "by": "FFmpeg",
-          "license": "LGPL/GPL",
-          "use": "xử lý video, âm thanh"
-        }
-      ],
-      "status": "soon",
-      "skill": {
-        "req": [
-          "Claude Code",
-          "Node.js 22+",
-          "FFmpeg",
-          "Google Sheet"
-        ],
-        "cmd": "/ugc-video SP8-1"
+        "note": "Không kèm mặt bằng căn hộ. Ảnh phối cảnh dự án do bạn đưa vào. Thời gian di chuyển là ước tính. Giọng đọc AI cần ZeroTTS (tuỳ chọn). Muốn lấy nhạc nền trong thư viện HyperFrames thì cần tài khoản HyperFrames (miễn phí)."
       }
     }
   ],
   "topics": [
     "Tool Video",
-    "UGC Video",
     "Bất động sản",
     "Talking-head",
     "Review sản phẩm",
@@ -493,120 +445,85 @@
   "templates": [
     {
       "topic": "Tool Video",
-      "name": "ui",
+      "name": "Card giao diện",
       "desc": "Card giao diện trồi lên trên mặt, khung chat gõ prompt.",
       "video": "videos/style/tool-video-ui.mp4",
       "href": ""
     },
     {
       "topic": "Tool Video",
-      "name": "split",
+      "name": "Chia đôi màn hình",
       "desc": "Đồ hoạ nửa trên, mặt nửa dưới, bung full ở câu nhấn.",
       "video": "",
       "href": ""
     },
     {
       "topic": "Tool Video",
-      "name": "screen",
+      "name": "Quay màn hình",
       "desc": "Quay màn hình trong khung laptop, zoom theo con trỏ, mặt trong bong bóng.",
       "video": "",
       "href": ""
     },
     {
       "topic": "Tool Video",
-      "name": "tutorial",
+      "name": "Hướng dẫn màn hình ngang",
       "desc": "Màn hình ngang full khung, mặt trong ô vuông, phụ đề đối diện.",
       "video": "videos/style/tool-video-tutorial.mp4",
       "href": ""
     },
     {
       "topic": "Tool Video",
-      "name": "terminal",
+      "name": "Terminal có người nói",
       "desc": "Cửa sổ terminal, gõ lệnh, log chạy.",
       "video": "",
       "href": ""
     },
     {
       "topic": "Tool Video",
-      "name": "retro",
+      "name": "Windows 95",
       "desc": "Windows 95: cửa sổ bật chồng, hộp thoại lỗi.",
       "video": "",
       "href": ""
     },
     {
       "topic": "Tool Video",
-      "name": "notebook",
+      "name": "Sổ tay",
       "desc": "Trang sổ, polaroid dán băng keo, nét bút vẽ dần.",
       "video": "",
       "href": ""
     },
     {
       "topic": "Tool Video",
-      "name": "ranking",
+      "name": "Bảng xếp hạng",
       "desc": "Số đếm ngược, card từng tool, bảng xếp hạng.",
       "video": "",
       "href": ""
     },
     {
       "topic": "Tool Video",
-      "name": "versus",
+      "name": "Đối đầu",
       "desc": "Chia đôi màn hình, VS, bảng điểm.",
       "video": "",
       "href": ""
     },
     {
       "topic": "Tool Video",
-      "name": "glide",
+      "name": "Trượt ngang",
       "desc": "Người trượt sang một bên, chữ và từ khoá hiện cạnh đầu.",
       "video": "videos/style/tool-video-glide.mp4",
       "href": ""
     },
     {
       "topic": "Tool Video",
-      "name": "fxreel",
+      "name": "Chuỗi hiệu ứng",
       "desc": "Mỗi giây một hiệu ứng chạy ngay trên người.",
       "video": "",
       "href": ""
     },
     {
       "topic": "Tool Video",
-      "name": "depth",
+      "name": "Chữ sau người",
       "desc": "Chữ khổng lồ nằm sau người, đổi khung bằng whip-zoom.",
-      "video": "",
-      "href": ""
-    },
-    {
-      "topic": "UGC Video",
-      "name": "xhs",
-      "desc": "Nền kem, hồng đậm, chip và hashtag.",
-      "video": "",
-      "href": ""
-    },
-    {
-      "topic": "UGC Video",
-      "name": "spotlight",
-      "desc": "Tím đậm, phát sáng, kịch tính.",
-      "video": "",
-      "href": ""
-    },
-    {
-      "topic": "UGC Video",
-      "name": "geom",
-      "desc": "Vàng chanh, hồng, đen va nhau.",
-      "video": "",
-      "href": ""
-    },
-    {
-      "topic": "UGC Video",
-      "name": "editorial",
-      "desc": "Nền kem, khối san hô, trích dẫn chữ nghiêng lớn.",
-      "video": "",
-      "href": ""
-    },
-    {
-      "topic": "UGC Video",
-      "name": "minimal",
-      "desc": "Đen trắng, chữ thật to, nhiều khoảng trống.",
       "video": "",
       "href": ""
     },
@@ -685,13 +602,15 @@
     },
     {
       "topic": "Giới thiệu phần mềm",
-      "name": "Terminal",
+      "name": "Terminal đồ hoạ",
+      "desc": "Gõ một dòng lệnh, video hiện ra. Toàn đồ hoạ, không cần quay mặt.",
       "video": "videos/terminal.mp4",
       "href": ""
     },
     {
       "topic": "Giới thiệu phần mềm",
-      "name": "Split màn hình",
+      "name": "Form và kết quả",
+      "desc": "Nửa trên gõ form, nửa dưới hiện kết quả và số đếm.",
       "video": "videos/split-man-hinh.mp4",
       "href": ""
     }
@@ -717,17 +636,12 @@
         "name": "API key Anthropic",
         "need": "Thay cho gói tháng",
         "for": "Trả theo lượng dùng, hợp khi chạy tự động."
-      },
-      {
-        "name": "Tài khoản HyperFrames",
-        "need": "Miễn phí, tuỳ chọn",
-        "for": "Chỉ cần khi muốn lấy nhạc nền hoặc giọng đọc trong thư viện của HyperFrames."
       }
     ],
     "plans_note": "Giá và hạn mức từng gói xem tại claude.com/pricing. Các module, dữ liệu bản đồ và giọng đọc ZeroTTS đều miễn phí.",
     "machine": {
       "min": [
-        "macOS 12 hoặc Windows 10 trở lên",
+        "macOS 12, Windows 10 hoặc Linux 64-bit trở lên",
         "CPU 4 nhân",
         "RAM 8 GB",
         "Ổ trống 15 GB",
@@ -749,7 +663,7 @@
       },
       {
         "name": "Node.js 22+",
-        "for": "Tool Video, Re Map Video, UGC Video (HyperFrames)",
+        "for": "Tool Video, Re Map Video (HyperFrames)",
         "install": "nodejs.org"
       },
       {
@@ -760,32 +674,7 @@
       {
         "name": "FFmpeg",
         "for": "Gần như mọi module",
-        "install": "brew install ffmpeg · winget install ffmpeg"
-      },
-      {
-        "name": "whisper-cpp + model medium (1,5 GB)",
-        "for": "Phụ đề, chép lời (Tool Video)",
-        "install": "brew install whisper-cpp"
-      },
-      {
-        "name": "Chrome headless (khoảng 400 MB)",
-        "for": "Render HyperFrames",
-        "install": "Tự tải ở lần render đầu"
-      },
-      {
-        "name": "yt-dlp",
-        "for": "ref-catalog",
-        "install": "brew install yt-dlp"
-      },
-      {
-        "name": "CapCut bản desktop",
-        "for": "CapCut Auto-Edit (chỉ macOS)",
-        "install": "capcut.com"
-      },
-      {
-        "name": "ZeroTTS (khoảng 870 MB)",
-        "for": "Giọng đọc AI tiếng Việt, tuỳ chọn",
-        "install": "pip install zerotts"
+        "install": "brew install ffmpeg · winget install ffmpeg · apt install ffmpeg"
       }
     ]
   }

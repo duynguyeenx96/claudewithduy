@@ -13,7 +13,7 @@ const firstPlugin = modules.find(m => m.skill?.plugin)?.skill?.plugin ?? 'fx-pac
 <section id="top" class="wrap hero">
   <div data-r>
     <div class="label" style="margin-bottom:28px">Claude with Duy / {pad(modules.length)} module, {pad(ready)} dùng được ngay</div>
-    <h1 class="h1">Mình biến việc dựng video thành <span class="accent">code.</span></h1>
+    <h1 class="h1">Nói với <span class="accent">Claude</span> bạn muốn làm video như thế nào!</h1>
     <p class="lead" style="margin:0 0 40px">Skill cho Claude Code và tool chạy local, tách ra từ flow dựng video mình dùng hằng ngày.</p>
     <div style="display:flex;gap:12px;flex-wrap:wrap">
       <a class="btn solid" href="#module">Xem các module</a>
@@ -76,24 +76,8 @@ const firstPlugin = modules.find(m => m.skill?.plugin)?.skill?.plugin ?? 'fx-pac
   </div>
 </section>
 
-<section id="village" class="village">
-  <div class="wrap pad">
-    <div class="label" data-r style="margin-bottom:24px">03 / Dự án riêng</div>
-    <h2 data-r class="big">Marketing <span class="accent">Village</span></h2>
-    <div class="two">
-      <p data-r class="quote">Ngôi làng 3D, mỗi NPC là một công cụ marketing.</p>
-      <div data-r>
-        <div class="label" style="margin-bottom:12px">Quy trình làm 1 NPC</div>
-        <ol class="steps">
-          {['Ảnh 2D', 'Dựng 3D', 'Giảm polygon xuống 40k', 'Rig', 'Đưa vào làng'].map((t, i) => <li><span>{pad(i + 1)}</span>{t}</li>)}
-        </ol>
-      </div>
-    </div>
-  </div>
-</section>
-
 <section id="cach-cai" class="wrap pad">
-  <div class="label" data-r>04 / Cách cài</div>
+  <div class="label" data-r>03 / Cách cài</div>
   <h2 class="h2" data-r>Cách cài 1 module</h2>
   <div class="two" style="align-items:start">
     <div data-r>
@@ -128,7 +112,7 @@ const firstPlugin = modules.find(m => m.skill?.plugin)?.skill?.plugin ?? 'fx-pac
 
 <section id="cau-hinh" class="band">
   <div class="wrap pad">
-    <div class="label" data-r>05 / Cấu hình</div>
+    <div class="label" data-r>04 / Cấu hình</div>
     <h2 class="h2" data-r>Cần gì để chạy</h2>
     <h3 class="sub" data-r>Gói đăng ký</h3>
     <div class="rq-plans" data-r>
@@ -147,7 +131,7 @@ const firstPlugin = modules.find(m => m.skill?.plugin)?.skill?.plugin ?? 'fx-pac
     </div>
     <p class="p rq-note" data-r>{rq.machine.note}</p>
     <h3 class="sub" style="margin-top:64px" data-r>Phần mềm</h3>
-    <p class="p" style="margin-bottom:20px" data-r>Chỉ cài những gì module bạn dùng cần. Mỗi module ghi rõ yêu cầu riêng ở mục Yêu cầu.</p>
+    <p class="p" style="margin-bottom:20px" data-r>Bốn thứ dùng chung. Phần mềm riêng (whisper-cpp, yt-dlp, CapCut, ZeroTTS…) ghi ở mục Yêu cầu của từng module.</p>
     <div class="rq-table" data-r>
       {rq.software.map(s => <div><b>{s.name}</b><span>{s.for}</span><code class="inl">{s.install}</code></div>)}
     </div>
@@ -156,29 +140,21 @@ const firstPlugin = modules.find(m => m.skill?.plugin)?.skill?.plugin ?? 'fx-pac
 
 <section id="faq" class="band">
   <div class="wrap pad">
-    <div class="label" data-r>06 / FAQ</div>
+    <div class="label" data-r>05 / FAQ</div>
     <h2 class="h2" data-r>Hay hỏi</h2>
     <div class="faq" data-r>
       <div><h3>Skill và Tool khác nhau thế nào?</h3><p>Skill là plugin cho Claude Code. Tool là trang kéo thả chạy local, không cần Claude.</p></div>
-      <div><h3>Chạy trên Windows được không?</h3><p>Được, trừ CapCut Auto-Edit chỉ chạy trên macOS.</p></div>
+      <div><h3>Chạy trên Windows, Linux được không?</h3><p>Được, cả skill lẫn tool. Riêng CapCut Auto-Edit chỉ chạy trên macOS.</p></div>
       <div><h3>Cập nhật thế nào?</h3><p>Skill: gõ <code class="inl">/plugin update</code> trong Claude Code. Tool: tải lại file .zip mới.</p></div>
       <div><h3>Mã nguồn ở đâu?</h3><p>Trên <a href={repoUrl} target="_blank" rel="noopener" style="text-decoration:underline">GitHub</a>.</p></div>
     </div>
   </div>
 </section>
 
-<section class="band">
-  <div class="wrap pad-s">
-    <div class="label" data-r>07 / Công nghệ</div>
-    <h2 class="h2" data-r>Dùng những gì</h2>
-    <div class="chips" data-r>{['Claude Code', 'HyperFrames', 'Python', 'FFmpeg', 'MediaPipe', 'Three.js'].map(t => <span class="chip" style="font-size:15px;padding:10px 18px;border-color:var(--ink);color:var(--ink)">{t}</span>)}</div>
-  </div>
-</section>
-
 <section id="lien-he" class="village" style="border-bottom:0">
   <div class="wrap pad two">
     <div data-r>
-      <div class="label">08 / Liên hệ</div>
+      <div class="label">06 / Liên hệ</div>
       <h2 class="h2" style="margin-bottom:24px">Nhắn cho mình</h2>
       <p class="p" style="max-width:380px">Báo lỗi, góp ý hay cần module riêng: mở issue hoặc nhắn mình.</p>
     </div>
@@ -232,9 +208,7 @@ const firstPlugin = modules.find(m => m.skill?.plugin)?.skill?.plugin ?? 'fx-pac
   .novid{min-height:320px;height:100%;display:flex;align-items:center;justify-content:center}
   .village{background:var(--bg2);border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);margin-top:96px}
   #lien-he{margin-top:0}
-  .big{font-family:var(--display);font-weight:400;font-size:clamp(52px,11vw,150px);line-height:.95;margin:0 0 56px;text-transform:uppercase}
   .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:56px}
-  .quote{font-family:var(--serif);font-size:clamp(22px,2.4vw,30px);line-height:1.35;margin:0;text-wrap:pretty}
   .steps{list-style:none;margin:0;padding:0;border-top:1px solid var(--ink)}
   .steps li{display:grid;grid-template-columns:48px 1fr;padding:14px 0;border-bottom:1px solid var(--line2);font-size:16px;line-height:1.5}
   .steps li span{font-family:var(--mono);font-size:13px;color:var(--accent);padding-top:2px}
