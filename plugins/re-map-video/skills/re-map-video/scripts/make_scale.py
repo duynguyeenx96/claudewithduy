@@ -14,13 +14,19 @@ Scenes, in order (seconds, override any in project.json "timing"):
 Audio: "music" / "voiceover" as in make_html.py ("start" absolute seconds), or automatic:
   "voice": {"dir": "assets/audio"}      -> uses vo_<scene>.wav (intro, area, dims, pitch, zones, stats, outro):
                                            scene = max(default, line + 1.2), outro + 1.8, VO starts 0.4 s into its scene
-  "music": {"source": "~/Documents/Nhạc/freepd/Upbeat/City Sunshine.mp3", "volume": 0.1}
+  "music": {"source": "city-sunshine", "volume": 0.1}   # tên bài kèm gói (assets/music/) hoặc đường dẫn file
                                         -> cut to the video length with fades into assets/audio/bgm.m4a
 """
 import json, os, shutil, subprocess, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from make_html import probe_duration, TPL  # noqa: E402
+from make_html import probe_duration, TPL, SKILL  # noqa: E402
+
+def music_path(src):
+    """Tên bài kèm gói (city-sunshine, happy-whistling-ukulele, inspiration) hoặc đường dẫn file."""
+    own = os.path.join(SKILL, "assets", "music", f"{src}.m4a")
+    return own if os.path.exists(own) else os.path.expanduser(src)
+
 
 DEF = {"intro": 4.5, "area": 6.5, "dims": 5.5, "pitch": 5.5, "zone": 2.6, "stats": 6.0, "outro": 6.5}
 
@@ -53,7 +59,7 @@ def main():
     if mus and mus.get("source"):
         os.makedirs(os.path.join(pdir, "assets", "audio"), exist_ok=True)
         tot = timing["total"]
-        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", os.path.expanduser(mus["source"]), "-t", str(tot),
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", music_path(mus["source"]), "-t", str(tot),
                         "-af", f"afade=t=in:d=0.6,afade=t=out:st={tot - 2.5:.2f}:d=2.5", "-c:a", "aac", "-b:a", "192k",
                         os.path.join(pdir, "assets", "audio", "bgm.m4a")], check=True)
         mus["src"] = "assets/audio/bgm.m4a"

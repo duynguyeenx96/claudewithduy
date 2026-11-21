@@ -74,11 +74,10 @@ Headline 2 dòng, mỗi dòng ≤ 14 ký tự (font 96px, khung 888px). `label` 
   - **Trước khi viết thoại: đọc từ điển phát âm dùng chung `~/.zerotts/voice_dict.json`** (cách viết tên riêng / viết tắt / đơn vị đã kiểm bằng Whisper; máy mới thì `tts.py` tự chép `voice_dict.seed.json` sang). Tên mới chưa có → thử 3–4 cách viết,
     gen, chép lại bằng Whisper, cách đúng thì **thêm vào `words` với `"verified": true`** để lần sau khỏi thử lại.
   - Giọng tiếng Việt offline: ZeroTTS. Gen bằng `scripts/tts.py` (tự áp dụng dict, đổi số/đơn vị ra chữ; `--dry` để xem câu sẽ đọc):
-    `<python có zerotts> -I "$SK/scripts/tts.py" <project>/assets/audio <project>/vo_lines.json --voice baotrang`.
-    Model + giọng mặc định ở `~/.cache/video-storyboard/ZeroTTS` (`voices/<tên>/`, `voices/index.json`); máy này chạy bằng
-    `~/.claude/skills/video-storyboard/.venv/bin/python`. Chưa có → `pip install zerotts` trong venv riêng.
+    `PYTTS=$(bash "$SK/scripts/setup_tts.sh" | tail -1 | sed 's/^READY //')` (lần đầu tạo venv riêng của plugin và cài `zerotts`; model + giọng tự tải từ Hugging Face `zeroweight-ai/ZeroTTS` lần chạy đầu), rồi
+    `"$PYTTS" -I "$SK/scripts/tts.py" <project>/assets/audio <project>/vo_lines.json --voice baotrang`. Có sẵn model ở máy thì đặt `ZEROTTS_MODEL=<thư mục>`.
     Giọng: `baotrang` (nữ, tin tức), `maichi` (nữ, nhẹ nhàng), `kimoanh` (nữ, ấm), `quangminh` (nam, tin tức), `tiendat` (nam, sôi nổi)… Beat = max(6, độ dài câu + 0.9).
-- **Nhạc nền không cần đăng nhập**: kho FreePD (CC0) ở `~/Documents/Nhạc/freepd/`. Người dùng đã chọn 3 bài nhịp nhanh, vui: `Upbeat/City Sunshine.mp3`, `Upbeat/Happy Whistling Ukulele.mp3`, `Upbeat/Inspiration.mp3` — dùng 1 trong 3, **không dùng `Motions`**. Cắt đúng tổng thời lượng, fade in 0.6s / out 2.5s. Có giọng đọc: `volume` 0.1 (nhạc thấp hơn giọng ~18 dB); chỉ nhạc: 0.5.
+- **Nhạc nền không cần đăng nhập**: 3 bài FreePD (CC0) kèm gói ở `$SK/assets/music/`: `city-sunshine`, `happy-whistling-ukulele`, `inspiration` (nhịp nhanh, vui, mỗi bài 100s). Dùng 1 trong 3; `make_scale.py` nhận thẳng tên bài trong `"music": {"source": "city-sunshine"}`, còn `make_html.py` thì cắt bằng ffmpeg vào `assets/audio/bgm.m4a`. Người dùng đưa nhạc riêng thì dùng file đó. Cắt đúng tổng thời lượng, fade in 0.6s / out 2.5s. Có giọng đọc: `volume` 0.1 (nhạc thấp hơn giọng ~18 dB); chỉ nhạc: 0.5.
 - `pois[i].sub` (tuỳ chọn) thay dòng phụ mặc định "tên · km · phút".
 - **ai_voice** (full AI): viết 1 câu thoại / beat (intro, mỗi tiện ích, outro; ~12–18 từ, giọng tư vấn), tạo TTS bằng `scripts/tts.py` (ZeroTTS, xem trên). Đặt `pois[i].dur = max(7, độ dài câu + 1.2)` rồi khai `voiceover` với `start` = đầu beat + 0.4. Thêm nhạc nền volume 0.1.
 - **aroll** (sale nói): user đưa clip quay dọc. `npx hyperframes transcribe <clip>` → tìm thời điểm sale nhắc từng tiện ích → điền

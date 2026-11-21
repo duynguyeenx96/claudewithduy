@@ -2,14 +2,14 @@
 """Vietnamese voiceover with ZeroTTS, after applying the shared pronunciation dict (~/.zerotts/voice_dict.json).
 
 Usage (run with the Python that has `zerotts` installed):
-  <python> -I tts.py <out_dir> <lines.json> [--voice baotrang] [--model ~/.cache/video-storyboard/ZeroTTS] [--dry]
+  <python> -I tts.py <out_dir> <lines.json> [--voice baotrang] [--model zeroweight-ai/ZeroTTS] [--dry]
 
 lines.json: {"intro": "câu thoại…", "area": "…"}  ->  <out_dir>/vo_<key>.wav
 --dry prints the text that will be spoken (after the dict) without synthesising.
 As a module: `from voicedict import load_dict, normalize; normalize(text, load_dict())` (copy at ~/.zerotts/voicedict.py).
 
 Model + voices: ZeroTTS model folder (has onnx/, voices/<name>/, voices/index.json).
-Default ~/.cache/video-storyboard/ZeroTTS; override with --model or ZEROTTS_MODEL.
+Default: Hugging Face repo zeroweight-ai/ZeroTTS (downloaded once, ~cached); override with --model or ZEROTTS_MODEL.
 Voices: baotrang (nữ, tin tức), maichi (nữ, nhẹ nhàng), kimoanh (nữ, ấm), quangminh (nam, tin tức),
         giahuy (nam, trầm ấm), tiendat (nam, sôi nổi), huuduc (nam, điềm đạm), hamy (nữ, hoạt hình).
 """
@@ -102,7 +102,8 @@ def main():
     opt = lambda k, dv: a[a.index(k) + 1] if k in a else dv  # noqa: E731
     out, lines_p = a[0], a[1]
     voice = opt("--voice", "baotrang")
-    model = os.path.expanduser(opt("--model", os.environ.get("ZEROTTS_MODEL", "~/.cache/video-storyboard/ZeroTTS")))
+    model = opt("--model", os.environ.get("ZEROTTS_MODEL", "zeroweight-ai/ZeroTTS"))
+    model = os.path.expanduser(model) if model.startswith(("~", "/", ".")) else model
     d = load_dict()
     print(f"dict: {DICT}")
     lines = {k: normalize(v, d) for k, v in json.load(open(lines_p, encoding="utf8")).items()}

@@ -6,6 +6,8 @@ Mã trong skill này: của Claude with Duy.
 - Playfair Display — SIL Open Font License 1.1 (`template/assets/fonts/OFL-PlayfairDisplay.txt`)
 - Be Vietnam Pro — SIL Open Font License 1.1 (`template/assets/fonts/OFL-BeVietnamPro.txt`)
 - Ảnh mây `template/assets/fx/` — tự sinh bằng script, dùng tự do.
+- Nhạc nền `assets/music/` — FreePD.com, CC0 / public domain: City Sunshine, Happy Whistling Ukulele, Inspiration (cắt 100s, AAC 128k).
+- Giọng đọc ZeroTTS (tuỳ chọn) — cài bằng `scripts/setup_tts.sh`, model tải từ Hugging Face lúc chạy, theo license của zeroweight-ai/ZeroTTS.
 
 ## Dữ liệu tải lúc chạy (không kèm trong plugin)
 - Ảnh vệ tinh: Esri World Imagery (Esri, Maxar, Earthstar Geographics) — phải ghi nguồn; xem điều khoản Esri trước khi dùng thương mại.
