@@ -4,6 +4,7 @@ export type Mod = (typeof data.modules)[number] & {
   skill?: { req: string[]; cmd: string; plugin?: string; note?: string; only?: string };
   tool?: { line: string; req: string[]; zip?: string };
   credits?: Credit[];
+  effects?: { fx: string; desc: string; extra?: boolean }[];
 };
 export type Credit = { name: string; url: string; by: string; license: string; use: string };
 

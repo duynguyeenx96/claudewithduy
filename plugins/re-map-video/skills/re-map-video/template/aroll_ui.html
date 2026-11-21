@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="vi" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Playfair Display"; src: url("assets/fonts/PlayfairDisplay.ttf"); }
+      @font-face { font-family: "Be Vietnam Pro"; src: url("assets/fonts/BeVietnamPro-Medium.ttf"); font-weight: 500; }
+      @font-face { font-family: "Be Vietnam Pro"; src: url("assets/fonts/BeVietnamPro-Bold.ttf"); font-weight: 700; }
+      @font-face { font-family: "Be Vietnam Pro"; src: url("assets/fonts/BeVietnamPro-ExtraBold.ttf"); font-weight: 800; }
+      :root { --panel: #0f3a31; --gold: #e2c27d; --ink: #fff; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: "Be Vietnam Pro", sans-serif; color: var(--ink); }
+      #aroll-wrap { position: absolute; inset: 0; z-index: 1; }
+      #aroll-wrap video { width: 100%; height: 100%; object-fit: cover; }
+      /* map cutaway: full-frame map, speaker in a fixed rounded-rect PiP (zoomed out: head + upper body) */
+      .mapw { position: absolute; inset: 0; z-index: 5; visibility: hidden; }
+      .mapw video { width: 1080px; height: 1920px; object-fit: cover; }
+      .pip { position: absolute; z-index: 7; right: 50px; top: 950px; width: 360px; height: 540px; border-radius: 28px; overflow: hidden;
+             border: 5px solid var(--gold); box-shadow: 0 22px 50px rgba(0,0,0,.55); visibility: hidden; background: #111; }
+      .pip video { position: absolute; width: 432px; height: 768px; left: calc(175px - __FX__px * 0.4); top: calc(185px - __FY__px * 0.4); object-fit: cover; }
+      .panel { position: absolute; z-index: 8; left: 56px; top: 1050px; width: 560px; padding: 30px 32px 32px; border-radius: 26px;
+               background: rgba(8, 26, 21, .82); border: 2px solid rgba(226,194,125,.55); opacity: 0; }
+      .panel .k { display: block; font-weight: 700; font-size: 24px; letter-spacing: .18em; color: var(--gold); margin-bottom: 10px; }
+      .panel .l1, .panel .l2 { display: block; font-family: "Playfair Display", serif; font-size: 72px; line-height: 1.02; }
+      .panel .l2 { color: var(--gold); }
+      .panel .r { display: block; width: 110px; height: 3px; background: var(--gold); margin: 18px 0 14px; }
+      .panel .sb { display: block; font-weight: 700; font-size: 32px; }
+      /* info card: above the head, speaker stays full frame */
+      .info { position: absolute; z-index: 8; left: 70px; right: 70px; top: 250px; height: 300px; display: flex; border-radius: 26px; overflow: hidden;
+              background: rgba(8, 26, 21, .9); border: 3px solid var(--gold); box-shadow: 0 24px 60px rgba(0,0,0,.5); opacity: 0; }
+      .info .ph { flex: 0 0 340px; height: 100%; background: var(--panel); display: grid; place-items: center; }
+      .info .ph img { width: 100%; height: 100%; object-fit: cover; }
+      .info .tx { flex: 1; padding: 30px 32px; display: flex; flex-direction: column; justify-content: center; gap: 6px; min-width: 0; }
+      .info .k { font-weight: 700; font-size: 22px; letter-spacing: .16em; color: var(--gold); }
+      .info .lb { font-weight: 800; font-size: 38px; line-height: 1.15; }
+      .info .st { font-family: "Playfair Display", serif; font-size: 78px; line-height: 1; color: var(--gold); margin-top: 8px; }
+      .info .sb { font-weight: 500; font-size: 28px; opacity: .9; }
+      .nametag { position: absolute; z-index: 8; left: 70px; top: 1060px; padding: 26px 34px 28px; border-radius: 22px; background: rgba(15,58,49,.86);
+                 border: 2px solid rgba(226,194,125,.7); opacity: 0; display: flex; flex-direction: column; gap: 6px; }
+      .nametag .k { font-weight: 700; font-size: 24px; letter-spacing: .2em; color: var(--gold); }
+      .nametag .n { font-family: "Playfair Display", serif; font-size: 72px; line-height: 1.05; }
+      .nametag .r { width: 120px; height: 3px; background: var(--gold); margin: 8px 0 4px; }
+      .nametag .ad { font-weight: 500; font-size: 30px; opacity: .9; }
+      #dim { position: absolute; inset: 0; z-index: 6; background: linear-gradient(180deg, rgba(6,18,15,.15) 0%, rgba(6,18,15,.55) 45%, rgba(6,18,15,.75) 100%); opacity: 0; }
+      .cta { position: absolute; z-index: 8; left: 90px; right: 90px; top: 1000px; display: flex; flex-direction: column; align-items: center; gap: 18px; text-align: center; }
+      .cta > span { opacity: 0; }
+      .cta .t { font-family: "Playfair Display", serif; font-size: 104px; line-height: 1.05; color: var(--gold); text-shadow: 0 4px 24px rgba(0,0,0,.6); }
+      .cta .s { font-weight: 700; font-size: 36px; line-height: 1.35; max-width: 860px; text-shadow: 0 2px 12px rgba(0,0,0,.7); }
+      .cta .btn { margin-top: 18px; padding: 26px 58px; border-radius: 999px; background: linear-gradient(180deg, #f2d898, #c99f4f); color: #1d1a12; font-weight: 800; font-size: 42px; }
+      #brandmini { position: absolute; z-index: 9; right: 70px; top: 170px; font-family: "Playfair Display", serif; font-size: 34px; color: var(--gold);
+                   text-shadow: 0 2px 14px rgba(0,0,0,.7); letter-spacing: .04em; }
+      .cap { position: absolute; z-index: 9; left: 80px; right: 80px; top: 1520px; text-align: center; font-weight: 800; font-size: 50px; line-height: 1.25;
+             text-shadow: 0 3px 0 #000, 0 0 18px rgba(0,0,0,.85), 0 0 4px #000; opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="__DUR__" data-width="1080" data-height="1920">
+      <!--MEDIA-->
+      <div id="dim"></div>
+      <!--ELS-->
+      <div id="brandmini"></div>
+      <!--CAPS-->
+      <!--AUDIO-->
+    </div>
+    <script>
+      const PLAN = __PLAN__;
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const q = (s) => document.querySelector(s);
+      PLAN.segments.forEach((s, n) => {
+        const a = s.start, b = s.end, el = q("#seg" + n);
+        if (s.kind === "title") {
+          tl.fromTo(el, { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.55, ease: "power3.out" }, a);
+          tl.to(el, { x: -40, opacity: 0, duration: 0.35, ease: "power2.in" }, b - 0.35);
+        } else if (s.kind === "cutaway") {
+          const m = q("#mapw" + n), p = q("#pip" + n);
+          tl.set([m, p], { visibility: "visible" }, a);
+          tl.fromTo(m, { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power2.out" }, a);
+          tl.fromTo(p, { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, duration: 0.45, ease: "power3.out" }, a + 0.1);
+          tl.fromTo(el, { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, a + 0.6);
+          tl.to(el, { opacity: 0, duration: 0.3 }, b - 0.45);
+          tl.to([m, p], { opacity: 0, duration: 0.4, ease: "power2.in" }, b - 0.4);
+          tl.set([m, p], { visibility: "hidden" }, b);
+        } else if (s.kind === "info") {
+          tl.fromTo(el, { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "power3.out" }, a);
+          tl.to(el, { y: -20, opacity: 0, duration: 0.3, ease: "power2.in" }, b - 0.3);
+        } else if (s.kind === "cta") {
+          tl.to("#dim", { opacity: 1, duration: 0.5, ease: "power2.out" }, a);
+          const parts = el.querySelectorAll("span");
+          tl.fromTo(parts, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, stagger: 0.15, ease: "power3.out" }, a + 0.2);
+          const btn = el.querySelector(".btn");
+          tl.to(btn, { scale: 1.05, duration: 0.5, ease: "sine.inOut", yoyo: true, repeat: Math.max(1, Math.floor((b - a - 1.4) / 0.5)) }, a + 1.0);
+        }
+      });
+      PLAN.captions.forEach((c, i) => {
+        const el = q("#cap" + i);
+        tl.fromTo(el, { opacity: 0, scale: 0.94 }, { opacity: 1, scale: 1, duration: 0.15, ease: "power2.out" }, c.start);
+        tl.set(el, { opacity: 0 }, c.end);
+      });
+      tl.set({}, {}, PLAN.total);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

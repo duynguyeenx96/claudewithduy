@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="vi" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Real-estate project scale</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script src="assets/data.js"></script>
+    <script src="assets/timing.js"></script>
+    <style>
+      @font-face { font-family: "Playfair"; src: url("assets/fonts/PlayfairDisplay.ttf") format("truetype"); font-weight: 400 900; }
+      @font-face { font-family: "BeVN"; src: url("assets/fonts/BeVietnamPro-Medium.ttf") format("truetype"); font-weight: 500; }
+      @font-face { font-family: "BeVN"; src: url("assets/fonts/BeVietnamPro-Bold.ttf") format("truetype"); font-weight: 700; }
+      @font-face { font-family: "BeVN"; src: url("assets/fonts/BeVietnamPro-ExtraBold.ttf") format("truetype"); font-weight: 800; }
+      :root {
+        --ground: #17231c; --ink: #ffffff; --gold: #e2c27d; --panel: #0f3a31; --panel-edge: rgba(226, 194, 125, 0.55);
+        --site: #7b4dff; --edge: #ffd34d; --park: #3ddc84; --zone: #ffb547;
+        --font-display: "Playfair", serif; --font-ui: "BeVN", sans-serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: var(--font-ui); color: var(--ink); }
+      .layer { position: absolute; inset: 0; width: 100%; height: 100%; }
+      #vignette {
+        background:
+          linear-gradient(180deg, rgba(8, 18, 14, 0.7) 0%, rgba(8, 18, 14, 0.3) 11%, rgba(8, 18, 14, 0) 18%),
+          linear-gradient(0deg, rgba(8, 18, 14, 0.88) 0%, rgba(8, 18, 14, 0.6) 34%, rgba(8, 18, 14, 0) 56%);
+        pointer-events: none;
+      }
+      #overlay-svg { overflow: visible; }
+      .site-fill { fill: var(--site); stroke: none; }
+      .site-edge { fill: none; stroke: var(--edge); stroke-width: 7; stroke-linejoin: round; filter: drop-shadow(0 0 10px rgba(255, 211, 77, 0.8)); }
+      .cell { fill: rgba(61, 220, 132, 0.34); stroke: rgba(255, 255, 255, 0.9); stroke-width: 1.4; }
+      .zone-fill { stroke: #fff; stroke-width: 4; stroke-linejoin: round; }
+      .dim { stroke: #fff; stroke-width: 4; fill: none; filter: drop-shadow(0 0 6px rgba(0,0,0,0.6)); }
+
+      .tagbox { position: absolute; left: 0; top: 0; opacity: 0; }
+      .tagbox > div { transform: translate(-50%, -50%); text-align: center; white-space: nowrap; }
+      .area-tag > div { padding: 18px 34px 20px; border-radius: 16px; background: rgba(20, 10, 48, 0.62); border: 3px solid var(--edge); box-shadow: 0 14px 40px rgba(0,0,0,0.45); }
+      .area-tag .k { display: block; font-size: 24px; font-weight: 800; letter-spacing: 0.16em; color: var(--edge); }
+      .area-tag .v { display: block; font-size: 92px; font-weight: 800; line-height: 1.05; letter-spacing: -0.01em; }
+      .area-tag .v small { font-size: 50px; font-weight: 700; margin-left: 6px; }
+      .dim-tag > div { padding: 8px 18px 10px; border-radius: 10px; background: #fff; color: #1c1530; font-size: 30px; font-weight: 800; box-shadow: 0 8px 22px rgba(0,0,0,0.4); }
+      .zone-tag > div { padding: 10px 20px 12px; border-radius: 10px; background: var(--panel); border: 2px solid var(--panel-edge); box-shadow: 0 8px 22px rgba(0,0,0,0.4); }
+      .zone-tag .t1 { display: block; font-size: 26px; font-weight: 800; }
+      .zone-tag .t2 { display: block; font-size: 19px; font-weight: 700; color: var(--gold); letter-spacing: 0.06em; }
+      .pitch-tag > div { padding: 14px 28px 16px; border-radius: 14px; background: rgba(8, 40, 22, 0.7); border: 3px solid var(--park); }
+      .pitch-tag .v { display: block; font-size: 76px; font-weight: 800; line-height: 1.05; }
+      .pitch-tag .k { display: block; font-size: 24px; font-weight: 800; letter-spacing: 0.12em; color: var(--park); }
+
+      .headline { position: absolute; left: 96px; right: 96px; top: 1060px; opacity: 0; }
+      .headline .l1, .headline .l2 { display: block; font-family: var(--font-display); font-weight: 700; font-size: 96px; line-height: 1.02; text-shadow: 0 6px 24px rgba(0,0,0,0.5); }
+      .headline .l2 { color: var(--gold); }
+      .headline .rule { display: block; width: 120px; height: 3px; margin: 26px 0 20px; background: var(--gold); }
+      .headline .sub { display: block; font-size: 34px; font-weight: 700; color: rgba(255,255,255,0.95); text-shadow: 0 2px 10px rgba(0,0,0,0.6); }
+      .headline .cta { display: inline-block; margin-top: 30px; padding: 20px 44px; border-radius: 999px; background: linear-gradient(180deg, #f3dca6, #c9a35c); color: #2a1e08; font-size: 34px; font-weight: 800; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+
+      #intro { position: absolute; left: 96px; right: 96px; top: 1020px; }
+      #intro .k { display: block; font-size: 26px; font-weight: 800; letter-spacing: 0.24em; color: var(--edge); margin-bottom: 18px; }
+      #intro .n { display: block; font-family: var(--font-display); font-weight: 700; font-size: 100px; line-height: 1.0; letter-spacing: 0.03em; text-shadow: 0 6px 30px rgba(0,0,0,0.55); }
+      #intro .rule { display: block; width: 120px; height: 3px; margin: 26px 0 20px; background: var(--gold); }
+      #intro .ad { display: block; font-size: 34px; font-weight: 700; }
+
+      #brand { position: absolute; right: 120px; top: 160px; text-align: right; opacity: 0; }
+      #brand .b1 { display: block; font-family: var(--font-display); font-weight: 700; font-size: 34px; letter-spacing: 0.1em; text-shadow: 0 2px 10px rgba(0,0,0,0.6); }
+      #brand .b2 { display: block; font-size: 17px; font-weight: 700; letter-spacing: 0.24em; color: #f6e2b0; text-shadow: 0 1px 6px rgba(0,0,0,0.9); margin-top: 4px; }
+
+      #stats { position: absolute; left: 80px; right: 80px; top: 1040px; opacity: 0; }
+      #stats .ttl { font-family: var(--font-display); font-weight: 700; font-size: 64px; margin-bottom: 26px; text-shadow: 0 4px 18px rgba(0,0,0,0.5); }
+      #stats .ttl b { color: var(--gold); font-weight: 700; }
+      #stats .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+      #stats .s { padding: 22px 26px 24px; border-radius: 18px; background: rgba(10, 30, 24, 0.72); border: 2px solid var(--panel-edge); opacity: 0; }
+      #stats .s .v { display: block; font-size: 70px; font-weight: 800; line-height: 1.05; }
+      #stats .s .v small { font-size: 36px; font-weight: 700; margin-left: 6px; color: var(--gold); }
+      #stats .s .l { display: block; font-size: 24px; font-weight: 700; color: rgba(255,255,255,0.8); margin-top: 6px; }
+
+      #credits { position: absolute; left: 96px; right: 96px; bottom: 330px; font-size: 15px; line-height: 1.45; color: rgba(255,255,255,0.6); opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="__DUR__" data-width="1080" data-height="1920">
+      <canvas id="map-canvas" class="layer" width="1080" height="1920"></canvas>
+      <svg id="overlay-svg" class="layer" viewBox="0 0 1080 1920"></svg>
+      <div id="vignette" class="layer"></div>
+      <div id="tags" class="layer"></div>
+      <div id="texts" class="layer"></div>
+      <div id="stats"></div>
+      <div id="brand"><span class="b1"></span><span class="b2"></span></div>
+      <div id="credits"></div>
+      <!--AUDIO-->
+    </div>
+
+    <script type="module">
+      import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.181.2/+esm";
+
+      const D = window.RE_DATA, T = window.RE_TIMING, S = T.scenes;
+      const W = 1080, H = 1920;
+      const $ = (s) => document.querySelector(s);
+      const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
+      const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+      const lerp = (a, b, k) => a + (b - a) * k;
+      const easeIO = (k) => (k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2);
+      const easeOut = (k) => 1 - Math.pow(1 - k, 3);
+      const backOut = (k) => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(k - 1, 3) + c1 * Math.pow(k - 1, 2); };
+      const ramp = (t, a, b) => clamp((t - a) / (b - a), 0, 1);
+      const win = (t, a, b, fi = 0.35, fo = 0.35) => Math.min(easeOut(ramp(t, a, a + fi)), 1 - easeIO(ramp(t, b - fo, b)));
+      const end = (s) => S[s].start + S[s].dur;
+      const num = (v, dec = 0) => v.toLocaleString("vi-VN", { minimumFractionDigits: dec, maximumFractionDigits: dec });
+      const decOf = (v) => (Number.isInteger(v) ? 0 : 1);
+
+      // ---------------- three.js map ----------------
+      const renderer = new THREE.WebGLRenderer({ canvas: $("#map-canvas"), antialias: true, preserveDrawingBuffer: true });
+      renderer.setPixelRatio(1);
+      renderer.setSize(W, H, false);
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      const scene = new THREE.Scene();
+      const HAZE = new THREE.Color("#7f8f86");
+      scene.background = HAZE;
+      scene.fog = new THREE.Fog(HAZE, 1, 2);
+      const camera = new THREE.PerspectiveCamera(40, W / H, 10, 1e6);
+      const loader = new THREE.TextureLoader();
+      const maskCanvas = document.createElement("canvas");
+      maskCanvas.width = maskCanvas.height = 256;
+      {
+        const g = maskCanvas.getContext("2d"), img = g.createImageData(256, 256);
+        for (let y = 0; y < 256; y++) for (let x = 0; x < 256; x++) {
+          const v = Math.round(255 * clamp(Math.min(x, y, 255 - x, 255 - y) / 255 / 0.12, 0, 1));
+          const i = (y * 256 + x) * 4; img.data[i] = img.data[i + 1] = img.data[i + 2] = v; img.data[i + 3] = 255;
+        }
+        g.putImageData(img, 0, 0);
+      }
+      const edgeMask = new THREE.CanvasTexture(maskCanvas);
+      D.layers.forEach((L, i) => {
+        const tex = loader.load(L.src);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+        const w = L.x1 - L.x0, h = L.z1 - L.z0;
+        const mat = new THREE.MeshBasicMaterial({ map: tex, depthTest: false, depthWrite: false, transparent: i > 0, alphaMap: i > 0 ? edgeMask : null, fog: true });
+        const mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat);
+        mesh.rotation.x = -Math.PI / 2;
+        mesh.position.set(L.x0 + w / 2, 0, L.z0 + h / 2);
+        mesh.renderOrder = i;
+        scene.add(mesh);
+      });
+
+      // ---------------- camera ----------------
+      // bearing that puts the site's long axis vertical on the 9:16 frame
+      const ax = (D.axis * Math.PI) / 180;
+      const brCands = [Math.atan2(-Math.cos(ax), -Math.sin(ax)), Math.atan2(Math.cos(ax), Math.sin(ax))];
+      const BR = (Math.abs(brCands[0]) < Math.abs(brCands[1]) ? brCands[0] : brCands[1]) * (180 / Math.PI);
+      // fit points into the upper picture area (y 250-1000), leaving the text block clear
+      function fit(pts, br, pad = 1.2, minD = 600) {
+        const b = (br * Math.PI) / 180;
+        const up = [-Math.sin(b), -Math.cos(b)], rt = [Math.cos(b), -Math.sin(b)];
+        let u0 = Infinity, u1 = -Infinity, v0 = Infinity, v1 = -Infinity;
+        pts.forEach(([x, z]) => { const u = x * rt[0] + z * rt[1], v = x * up[0] + z * up[1]; u0 = Math.min(u0, u); u1 = Math.max(u1, u); v0 = Math.min(v0, v); v1 = Math.max(v1, v); });
+        const d = Math.max(((u1 - u0) / 0.41) * pad, ((v1 - v0) / 0.29) * pad, minD);
+        const cu = (u0 + u1) / 2, cv = (v0 + v1) / 2 - d * 0.125;
+        return { x: cu * rt[0] + cv * up[0], z: cu * rt[1] + cv * up[1], d };
+      }
+      const shot = (f, tilt, bearing, k = 1) => ({ x: f.x, z: f.z, d: f.d * k, tilt, bearing });
+      const site = fit(D.boundary, BR, 1.15);
+      const siteDims = fit([...D.boundary, ...D.dims.flatMap((d) => [d.a, d.b])], BR, 1.12);
+      const K = [];
+      const key = (t, s) => K.push({ t, s });
+      key(0, shot(site, 24, BR - 25, 9));
+      key(S.intro.start + S.intro.dur * 0.6, shot(site, 16, BR - 8, 2.6));
+      key(end("intro"), shot(site, 8, BR, 1.08));
+      key(end("area"), shot(site, 8, BR, 0.98));
+      key(S.dims.start + 1.2, shot(siteDims, 8, BR));
+      key(end("dims"), shot(siteDims, 8, BR, 0.97));
+      key(S.pitch.start + 1.4, shot(site, 22, BR + 4, 0.92));
+      key(end("pitch"), shot(site, 26, BR + 8, 0.88));
+      if (S.zones) {
+        D.zones.forEach((z, i) => {
+          const zs = S.zones.start + 0.4 + i * T.zone;
+          const f = fit(z.pts, BR, 2.6, 900);
+          key(zs + Math.min(1.1, T.zone * 0.45), shot(f, 34, BR + (i % 2 ? 6 : -6)));
+          key(zs + T.zone, shot(f, 36, BR + (i % 2 ? 9 : -9), 0.94));
+        });
+      }
+      if (S.stats) {
+        key(S.stats.start + 1.6, shot(site, 42, BR + 14, 1.05));
+        key(end("stats"), shot(site, 46, BR + 24, 0.98));
+      }
+      key(S.outro.start + 2.2, shot(site, 30, BR + 6, 1.1));
+      key(end("outro"), shot(site, 32, BR + 12, 1.02));
+      K.sort((a, b) => a.t - b.t);
+
+      function camAt(t) {
+        if (t <= K[0].t) return K[0].s;
+        for (let i = 1; i < K.length; i++) {
+          if (t <= K[i].t) {
+            const a = K[i - 1].s, b = K[i].s, k = easeIO(ramp(t, K[i - 1].t, K[i].t));
+            return { x: lerp(a.x, b.x, k), z: lerp(a.z, b.z, k), d: Math.exp(lerp(Math.log(a.d), Math.log(b.d), k)), tilt: lerp(a.tilt, b.tilt, k), bearing: lerp(a.bearing, b.bearing, k) };
+          }
+        }
+        return K[K.length - 1].s;
+      }
+      function placeCamera(c) {
+        const tl = THREE.MathUtils.degToRad(Math.max(4, c.tilt)), br = THREE.MathUtils.degToRad(c.bearing);
+        camera.position.set(c.x + c.d * Math.sin(tl) * Math.sin(br), c.d * Math.cos(tl), c.z + c.d * Math.sin(tl) * Math.cos(br));
+        camera.near = Math.max(5, c.d * 0.02);
+        camera.far = c.d * 30;
+        camera.updateProjectionMatrix();
+        camera.lookAt(c.x, 0, c.z);
+        camera.updateMatrixWorld();
+        scene.fog.near = c.d * 1.6;
+        scene.fog.far = c.d * 5;
+      }
+      const v3 = new THREE.Vector3();
+      function proj(x, z) { v3.set(x, 0, z).project(camera); return { x: (v3.x + 1) * 0.5 * W, y: (1 - v3.y) * 0.5 * H }; }
+      const ptsD = (P, close) => P.map(([x, z], i) => { const s = proj(x, z); return (i ? "L" : "M") + s.x.toFixed(1) + " " + s.y.toFixed(1); }).join("") + (close ? "Z" : "");
+
+      // ---------------- overlays ----------------
+      const svg = $("#overlay-svg"), NS = "http://www.w3.org/2000/svg";
+      const mk = (tag, cls) => { const p = document.createElementNS(NS, tag); if (cls) p.setAttribute("class", cls); svg.appendChild(p); return p; };
+      const zoneFills = D.zones.map((z) => { const p = mk("path", "zone-fill"); p.style.fill = z.kind === "park" ? "rgba(61,220,132,0.5)" : "rgba(255,181,71,0.48)"; return p; });
+      const siteFill = mk("path", "site-fill");
+      const clip = mk("clipPath"); clip.id = "site-clip";
+      const clipPath = document.createElementNS(NS, "path"); clip.appendChild(clipPath);
+      const cellG = mk("g"); cellG.setAttribute("clip-path", "url(#site-clip)");
+      const ca = Math.cos(ax), sa = Math.sin(ax), HU = 52.5 - 3, HV = 34 - 3;
+      const cellOrder = D.cells.map((c, i) => ({ c, i, d: Math.hypot(c[0] - D.centroid[0], c[1] - D.centroid[1]) })).sort((a, b) => a.d - b.d);
+      const cells = cellOrder.map(({ c }) => {
+        const p = document.createElementNS(NS, "path"); p.setAttribute("class", "cell"); cellG.appendChild(p);
+        const q = [[1, 1], [1, -1], [-1, -1], [-1, 1]].map(([su, sv]) => [c[0] + su * HU * ca - sv * HV * sa, c[1] + su * HU * sa + sv * HV * ca]);
+        return { p, q };
+      });
+      const siteEdge = mk("path", "site-edge");
+      siteEdge.setAttribute("pathLength", "1");
+      siteEdge.style.strokeDasharray = "1 1";
+      const dims = D.dims.map(() => ({ line: mk("path", "dim"), ends: mk("path", "dim") }));
+      zoneFills.forEach((p) => svg.insertBefore(p, siteEdge));
+
+      const tags = $("#tags");
+      const tagbox = (cls, html) => { const b = el("div", "tagbox " + cls, `<div>${html}</div>`); tags.append(b); return b; };
+      const areaTag = tagbox("area-tag", `<span class="k">DIỆN TÍCH</span><span class="v"><b>0</b><small>ha</small></span>`);
+      const pitchTag = tagbox("pitch-tag", `<span class="v">≈ <b>0</b></span><span class="k">SÂN BÓNG ĐÁ</span>`);
+      const dimTags = D.dims.map((d) => tagbox("dim-tag", d.label));
+      const zoneTags = D.zones.map((z) => tagbox("zone-tag", `<span class="t1">${z.label}</span><span class="t2">${z.ha ? "~" + num(z.ha, z.ha < 10 ? 1 : 0) + " HA" : ""}</span>`));
+      const place = (e, x, y) => { e.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`; };
+      const areaDec = decOf(D.area_ha);
+
+      function renderOverlays(t) {
+        // boundary: draws during area scene, stays for the rest
+        const draw = easeIO(ramp(t, S.area.start + 0.2, S.area.start + 2.4));
+        siteEdge.setAttribute("d", ptsD(D.boundary, true));
+        siteEdge.style.strokeDashoffset = 1 - draw;
+        siteEdge.style.opacity = draw > 0 ? 1 : 0;
+        const zonesOn = S.zones ? win(t, S.zones.start, end("zones"), 0.4, 0.5) : 0;
+        const siteD = ptsD(D.boundary, true);
+        siteFill.setAttribute("d", siteD);
+        clipPath.setAttribute("d", siteD);
+        siteFill.style.opacity = 0.42 * easeOut(ramp(t, S.area.start + 1.8, S.area.start + 2.8)) * (1 - 0.7 * zonesOn) * (1 - 0.5 * ramp(t, S.pitch.start, S.pitch.start + 0.8));
+
+        // area label
+        const c = proj(D.centroid[0], D.centroid[1]);
+        const aK = win(t, S.area.start + 2.0, end("area") + 0.1, 0.5, 0.4);
+        place(areaTag, c.x, clamp(c.y, 320, 920));
+        areaTag.style.opacity = aK;
+        areaTag.firstChild.style.scale = 0.85 + 0.15 * backOut(ramp(t, S.area.start + 2.0, S.area.start + 2.6));
+        areaTag.querySelector("b").textContent = num(D.area_ha * easeOut(ramp(t, S.area.start + 2.1, S.area.start + 4.3)), areaDec);
+
+        // dimension lines
+        D.dims.forEach((d, i) => {
+          const k = easeIO(ramp(t, S.dims.start + 0.5 + i * 0.6, S.dims.start + 1.9 + i * 0.6));
+          const on = win(t, S.dims.start + 0.5, end("dims"), 0.2, 0.4);
+          const a = proj(d.a[0], d.a[1]), b0 = proj(d.b[0], d.b[1]);
+          const m = { x: (a.x + b0.x) / 2, y: (a.y + b0.y) / 2 };
+          const p1 = { x: lerp(m.x, a.x, k), y: lerp(m.y, a.y, k) }, p2 = { x: lerp(m.x, b0.x, k), y: lerp(m.y, b0.y, k) };
+          const L = Math.hypot(b0.x - a.x, b0.y - a.y) || 1, nx = -(b0.y - a.y) / L * 16, ny = (b0.x - a.x) / L * 16;
+          const ux = (b0.x - a.x) / L * 18, uy = (b0.y - a.y) / L * 18;
+          dims[i].line.setAttribute("d", `M${p1.x} ${p1.y}L${p2.x} ${p2.y}`);
+          dims[i].ends.setAttribute("d", k >= 1 ? `M${a.x + nx} ${a.y + ny}L${a.x - nx} ${a.y - ny}M${b0.x + nx} ${b0.y + ny}L${b0.x - nx} ${b0.y - ny}M${a.x + ux + nx * 0.7} ${a.y + uy + ny * 0.7}L${a.x} ${a.y}L${a.x + ux - nx * 0.7} ${a.y + uy - ny * 0.7}M${b0.x - ux + nx * 0.7} ${b0.y - uy + ny * 0.7}L${b0.x} ${b0.y}L${b0.x - ux - nx * 0.7} ${b0.y - uy - ny * 0.7}` : "M0 0");
+          dims[i].line.style.opacity = dims[i].ends.style.opacity = on;
+          place(dimTags[i], m.x, m.y);
+          dimTags[i].style.opacity = on * ramp(t, S.dims.start + 1.6 + i * 0.6, S.dims.start + 2.0 + i * 0.6);
+        });
+
+        // football pitches
+        const pOn = win(t, S.pitch.start + 0.3, end("pitch") + 0.2, 0.2, 0.5);
+        const shown = Math.floor(cells.length * easeIO(ramp(t, S.pitch.start + 0.5, S.pitch.start + 3.2)));
+        cellG.style.opacity = pOn;
+        cells.forEach((cl, i) => { if (i < shown && pOn > 0) { cl.p.setAttribute("d", ptsD(cl.q, true)); cl.p.style.display = ""; } else cl.p.style.display = "none"; });
+        place(pitchTag, c.x, clamp(c.y, 320, 920));
+        pitchTag.style.opacity = win(t, S.pitch.start + 1.2, end("pitch"), 0.4, 0.4);
+        pitchTag.querySelector("b").textContent = num(Math.round(D.pitches * easeOut(ramp(t, S.pitch.start + 1.2, S.pitch.start + 3.4))));
+
+        // zones: each pops in turn, all stay until the scene ends
+        D.zones.forEach((z, i) => {
+          const zs = S.zones.start + 0.4 + i * T.zone;
+          const k = ramp(t, zs + 0.3, zs + 0.9);
+          zoneFills[i].setAttribute("d", ptsD(z.pts, true));
+          zoneFills[i].style.opacity = k * zonesOn;
+          const s = proj(z.c[0], z.c[1]);
+          place(zoneTags[i], clamp(s.x, 200, 880), clamp(s.y, 300, 960));
+          zoneTags[i].style.opacity = win(t, zs + 0.5, zs + T.zone + 0.15, 0.3, 0.3) * zonesOn;
+          zoneTags[i].firstChild.style.scale = 0.8 + 0.2 * backOut(ramp(t, zs + 0.5, zs + 1.0));
+        });
+
+        // stat board count-up
+        if (S.stats) {
+          (D.stats || []).forEach((st, i) => {
+            const a = S.stats.start + 0.5 + i * 0.25;
+            const v = st.value * easeOut(ramp(t, a, a + 1.6));
+            statEls[i].querySelector("b").textContent = (st.prefix || "") + num(v, decOf(st.value)) + (st.suffix || "");
+          });
+        }
+      }
+
+      function renderAt(t) { placeCamera(camAt(t)); renderer.render(scene, camera); renderOverlays(t); }
+
+      // ---------------- text (GSAP) ----------------
+      const texts = $("#texts");
+      const tl = gsap.timeline({ paused: true });
+      $("#brand .b1").textContent = D.name;
+      $("#brand .b2").textContent = (D.tagline || "").toUpperCase();
+      tl.fromTo("#brand", { opacity: 0, y: -16 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, end("intro"));
+
+      const intro = el("div", "", `<span class="k">${D.kicker || "QUY MÔ DỰ ÁN"}</span><span class="n">${D.name}</span><span class="rule"></span><span class="ad">${D.address || ""}</span>`);
+      intro.id = "intro";
+      texts.append(intro);
+      const i0 = S.intro.start;
+      tl.fromTo("#intro .k", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.5 }, i0 + 0.2);
+      tl.fromTo("#intro .n", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, i0 + 0.35);
+      tl.fromTo("#intro .rule", { scaleX: 0 }, { scaleX: 1, transformOrigin: "0 50%", duration: 0.5 }, i0 + 0.8);
+      tl.fromTo("#intro .ad", { opacity: 0 }, { opacity: 1, duration: 0.5 }, i0 + 0.95);
+      tl.to("#intro", { opacity: 0, y: -20, duration: 0.45, ease: "power2.in" }, end("intro") - 0.45);
+
+      const H0 = D.headlines || {};
+      const up = (s) => s.toUpperCase();
+      const haTxt = num(D.area_ha, areaDec);
+      const heads = {
+        area: { l: H0.area || ["QUY MÔ", `${haTxt} HA`], sub: D.area_official ? "Tổng diện tích dự án" : "Diện tích đo trên bản đồ, ước tính" },
+        dims: { l: H0.dims || ["TRẢI DÀI", up(D.dims[0].label.replace("~", ""))], sub: D.dims[0].m < D.dims[1].m * 1.15 ? `Mỗi chiều ${D.dims[0].label}` : `Dài ${D.dims[0].label} · rộng ${D.dims[1].label}` },
+        pitch: { l: H0.pitch || ["BẰNG", `${num(D.pitches)} SÂN BÓNG`], sub: "Sân tiêu chuẩn 105 × 68 m" },
+      };
+      Object.entries(D.subs || {}).forEach(([k, v]) => { if (heads[k]) heads[k].sub = v; });
+      if (S.zones) heads.zones = { l: H0.zones || ["NHIỀU", "PHÂN KHU"], sub: (D.subs || {}).zones || D.zones.map((z) => z.label).slice(0, 3).join(" · ") };
+      Object.entries(heads).forEach(([k, h]) => {
+        const e = el("div", "headline", `<span class="l1">${h.l[0]}</span><span class="l2">${h.l[1] || ""}</span><span class="rule"></span><span class="sub">${h.sub}</span>`);
+        e.id = `hl-${k}`;
+        texts.append(e);
+        const s = S[k].start, e1 = end(k);
+        tl.fromTo(`#hl-${k}`, { opacity: 0 }, { opacity: 1, duration: 0.01 }, s);
+        tl.fromTo(`#hl-${k} .l1`, { opacity: 0, y: 46 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, s + 0.3);
+        tl.fromTo(`#hl-${k} .l2`, { opacity: 0, y: 46 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, s + 0.45);
+        tl.fromTo(`#hl-${k} .rule`, { scaleX: 0 }, { scaleX: 1, transformOrigin: "0 50%", duration: 0.5 }, s + 0.7);
+        tl.fromTo(`#hl-${k} .sub`, { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.5 }, s + 0.85);
+        tl.to(`#hl-${k}`, { opacity: 0, duration: 0.4, ease: "power1.in" }, e1 - 0.45);
+      });
+
+      const statEls = [];
+      if (S.stats) {
+        const st = $("#stats");
+        st.innerHTML = `<div class="ttl">${D.stats_title || "Thông số <b>nổi bật</b>"}</div><div class="grid"></div>`;
+        D.stats.forEach((x) => { const e = el("div", "s", `<span class="v"><b>0</b><small>${x.unit || ""}</small></span><span class="l">${x.label}</span>`); st.querySelector(".grid").append(e); statEls.push(e); });
+        const s = S.stats.start;
+        tl.fromTo("#stats", { opacity: 0 }, { opacity: 1, duration: 0.01 }, s);
+        tl.fromTo("#stats .ttl", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, s + 0.2);
+        statEls.forEach((e, i) => tl.fromTo(e, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, s + 0.45 + i * 0.25));
+        tl.to("#stats", { opacity: 0, duration: 0.4 }, end("stats") - 0.45);
+      }
+
+      const ot = D.outro_title || ["QUY MÔ", "ĐẲNG CẤP"];
+      const out = el("div", "headline", `<span class="l1">${ot[0]}</span><span class="l2">${ot[1] || ""}</span><span class="rule"></span><span class="sub">${D.outro_sub || D.tagline || ""}</span>${D.cta ? `<span class="cta">${D.cta}</span>` : ""}`);
+      out.id = "hl-out";
+      texts.append(out);
+      const o = S.outro.start;
+      tl.fromTo("#hl-out", { opacity: 0 }, { opacity: 1, duration: 0.01 }, o);
+      tl.fromTo("#hl-out .l1", { opacity: 0, y: 46 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, o + 0.4);
+      tl.fromTo("#hl-out .l2", { opacity: 0, y: 46 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, o + 0.55);
+      tl.fromTo("#hl-out .rule", { scaleX: 0 }, { scaleX: 1, transformOrigin: "0 50%", duration: 0.5 }, o + 0.8);
+      tl.fromTo("#hl-out .sub", { opacity: 0 }, { opacity: 1, duration: 0.5 }, o + 0.9);
+      if (D.cta) {
+        tl.fromTo("#hl-out .cta", { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(2)" }, o + 1.2);
+        tl.to("#hl-out .cta", { scale: 1.06, duration: 0.5, yoyo: true, repeat: 3, ease: "sine.inOut" }, o + 2.1);
+      }
+      $("#credits").textContent = "Bản đồ: Esri World Imagery · Ranh giới: © OpenStreetMap contributors" + (D.credits_extra ? " · " + D.credits_extra : "") + ". Kích thước và số sân bóng đo trên bản đồ, ước tính.";
+      tl.fromTo("#credits", { opacity: 0 }, { opacity: 1, duration: 0.6 }, o + 1.4);
+
+      const clock = { t: 0 };
+      tl.fromTo(clock, { t: 0 }, { t: T.total, duration: T.total, ease: "none", onUpdate: () => renderAt(clock.t) }, 0);
+      window.addEventListener("hf-seek", (e) => renderAt(e.detail.time));
+      window.__hf = window.__hf || {};
+      window.__hf.buildReady = window.__hf.buildReady || {};
+      window.__hf.buildReady["re-map-scale"] = document.fonts.ready.then(() => {
+        renderAt(window.__hfThreeTime || 0);
+        window.__timelines["main"] = tl;
+        tl.seek(0);
+        if (window.__hfForceTimelineRebind) window.__hfForceTimelineRebind();
+      });
+    </script>
+  </body>
+</html>

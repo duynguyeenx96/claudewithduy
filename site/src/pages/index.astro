@@ -60,14 +60,14 @@ const firstPlugin = modules.find(m => m.skill?.plugin)?.skill?.plugin ?? 'fx-pac
             <div>
               <h3><a href={u(`module/${m.id}/`)}>{m.name}</a>{m.status !== 'ready' && <span class="chip sm soon">Sắp có</span>}</h3>
               <p class="desc">{m.desc}</p>
-              <div class="chips">{m.chips.map(c => <span class="chip">{c}</span>)}</div>
+              <div class="chips">{m.chips.map((c, k) => k === 0 && m.effects ? <a class="chip chip-link" href={u(`module/${m.id}/#hieu-ung`)}>{c} →</a> : <span class="chip">{c}</span>)}</div>
               <Blocks m={m} />
               <p style="margin:16px 0 0;font-size:14px"><a href={u(`module/${m.id}/`)}>Chi tiết →</a></p>
             </div>
           </div>
           <div style="direction:ltr;align-self:stretch">
             {m.video.before || m.video.after
-              ? <BeforeAfter before={m.video.before} after={m.video.after} />
+              ? <BeforeAfter before={m.video.before} after={m.video.after} audio={(m.video as any).audio} />
               : <div class="vframe novid"><span class="label">Chưa có video</span></div>}
           </div>
         </div>

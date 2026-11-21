@@ -120,7 +120,253 @@
         "cmd": "/fx-pack:effects video.mp4",
         "plugin": "fx-pack",
         "note": "Gốc từ claude-video-effects, thêm 8 hiệu ứng."
-      }
+      },
+      "effects": [
+        {
+          "fx": "noise",
+          "desc": "Reels chồng dần sau đầu, cứ 1/4 giây thêm một cái"
+        },
+        {
+          "fx": "lineup",
+          "desc": "Ô đánh số xoè hình vòng cung trên đầu"
+        },
+        {
+          "fx": "locked-on",
+          "desc": "Khung góc bắt dính vào mặt, camera bám theo"
+        },
+        {
+          "fx": "orbit",
+          "desc": "Reels bay vòng quanh đầu, trước mặt ở dưới, sau đầu ở trên"
+        },
+        {
+          "fx": "lean-in",
+          "desc": "Zoom giật nhanh vào đúng một từ"
+        },
+        {
+          "fx": "backdrop-word",
+          "desc": "Một chữ khổng lồ rơi xuống sau lưng"
+        },
+        {
+          "fx": "spotlight",
+          "desc": "Tắt đèn cả phòng, chỉ còn người sáng"
+        },
+        {
+          "fx": "the-bill",
+          "desc": "In lời dặn như tờ hoá đơn lên tường trên đầu"
+        },
+        {
+          "fx": "moody",
+          "desc": "Chỉnh màu trầm (moody, đen trắng, ấm, lạnh, rực)"
+        },
+        {
+          "fx": "swipe",
+          "desc": "Thanh trượt trước/sau quét ngang người"
+        },
+        {
+          "fx": "todo",
+          "desc": "Thẻ checklist cạnh đầu, tự tích khi bạn nói"
+        },
+        {
+          "fx": "comment-box",
+          "desc": "Thanh bình luận Instagram gõ chữ rồi đăng"
+        },
+        {
+          "fx": "tap",
+          "desc": "Nút Follow bật lên rồi chuyển thành Following"
+        },
+        {
+          "fx": "pause-point",
+          "desc": "Dừng hình, mũi tên vẽ tay chỉ vào bạn"
+        },
+        {
+          "fx": "uninstall",
+          "desc": "Thanh gỡ cài đặt nhiễu glitch làm vỡ khung hình"
+        },
+        {
+          "fx": "reel-frame",
+          "desc": "Video thu nhỏ thành thẻ reel Instagram"
+        },
+        {
+          "fx": "shortcut-rain",
+          "desc": "Phím bàn phím mưa xuống sau lưng"
+        },
+        {
+          "fx": "reject-stamp",
+          "desc": "Con dấu đỏ to đập xuống màn hình"
+        },
+        {
+          "fx": "countdown-flip",
+          "desc": "Đồng hồ lật 3, 2, 1 trên đầu"
+        },
+        {
+          "fx": "rabbit-hole",
+          "desc": "Khung hình xoáy hút vào chính nó"
+        },
+        {
+          "fx": "cover-star",
+          "desc": "Bạn thành bìa tạp chí, tít nằm sau đầu"
+        },
+        {
+          "fx": "scribble",
+          "desc": "Nét bút dạ tự vẽ quanh người"
+        },
+        {
+          "fx": "glass-widgets",
+          "desc": "Widget kính mờ bay quanh đầu"
+        },
+        {
+          "fx": "red-collage",
+          "desc": "Người đen trắng, chữ đỏ khổng lồ phía sau, 3 dòng chữ đập vào"
+        },
+        {
+          "fx": "split-headline",
+          "desc": "Thẻ tít trượt xuống, đẩy bạn xuống nửa dưới"
+        },
+        {
+          "fx": "pastel-word",
+          "desc": "Phòng tím pastel, chữ lớn sau lưng, thẻ hồ sơ được follow"
+        },
+        {
+          "fx": "check-pills",
+          "desc": "Phòng giấy kẻ ô, bảng reel sau lưng, con trỏ bấm các nút xanh"
+        },
+        {
+          "fx": "timeline",
+          "desc": "Màu phim đỏ sẫm, timeline dựng phim, mã REC, đầu phát sáng"
+        },
+        {
+          "fx": "headline-box",
+          "desc": "Zoom vào kèm tít 2 dòng, dòng 2 trong hộp trắng"
+        },
+        {
+          "fx": "profile-wall",
+          "desc": "Lưới reel phủ kín tường sau lưng, bộ đếm chạy lên"
+        },
+        {
+          "fx": "tier-list",
+          "desc": "Bảng xếp hạng rơi xuống, Claude bay vào hạng S"
+        },
+        {
+          "fx": "broll-split",
+          "desc": "B-roll ở trên kèm nhãn giá, bạn ở dưới"
+        },
+        {
+          "fx": "phone-fan",
+          "desc": "Reels xoè ra như tay cầm bài dưới dòng tít"
+        },
+        {
+          "fx": "dot-reveal",
+          "desc": "Khung hình hiện dần từ chấm sáng rồi bật về hình thật"
+        },
+        {
+          "fx": "headline-wall",
+          "desc": "Tít bài của bạn chồng lên sau đầu, rồi hiện tổng"
+        },
+        {
+          "fx": "checklist",
+          "desc": "Danh sách việc kiểu Claude dưới cằm, từng bước quay rồi tích xanh"
+        },
+        {
+          "fx": "liquid-glass-graph",
+          "desc": "Thẻ kính lỏng dưới cằm, biểu đồ leo, số đếm lên"
+        },
+        {
+          "fx": "carousel-spin",
+          "desc": "Reels quay quanh bạn như băng chuyền 3D rồi dừng"
+        },
+        {
+          "fx": "match-cut",
+          "desc": "Trang báo cắt liên tục trên một từ, khoá trong hộp đỏ sau đầu"
+        },
+        {
+          "fx": "apple-toggles",
+          "desc": "Thẻ cài đặt iPhone bật từng công tắc một"
+        },
+        {
+          "fx": "led-sign",
+          "desc": "Đèn tắt, biển LED phát sáng tự gõ chữ sau lưng"
+        },
+        {
+          "fx": "slow-push",
+          "desc": "Đẩy chậm vào mặt, phòng nhoè dần"
+        },
+        {
+          "fx": "over-the-shoulder-zoom",
+          "desc": "Camera đẩy vào góc trên, biểu đồ kính bật cạnh đầu, rồi sang góc kia"
+        },
+        {
+          "fx": "messages",
+          "desc": "Thông báo iMessage bật lên lần lượt, xếp chồng"
+        },
+        {
+          "fx": "place-in-grid",
+          "desc": "Bạn thu vào ô giữa lưới 3x3, 8 reel bật quanh kèm lượt xem"
+        },
+        {
+          "fx": "tape-label",
+          "desc": "Dải băng dính vàng ghi câu của bạn dán ngang ngực"
+        },
+        {
+          "fx": "select-resize",
+          "desc": "Khung chọn xanh bắt lấy con số, con trỏ kéo to ra"
+        },
+        {
+          "fx": "wave-trim",
+          "desc": "Sóng âm giọng bạn, đoạn im lặng hai đầu co lại biến mất"
+        },
+        {
+          "fx": "huge-strike",
+          "desc": "Một chữ serif khổng lồ sau đầu bị gạch đỏ"
+        },
+        {
+          "fx": "crayon-write",
+          "desc": "Bút sáp đỏ viết chữ sau đầu, gạch chân rồi bay đi"
+        },
+        {
+          "fx": "fan-build",
+          "desc": "Bìa reel chia bài thành hình quạt sau đầu, từng lá một"
+        },
+        {
+          "fx": "cinema",
+          "desc": "Bìa phim tài liệu: người đen trắng, vòng tròn vàng, tít nảy từng chữ",
+          "extra": true
+        },
+        {
+          "fx": "cinema-v1",
+          "desc": "Bản 1 của cinema: tít lớn đập vào, hạt phim",
+          "extra": true
+        },
+        {
+          "fx": "split-graph",
+          "desc": "Thẻ trên cùng với biểu đồ 7 cột nảy lên, cột số 1 phát sáng có vương miện",
+          "extra": true
+        },
+        {
+          "fx": "split-graph-v1",
+          "desc": "Bản 1 của split-graph: cột mọc dần, số đếm lên, bạn ở 55% dưới",
+          "extra": true
+        },
+        {
+          "fx": "editor",
+          "desc": "Giao diện phần mềm dựng phim chi tiết bao quanh bạn, timeline 6 track",
+          "extra": true
+        },
+        {
+          "fx": "spotlight-type",
+          "desc": "Tắt đèn, một từ tự gõ từng chữ trên đầu",
+          "extra": true
+        },
+        {
+          "fx": "spotlight-neon",
+          "desc": "Phòng tối, chữ neon kính phát sáng bật từng chữ sau lưng",
+          "extra": true
+        },
+        {
+          "fx": "gold-collage",
+          "desc": "Người đen trắng, chữ vàng kim khổng lồ có vệt sáng, dòng chữ bên cạnh",
+          "extra": true
+        }
+      ]
     },
     {
       "id": "chuan-hoa-giong",
@@ -133,7 +379,8 @@
       ],
       "video": {
         "before": "videos/modules/chuan-hoa-giong-before.mp4",
-        "after": "videos/modules/chuan-hoa-giong-after.mp4"
+        "after": "videos/modules/chuan-hoa-giong-after.mp4",
+        "audio": "both"
       },
       "credits": [
         {
@@ -337,15 +584,16 @@
     {
       "id": "re-map-video",
       "name": "Re Map Video",
-      "desc": "Video vị trí dự án BĐS 9:16 dạng bản đồ 3D, chỉ cần tên dự án hoặc link Google Maps. Chọn nhạc nền, giọng đọc AI, hoặc clip sale nói thu nhỏ ở góc.",
+      "desc": "Video BĐS 9:16 dạng bản đồ 3D, chỉ cần tên dự án hoặc link Google Maps. Hai kiểu: vị trí và kết nối tiện ích, hoặc quy mô dự án (viền khu đất, diện tích, phân khu). Chọn nhạc nền, giọng đọc AI, hoặc clip sale nói thu nhỏ ở góc.",
       "chips": [
         "9:16",
-        "Bản đồ 3D",
+        "Vị trí và quy mô",
         "Link Google Maps"
       ],
       "video": {
         "before": "videos/modules/re-map-video-before.mp4",
-        "after": "videos/modules/re-map-video-after.mp4"
+        "after": "videos/modules/re-map-video-after.mp4",
+        "audio": "after"
       },
       "credits": [
         {
@@ -532,7 +780,16 @@
       "name": "Bản đồ 3D vị trí",
       "desc": "Bản đồ vệ tinh nghiêng, camera bay tới từng tiện ích, kèm tuyến đường, km và phút. Làm bằng Re Map Video.",
       "video": "videos/style/re-map-video.mp4",
-      "href": ""
+      "href": "",
+      "audio": true
+    },
+    {
+      "topic": "Bất động sản",
+      "name": "Quy mô dự án",
+      "desc": "Vẽ viền khu đất trên ảnh vệ tinh, đếm diện tích, đo chiều dài, quy ra số sân bóng, lần lượt hiện các phân khu. Làm bằng Re Map Video.",
+      "video": "videos/style/re-map-quy-mo.mp4",
+      "href": "",
+      "audio": true
     },
     {
       "topic": "Bất động sản",

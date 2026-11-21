@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { topics, templates, u, pad } from '../lib';
+import SoundBtn from '../components/SoundBtn.astro';
 const counts = Object.fromEntries(topics.map(t => [t, templates.filter(x => x.topic === t).length]));
 ---
 <Base title="Style video: Claude with Duy" description="Các style dựng video 9:16 của Tool Video, Re Map Video và các mẫu khác." current="template" image="og.jpg">
@@ -20,7 +21,8 @@ const counts = Object.fromEntries(topics.map(t => [t, templates.filter(x => x.to
         {templates.map(c => (
           <article data-topic={c.topic}>
             <div class="vframe card" data-demo>
-              {c.video ? <video src={u(c.video)} muted loop playsinline preload="metadata"></video> : <span class="label empty">Chưa có mẫu</span>}
+              {c.video ? <video src={u(c.video)} muted loop playsinline preload="metadata" data-audio={(c as any).audio ? '' : undefined}></video> : <span class="label empty">Chưa có mẫu</span>}
+              {(c as any).audio && <SoundBtn />}
               <span class="tag">9:16</span>
             </div>
             <div class="label" style="font-size:11px">{c.topic}</div>

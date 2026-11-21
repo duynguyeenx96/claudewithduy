@@ -57,7 +57,7 @@
     {
       "name": "re-map-video",
       "source": "./plugins/re-map-video",
-      "description": "Video vị trí dự án BĐS 9:16 dạng bản đồ 3D từ tên dự án hoặc link Google Maps: camera bay tới tiện ích, tuyến đường, km/phút, Metro, CTA.",
+      "description": "Video BĐS 9:16 dạng bản đồ 3D từ tên dự án hoặc link Google Maps: vị trí và kết nối (tiện ích, tuyến đường, km/phút, Metro) hoặc quy mô dự án (viền khu đất, diện tích, phân khu), CTA.",
       "category": "video",
       "keywords": [
         "video",

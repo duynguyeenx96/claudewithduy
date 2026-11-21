@@ -476,7 +476,7 @@
 
       T.beats.forEach((b, n) => {
         const p = D.pois[b.i];
-        const h = el("div", "headline", `<span class="l1">${p.headline[0]}</span><span class="l2">${p.headline[1] || ""}</span><span class="rule"></span><span class="sub">${p.short} · ${fmtKm(p.km)} km · ~${p.min} phút</span>`);
+        const h = el("div", "headline", `<span class="l1">${p.headline[0]}</span><span class="l2">${p.headline[1] || ""}</span><span class="rule"></span><span class="sub">${p.sub || `${p.short} · ${fmtKm(p.km)} km · ~${p.min} phút`}</span>`);
         h.id = `hl-${n}`;
         texts.append(h);
         const s = b.start, e = b.start + b.dur;

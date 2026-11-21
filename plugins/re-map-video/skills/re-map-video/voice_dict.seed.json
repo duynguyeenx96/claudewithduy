@@ -1,0 +1,78 @@
+{
+  "_note": "Cách viết cho TTS tiếng Việt (ZeroTTS). Trước khi gen thoại: tra bảng này, thay từ trong kịch bản. Từ mới (tên dự án, tên nước ngoài) -> thử 3-4 cách viết, gen, nghe lại bằng Whisper, cách nào ra đúng thì thêm vào 'words' với 'verified': true. scripts/tts.py tự áp dụng bảng này.",
+  "words": {
+    "Bcons": {
+      "say": "Bi-cons",
+      "verified": true
+    },
+    "Vinhomes": {
+      "say": "Vinhomes",
+      "verified": true,
+      "note": "để nguyên; 'Vin-hôm' bị đọc thành Vinholm"
+    },
+    "Grand Park": {
+      "say": "Grand Park",
+      "verified": true
+    },
+    "Center City": {
+      "say": "Center City",
+      "verified": true
+    },
+    "Metro": {
+      "say": "Metro",
+      "verified": true
+    },
+    "BĐS": {
+      "say": "bất động sản"
+    },
+    "TP.HCM": {
+      "say": "thành phố Hồ Chí Minh"
+    },
+    "TPHCM": {
+      "say": "thành phố Hồ Chí Minh"
+    },
+    "Q1": {
+      "say": "Quận một"
+    },
+    "Q.1": {
+      "say": "Quận một"
+    },
+    "ĐHQG": {
+      "say": "Đại học Quốc gia"
+    },
+    "TTTM": {
+      "say": "trung tâm thương mại"
+    },
+    "QL": {
+      "say": "quốc lộ"
+    },
+    "CĐT": {
+      "say": "chủ đầu tư"
+    },
+    "Vinschool": {
+      "say": "Vinschool",
+      "verified": false,
+      "note": "Whisper nghe thành 'viên school' — cần thử 'Vin-school', 'Vin school'"
+    }
+  },
+  "units": {
+    "m²": "mét vuông",
+    "m2": "mét vuông",
+    "ha": "héc ta",
+    "km": "ki lô mét",
+    "m": "mét",
+    "%": "phần trăm",
+    "tr/m²": "triệu một mét vuông",
+    "tỷ": "tỷ"
+  },
+  "phrasing": {
+    "Quy ra": "Quy đổi ra",
+    "_why": "câu ngắn 'Quy ra' bị nuốt chữ, Whisper nghe thành 'Quy giặt'"
+  },
+  "rules": [
+    "Số viết bằng chữ: 271 -> 'hai trăm bảy mươi mốt', 2,5 -> 'hai phẩy năm', 36 -> 'ba mươi sáu'. tts.py tự đổi số nguyên và số thập phân có dấu phẩy.",
+    "Không viết tắt, không ký hiệu (~, ≈, ·, /): '~10 phút' -> 'khoảng mười phút'.",
+    "Câu 12-18 từ, có dấu phẩy để ngắt hơi. Tên tiếng Anh dài nên tách câu riêng.",
+    "Whisper chép sai chính tả (vd 'danh giới', 'hecta') không có nghĩa TTS đọc sai: nghe lại đoạn đó trước khi đổi cách viết."
+  ]
+}

@@ -1,17 +1,22 @@
 ---
 import { u } from '../lib';
-interface Props { before?: string; after?: string; minH?: number }
-const { before, after, minH = 320 } = Astro.props;
+import SoundBtn from './SoundBtn.astro';
+interface Props { before?: string; after?: string; minH?: number; audio?: string }
+// audio: "after" | "before" | "both" — clip nào có tiếng thì hiện nút bật âm thanh
+const { before, after, minH = 320, audio = '' } = Astro.props;
+const snd = (k: string) => audio === 'both' || audio === k;
 ---
 {(before || after) && (
   <div data-demo style={`display:grid;grid-template-columns:1fr 1fr;gap:8px`}>
     <div class="vframe" style={`min-height:${minH}px`}>
-      {before && <video src={u(before)} muted loop playsinline preload="metadata"></video>}
+      {before && <video src={u(before)} muted loop playsinline preload="metadata" data-audio={snd('before') ? '' : undefined}></video>}
       <span class="tag">TRƯỚC</span>
+      {before && snd('before') && <SoundBtn />}
     </div>
     <div class="vframe dark" style={`min-height:${minH}px`}>
-      {after && <video src={u(after)} muted loop playsinline preload="metadata"></video>}
+      {after && <video src={u(after)} muted loop playsinline preload="metadata" data-audio={snd('after') ? '' : undefined}></video>}
       <span class="tag">SAU</span>
+      {after && snd('after') && <SoundBtn />}
     </div>
   </div>
 )}
