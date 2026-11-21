@@ -20,11 +20,9 @@ $PYFX $FX/custom/fx_vi.py --plan plan.json <vào.mp4> <ra.mp4>                  
 ```
 `plan.json`: `{"effects":[{"fx":"backdrop-word","start":2.0,"end":4.0,"text":"CLAUDE"}, ...]}`. Mỗi hiệu ứng 1.5–4s. Danh sách chữ nối bằng `|`.
 
-## Chỗ đứng trong /tool-video
-Đây là một lần encode hình. Quy tắc "một lần encode, crf 12" nên: chạy fxpack **thay cho** bước encode A-roll
-(đầu vào = clip đã cắt lời, đầu ra = `public/aroll.mp4`, fxpack tự đưa về 1080 ngang), rồi dựng concept như thường.
-Không chạy fxpack lên mp4 đã render xong. Vùng có hiệu ứng fxpack thì build.py không đặt thêm chữ / chip đè lên (một hệ chữ mỗi đoạn).
-SFX cho từng hiệu ứng vẫn đặt trong build.py bằng `sfxkit` (cue theo mốc `start` trong plan).
+## Ghép với video dựng bằng HyperFrames
+FX Pack là một lần encode hình. Chạy nó lên clip người nói đã cắt lời **trước** khi dựng (đầu ra đưa vào làm A-roll),
+không chạy lên mp4 đã render xong. Vùng có hiệu ứng thì không đặt thêm chữ / chip đè lên (một hệ chữ mỗi đoạn).
 
 ## Vùng an toàn (x 70–1010, y 250–1500), soát trên clip thử 2026-11-16, đầu ở giữa khung
 Vị trí đa số bám theo đầu: đầu càng cao thì thẻ "trên đầu" càng dễ vượt mép trên. **Luôn xuất khung kiểm trước khi render.**

@@ -43,18 +43,6 @@
       ]
     },
     {
-      "name": "tool-video",
-      "source": "./plugins/tool-video",
-      "description": "Dựng short 9:16 review / giới thiệu phần mềm từ A-roll người nói và tư liệu thật, 12 concept, render bằng HyperFrames.",
-      "category": "video",
-      "keywords": [
-        "video",
-        "hyperframes",
-        "review",
-        "short"
-      ]
-    },
-    {
       "name": "re-map-video",
       "source": "./plugins/re-map-video",
       "description": "Video BĐS 9:16 dạng bản đồ 3D từ tên dự án hoặc link Google Maps: vị trí và kết nối (tiện ích, tuyến đường, km/phút, Metro) hoặc quy mô dự án (viền khu đất, diện tích, phân khu), CTA.",

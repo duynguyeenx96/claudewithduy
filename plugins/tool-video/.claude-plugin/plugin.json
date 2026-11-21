@@ -1,8 +1,0 @@
-{
-  "name": "tool-video",
-  "version": "1.0.0",
-  "description": "Dựng short 9:16 giới thiệu / review phần mềm từ A-roll người nói và tư liệu thật, 12 concept hình ảnh, render bằng HyperFrames.",
-  "author": { "name": "Claude with Duy" },
-  "homepage": "https://github.com/duynguyeenx96/claudewithduy/tree/main/plugins/tool-video",
-  "repository": "https://github.com/duynguyeenx96/claudewithduy"
-}
