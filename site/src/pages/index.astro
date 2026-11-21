@@ -101,10 +101,10 @@ const firstPlugin = modules.find(m => m.skill?.plugin)?.skill?.plugin ?? 'fx-pac
     <div data-r>
       <h3 class="sub">Tool: tải về, bấm đúp</h3>
       <ol class="steps light">
-        <li><span>01</span>Tải .zip, giải nén.</li>
-        <li><span>02</span>Cài Python, FFmpeg hoặc Node.js nếu module cần.</li>
-        <li><span>03</span>macOS: bấm đúp file <code class="inl">.command</code> (lần đầu chuột phải, chọn Mở). Windows: bấm đúp <code class="inl">start.bat</code>. Linux: <code class="inl">bash start.sh</code>.</li>
-        <li><span>04</span>Kéo file vào trang vừa mở.</li>
+        <li><span>01</span><div>Tải .zip, giải nén.</div></li>
+        <li><span>02</span><div>Cài Python, FFmpeg hoặc Node.js nếu module cần.</div></li>
+        <li><span>03</span><div>macOS: bấm đúp file <code class="inl">.command</code> (lần đầu chuột phải, chọn Mở). Windows: bấm đúp <code class="inl">start.bat</code>. Linux: <code class="inl">bash start.sh</code>.</div></li>
+        <li><span>04</span><div>Kéo file vào trang vừa mở.</div></li>
       </ol>
     </div>
   </div>
@@ -211,7 +211,7 @@ const firstPlugin = modules.find(m => m.skill?.plugin)?.skill?.plugin ?? 'fx-pac
   .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:56px}
   .steps{list-style:none;margin:0;padding:0;border-top:1px solid var(--ink)}
   .steps li{display:grid;grid-template-columns:48px 1fr;padding:14px 0;border-bottom:1px solid var(--line2);font-size:16px;line-height:1.5}
-  .steps li span{font-family:var(--mono);font-size:13px;color:var(--accent);padding-top:2px}
+  .steps li>span{font-family:var(--mono);font-size:13px;color:var(--accent);padding-top:2px}
   .sub{font-family:var(--serif);font-weight:500;font-size:24px;margin:0 0 12px}
   .p{font-size:16px;line-height:1.6;color:var(--ink2);margin:0}
   .inl{font-family:var(--mono);font-size:13px;color:var(--accent);background:var(--bg2);padding:1px 6px;border-radius:3px}
