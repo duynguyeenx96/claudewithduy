@@ -37,10 +37,10 @@ const styleCount = templates.filter(t => t.topic === m.name).length;
     {m.effects && m.effects.length > 0 && (
       <section class="steps-sec fx-sec" id="hieu-ung">
         <div class="label">{m.effects.length} hiệu ứng</div>
-        <p class="fx-hint">Gõ tên hiệu ứng (cột trái) khi nhờ Claude, hoặc mô tả bằng lời. Đánh dấu <span class="fx-new">thêm</span> là hiệu ứng Claude with Duy làm thêm.</p>
+        <p class="fx-hint">Gõ tên hiệu ứng (chữ màu cam) khi nhờ Claude, hoặc mô tả bằng lời. Đánh dấu <span class="fx-new">thêm</span> là hiệu ứng Claude with Duy làm thêm.</p>
         <ol class="fx-list">
           {m.effects.map((e, k) => (
-            <li><span>{String(k + 1).padStart(2, '0')}</span><code class="inl">{e.fx}</code><div>{e.desc}{e.extra && <span class="fx-new">thêm</span>}</div></li>
+            <li><span>{String(k + 1).padStart(2, '0')}</span><div class="fx-body"><p class="fx-name"><code class="inl">{e.fx}</code>{e.extra && <span class="fx-new">thêm</span>}</p><p class="fx-desc">{e.desc}</p></div></li>
           ))}
         </ol>
       </section>
@@ -86,9 +86,11 @@ const styleCount = templates.filter(t => t.topic === m.name).length;
 .fx-sec{max-width:none;scroll-margin-top:88px}
     .fx-hint{margin:12px 0 0;font-size:14px;color:var(--ink2);line-height:1.6}
     .fx-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(460px,100%),1fr));column-gap:48px}
-    .fx-list li{grid-template-columns:36px minmax(0,auto) 1fr;gap:12px;align-items:baseline;font-size:15px;padding:12px 0}
-    .fx-list li>.inl{white-space:nowrap}
-    .fx-new{display:inline-block;margin-left:8px;font-family:var(--mono);font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);border-radius:3px;padding:0 5px;vertical-align:1px}
+    .fx-list li{grid-template-columns:36px 1fr;padding:14px 0;font-size:15px}
+    .fx-list li>.fx-body{display:block}
+    .fx-name{margin:0;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+    .fx-desc{margin:4px 0 0;line-height:1.5;color:var(--ink)}
+    .fx-new{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);border-radius:3px;padding:0 5px;vertical-align:1px}
     .pn{margin-top:96px;display:grid;grid-template-columns:1fr 1fr;gap:16px;border-top:1px solid var(--line);padding-top:24px}
     .pn a{display:grid;gap:8px;font-family:var(--serif);font-size:22px}
   </style>
