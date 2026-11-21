@@ -482,108 +482,8 @@
       }
     },
     {
-      "id": "tool-video",
-      "name": "Tool Video",
-      "desc": "Short 9:16 review phần mềm từ clip bạn nói và tư liệu thật. 12 concept, video nào cũng khác.",
-      "chips": [
-        "9:16",
-        "12 concept",
-        "Review phần mềm"
-      ],
-      "video": {
-        "before": "videos/modules/tool-video-before.mp4",
-        "after": "videos/modules/tool-video-after.mp4"
-      },
-      "credits": [
-        {
-          "name": "HyperFrames",
-          "url": "https://github.com/heygen-com/hyperframes",
-          "by": "HeyGen",
-          "license": "Apache-2.0",
-          "use": "dựng và render video bằng HTML"
-        },
-        {
-          "name": "herk-edit-kit",
-          "url": "https://github.com/nateherkai/herk-edit-kit",
-          "by": "Nate Herk",
-          "license": "MIT",
-          "use": "script cắt khoảng lặng, nói vấp (đã vá cho tiếng Việt)"
-        },
-        {
-          "name": "EditAtlas skills",
-          "url": "https://github.com/EditAtlas/skills",
-          "by": "EditAtlas",
-          "license": "Apache-2.0",
-          "use": "script soát bản render, phân tích video mẫu"
-        },
-        {
-          "name": "GSAP",
-          "url": "https://github.com/greensock/GSAP",
-          "by": "GreenSock",
-          "license": "GSAP Standard License",
-          "use": "chuyển động"
-        },
-        {
-          "name": "Be Vietnam Pro",
-          "url": "https://github.com/bettergui/BeVietnamPro",
-          "by": "Be Vietnam Pro Project",
-          "license": "OFL-1.1",
-          "use": "phông chữ tiếng Việt"
-        },
-        {
-          "name": "Kenney audio",
-          "url": "https://kenney.nl/assets",
-          "by": "Kenney",
-          "license": "CC0",
-          "use": "hiệu ứng âm thanh"
-        },
-        {
-          "name": "Freesound",
-          "url": "https://freesound.org",
-          "by": "nhiều tác giả",
-          "license": "CC0",
-          "use": "hiệu ứng âm thanh (chỉ âm CC0)"
-        },
-        {
-          "name": "whisper.cpp",
-          "url": "https://github.com/ggml-org/whisper.cpp",
-          "by": "ggml-org",
-          "license": "MIT",
-          "use": "chép lời trên máy"
-        },
-        {
-          "name": "FFmpeg",
-          "url": "https://github.com/FFmpeg/FFmpeg",
-          "by": "FFmpeg",
-          "license": "LGPL/GPL",
-          "use": "xử lý video, âm thanh"
-        }
-      ],
-      "status": "ready",
-      "skill": {
-        "req": [
-          "Claude Code",
-          "Node.js 22+",
-          "Python 3",
-          "FFmpeg",
-          "whisper-cpp"
-        ],
-        "cmd": "/tool-video:tool-video aroll.mp4 --tool \"Tên tool\"",
-        "plugin": "tool-video",
-        "note": "Không có whisper-cli thì đưa kèm script hoặc .srt. Không kèm nhạc nền. Muốn lấy nhạc nền hoặc giọng đọc trong thư viện HyperFrames thì cần tài khoản HyperFrames (miễn phí)."
-      },
-      "tool": {
-        "line": "Bản web: chọn clip, chọn concept, bấm dựng.",
-        "req": [
-          "Python",
-          "HyperFrames",
-          "FFmpeg"
-        ]
-      }
-    },
-    {
-      "id": "re-map-video",
-      "name": "Re Map Video",
+      "id": "bat-dong-san",
+      "name": "Bất động sản",
       "desc": "Video BĐS 9:16 dạng bản đồ 3D, chỉ cần tên dự án hoặc link Google Maps. Hai kiểu: vị trí và kết nối tiện ích, hoặc quy mô dự án (viền khu đất, diện tích, phân khu). Chọn nhạc nền, giọng đọc AI, hoặc clip sale nói thu nhỏ ở góc.",
       "chips": [
         "9:16",
@@ -591,8 +491,8 @@
         "Link Google Maps"
       ],
       "video": {
-        "before": "videos/modules/re-map-video-before.mp4",
-        "after": "videos/modules/re-map-video-after.mp4",
+        "before": "videos/modules/bat-dong-san-before.mp4",
+        "after": "videos/modules/bat-dong-san-after.mp4",
         "audio": "after"
       },
       "credits": [
@@ -683,7 +583,6 @@
     }
   ],
   "topics": [
-    "Tool Video",
     "Bất động sản",
     "Talking-head",
     "Review sản phẩm",
@@ -692,93 +591,9 @@
   ],
   "templates": [
     {
-      "topic": "Tool Video",
-      "name": "Card giao diện",
-      "desc": "Card giao diện trồi lên trên mặt, khung chat gõ prompt.",
-      "video": "videos/style/tool-video-ui.mp4",
-      "href": ""
-    },
-    {
-      "topic": "Tool Video",
-      "name": "Chia đôi màn hình",
-      "desc": "Đồ hoạ nửa trên, mặt nửa dưới, bung full ở câu nhấn.",
-      "video": "",
-      "href": ""
-    },
-    {
-      "topic": "Tool Video",
-      "name": "Quay màn hình",
-      "desc": "Quay màn hình trong khung laptop, zoom theo con trỏ, mặt trong bong bóng.",
-      "video": "",
-      "href": ""
-    },
-    {
-      "topic": "Tool Video",
-      "name": "Hướng dẫn màn hình ngang",
-      "desc": "Màn hình ngang full khung, mặt trong ô vuông, phụ đề đối diện.",
-      "video": "videos/style/tool-video-tutorial.mp4",
-      "href": ""
-    },
-    {
-      "topic": "Tool Video",
-      "name": "Terminal có người nói",
-      "desc": "Cửa sổ terminal, gõ lệnh, log chạy.",
-      "video": "",
-      "href": ""
-    },
-    {
-      "topic": "Tool Video",
-      "name": "Windows 95",
-      "desc": "Windows 95: cửa sổ bật chồng, hộp thoại lỗi.",
-      "video": "",
-      "href": ""
-    },
-    {
-      "topic": "Tool Video",
-      "name": "Sổ tay",
-      "desc": "Trang sổ, polaroid dán băng keo, nét bút vẽ dần.",
-      "video": "",
-      "href": ""
-    },
-    {
-      "topic": "Tool Video",
-      "name": "Bảng xếp hạng",
-      "desc": "Số đếm ngược, card từng tool, bảng xếp hạng.",
-      "video": "",
-      "href": ""
-    },
-    {
-      "topic": "Tool Video",
-      "name": "Đối đầu",
-      "desc": "Chia đôi màn hình, VS, bảng điểm.",
-      "video": "",
-      "href": ""
-    },
-    {
-      "topic": "Tool Video",
-      "name": "Trượt ngang",
-      "desc": "Người trượt sang một bên, chữ và từ khoá hiện cạnh đầu.",
-      "video": "videos/style/tool-video-glide.mp4",
-      "href": ""
-    },
-    {
-      "topic": "Tool Video",
-      "name": "Chuỗi hiệu ứng",
-      "desc": "Mỗi giây một hiệu ứng chạy ngay trên người.",
-      "video": "",
-      "href": ""
-    },
-    {
-      "topic": "Tool Video",
-      "name": "Chữ sau người",
-      "desc": "Chữ khổng lồ nằm sau người, đổi khung bằng whip-zoom.",
-      "video": "",
-      "href": ""
-    },
-    {
       "topic": "Bất động sản",
       "name": "Bản đồ 3D vị trí",
-      "desc": "Bản đồ vệ tinh nghiêng, camera bay tới từng tiện ích, kèm tuyến đường, km và phút. Làm bằng Re Map Video.",
+      "desc": "Bản đồ vệ tinh nghiêng, camera bay tới từng tiện ích, kèm tuyến đường, km và phút. Làm bằng module Bất động sản.",
       "video": "videos/style/re-map-video.mp4",
       "href": "",
       "audio": true
@@ -786,7 +601,7 @@
     {
       "topic": "Bất động sản",
       "name": "Quy mô dự án",
-      "desc": "Vẽ viền khu đất trên ảnh vệ tinh, đếm diện tích, đo chiều dài, quy ra số sân bóng, lần lượt hiện các phân khu. Làm bằng Re Map Video.",
+      "desc": "Vẽ viền khu đất trên ảnh vệ tinh, đếm diện tích, đo chiều dài, quy ra số sân bóng, lần lượt hiện các phân khu. Làm bằng module Bất động sản.",
       "video": "videos/style/re-map-quy-mo.mp4",
       "href": "",
       "audio": true
@@ -902,7 +717,7 @@
         "CPU 4 nhân",
         "RAM 8 GB",
         "Ổ trống 15 GB",
-        "Có Internet khi cài và khi dùng re-map-video"
+        "Có Internet khi cài và khi dùng module Bất động sản"
       ],
       "rec": [
         "Mac chip M1 trở lên, hoặc CPU 8 nhân",
@@ -920,12 +735,12 @@
       },
       {
         "name": "Node.js 22+",
-        "for": "Tool Video, Re Map Video (HyperFrames)",
+        "for": "Bất động sản (HyperFrames)",
         "install": "nodejs.org"
       },
       {
         "name": "Python 3.12",
-        "for": "FX Pack, Re Map Video, Chuẩn hoá giọng, ref-catalog",
+        "for": "FX Pack, Bất động sản, Chuẩn hoá giọng, ref-catalog",
         "install": "python.org"
       },
       {
