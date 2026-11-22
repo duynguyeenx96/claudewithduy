@@ -628,18 +628,24 @@
     {
       "topic": "Talking-head",
       "name": "Tiêu đề động",
+      "desc": "Tít chữ to bật lên trên đầu theo từng cụm từ bạn nói, chữ khoá đổi màu.",
+      "audio": true,
       "video": "videos/tieu-de-dong.mp4",
       "href": ""
     },
     {
       "topic": "Talking-head",
       "name": "Lower-third và số liệu",
+      "desc": "Thanh tên trượt vào, rồi thẻ kính có biểu đồ và số đếm chạy theo lời nói.",
+      "audio": true,
       "video": "videos/lower-third-va-so-lieu.mp4",
       "href": ""
     },
     {
       "topic": "Talking-head",
       "name": "Trích dẫn nổi bật",
+      "desc": "Nền tối lại, câu nói hiện thành khung trích dẫn, từng chữ sáng theo giọng.",
+      "audio": true,
       "video": "videos/trich-dan-noi-bat.mp4",
       "href": ""
     },
@@ -664,6 +670,8 @@
     {
       "topic": "Giáo dục",
       "name": "Giải thích 3 ý",
+      "desc": "Tít chủ đề trên đầu, mỗi ý là một thẻ đánh số trượt vào, cuối có dòng tóm tắt.",
+      "audio": true,
       "video": "videos/giai-thich-3-y.mp4",
       "href": ""
     },
