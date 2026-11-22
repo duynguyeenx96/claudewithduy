@@ -1,0 +1,11 @@
+---
+// Một video 16:9 giới thiệu module (thay cho cặp TRƯỚC/SAU 9:16).
+import { u } from '../lib';
+import SoundBtn from './SoundBtn.astro';
+interface Props { src: string; audio?: boolean }
+const { src, audio = false } = Astro.props;
+---
+<div class="vframe dark" data-demo style="aspect-ratio:16/9;width:100%">
+  <video src={u(src)} muted loop playsinline preload="metadata" data-audio={audio ? '' : undefined}></video>
+  {audio && <SoundBtn />}
+</div>

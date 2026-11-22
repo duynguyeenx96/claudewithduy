@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Blocks from '../components/Blocks.astro';
 import BeforeAfter from '../components/BeforeAfter.astro';
+import Feature from '../components/Feature.astro';
 import Cmd from '../components/Cmd.astro';
 import { requirements as rq, modules, flow, site, u, pad, kinds, marketplaceAdd, pluginInstall, repoUrl, social, socialIcons as icons } from '../lib';
 
@@ -66,7 +67,9 @@ const firstPlugin = modules.find(m => m.skill?.plugin)?.skill?.plugin ?? 'fx-pac
             </div>
           </div>
           <div style="direction:ltr;align-self:stretch">
-            {m.video.before || m.video.after
+            {(m.video as any).main
+              ? <Feature src={(m.video as any).main} audio={!!(m.video as any).audio} />
+              : m.video.before || m.video.after
               ? <BeforeAfter before={m.video.before} after={m.video.after} audio={(m.video as any).audio} />
               : <div class="vframe novid"><span class="label">Chưa có video</span></div>}
           </div>

@@ -77,9 +77,8 @@
         "Sau đầu"
       ],
       "video": {
-        "before": "videos/modules/fx-pack-before.mp4",
-        "after": "videos/modules/fx-pack-after.mp4",
-        "audio": "both"
+        "main": "videos/modules/fx-pack.mp4",
+        "audio": true
       },
       "credits": [
         {

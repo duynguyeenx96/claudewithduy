@@ -234,7 +234,7 @@ def fx_noise(c, e):
 @effect('lineup', 'numbered tiles fan out in an arc above your head')
 def fx_lineup(c, e):
     names = e.o.get('text', '|'.join(NAMES)).split('|')
-    tw = int(c.W * 0.105)
+    tw = int(c.W * 0.125)
     def tile(i, name):
         im = rrect(tw, int(tw * 1.25), tw * 0.16, (24, 24, 28, 225), (255, 255, 255, 60), 2)
         d = ImageDraw.Draw(im)
@@ -268,12 +268,12 @@ def fx_locked_on(c, e):
     snap = ease_out(c.lt / 0.22); s = c.fw * 0.85 * (1 + 0.6 * (1 - snap))
     al = clamp(c.lt / 0.12) * clamp((e.d - c.lt) / 0.2)
     size = int(2 * s + 40); im = Image.new('RGBA', (size, int(size * 1.25)), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
-    x0, y0, x1, y1 = 20, 20, size - 20, im.height - 20; L = int(s * 0.32); wd = max(4, int(c.W / 200))
+    x0, y0, x1, y1 = 20, 20, size - 20, im.height - 20; L = int(s * 0.36); wd = max(6, int(c.W / 105))
     for (px, py, dx, dy) in ((x0, y0, 1, 1), (x1, y0, -1, 1), (x0, y1, 1, -1), (x1, y1, -1, -1)):
         d.line([(px, py + dy * L), (px, py), (px + dx * L, py)], fill=(255, 255, 255, 255), width=wd, joint='curve')
     place(c, shadowed(im, 6, 2, 120), c.fx, c.fy, alpha=al)
-    tag = text_img(e.o.get('text', 'LOCKED ON').upper(), c.W * 0.022, 'mono', INK)
-    pill = rrect(tag.width + 10, tag.height, tag.height / 2, (255, 255, 255, 235)); pill.alpha_composite(tag, (5, 0))
+    tag = text_img(e.o.get('text', 'LOCKED ON').upper(), c.W * 0.036, 'mono', INK)
+    pill = rrect(tag.width + 24, tag.height, tag.height / 2, (255, 255, 255, 240)); pill.alpha_composite(tag, (12, 0))
     place(c, pill, c.fx, c.fy + s * 1.25 + pill.height, alpha=clamp((c.lt - 0.15) / 0.15) * al, guard=True)
 
 
@@ -339,7 +339,7 @@ def fx_spotlight(c, e):
 def fx_bill(c, e):
     lines = e.o.get('text', 'ORDER #1021|1x orbit|1x spotlight|1x lean-in|cut the dead air|TOTAL: 1 prompt').split('|')
     def build():
-        pw = int(c.W * 0.5); lh = int(pw * 0.085); pad = int(pw * 0.08)
+        pw = int(c.W * 0.68); lh = int(pw * 0.085); pad = int(pw * 0.08)
         h = pad * 2 + lh * (len(lines) + 1)
         im = Image.new('RGBA', (pw, h), CREAM + (255,)); d = ImageDraw.Draw(im)
         f = font('mono', lh * 0.62)
@@ -372,7 +372,7 @@ def fx_bill(c, e):
 def fx_moody(c, e):
     k = ramp(c, e, 0.35, 0)
     c.img = c.img * (1 - k) + grade(c.img, e.o.get('grade', 'moody')) * k
-    vignette(c, 0.4 * k)
+    vignette(c, 0.65 * k)
 
 
 @effect('swipe', 'a before and after slider that sweeps across you')
@@ -385,15 +385,15 @@ def fx_swipe(c, e):
     a = np.clip((xx - line) / 3 + 0.5, 0, 1)[..., None]
     c.img = c.img * (1 - a) + after * a
     hy = c.H * 0.62; hx = sp * c.W + 0.22 * (hy - c.H / 2)
-    edge = np.clip(1 - np.abs(xx - line) / 3.5, 0, 1)[..., None]
+    edge = np.clip(1 - np.abs(xx - line) / 6, 0, 1)[..., None]
     c.img = c.img * (1 - edge) + edge
-    r = int(c.W * 0.035); h = Image.new('RGBA', (2 * r + 4, 2 * r + 4), (0, 0, 0, 0)); d = ImageDraw.Draw(h)
+    r = int(c.W * 0.05); h = Image.new('RGBA', (2 * r + 4, 2 * r + 4), (0, 0, 0, 0)); d = ImageDraw.Draw(h)
     d.ellipse([2, 2, 2 * r + 2, 2 * r + 2], fill=(255, 255, 255, 255))
     d.text((r + 2, r + 2), '< >', font=font('mono', r * 0.7), fill=INK + (255,), anchor='mm')
     place(c, shadowed(h, 8, 4, 110), hx, hy)
-    for lab, x in (('before', 0.14), ('after', 0.86)):
-        t = text_img(lab, c.W * 0.03, 'serif', INK); pill = rrect(t.width + 16, t.height, t.height / 2, (255, 255, 255, 225))
-        pill.alpha_composite(t, (8, 0)); place(c, pill, c.W * x, c.H * 0.88)
+    for lab, x in ((e.o.get('before', 'BEFORE'), 0.2), (e.o.get('after', 'AFTER'), 0.8)):
+        t = text_img(lab, c.W * 0.05, 'bold', INK); pill = rrect(t.width + 36, t.height, t.height / 2, (255, 255, 255, 235))
+        pill.alpha_composite(t, (18, 0)); place(c, shadowed(pill, 10, 5, 100), c.W * x, c.H * float(e.o.get('label_y', 0.3)))
 
 
 @effect('todo', 'a checklist card beside your head that ticks off as you talk')
@@ -401,7 +401,7 @@ def fx_todo(c, e):
     items = e.o.get('text', 'drop your video into Claude|install the skill|type /effects').split('|')
     # ticks = video seconds when each item gets ticked (e.g. when you say it); default is evenly spaced
     ticks = [float(t) - e.start for t in str(e.o['ticks']).split('|')] if e.o.get('ticks') else [e.d * (i + 1) / (len(items) + 1) for i in range(len(items))]
-    cw = int(c.W * 0.5); lh = int(cw * 0.13); pad = int(cw * 0.07)
+    cw = int(c.W * 0.6); lh = int(cw * 0.13); pad = int(cw * 0.07)
     im = rrect(cw, pad * 2 + lh * (len(items) + 1), cw * 0.07, (250, 248, 242, 235)); d = ImageDraw.Draw(im)
     done = sum(c.lt >= t for t in ticks)
     d.text((pad, pad), e.o.get('title', 'TO DO').upper(), font=font('ui', lh * 0.42), fill=(200, 140, 20, 255))
@@ -458,7 +458,7 @@ def comment_bar(c, e):
 @effect('tap', 'a Follow button pops up and flips to Following')
 def fx_tap(c, e):
     at = float(e.o['at']) - e.start if 'at' in e.o else e.d * 0.45  # 'at' = video second of the tap
-    bw, bh = int(c.W * 0.3), int(c.W * 0.09)
+    bw, bh = int(c.W * 0.42), int(c.W * 0.12)
     x = clamp(float(e.o['x']) * c.W if 'x' in e.o else c.fx + c.fw * 1.9, bw / 2 + 30, c.W - bw / 2 - 30)
     y = clamp(float(e.o['y']) * c.H if 'y' in e.o else c.fy + c.fw * 1.6, bh + 30, c.H - bh - 30)
     on = c.lt >= at
@@ -685,7 +685,7 @@ def fx_cover_star(c, e):
 
 @effect('scribble', 'marker doodles draw themselves around you')
 def fx_scribble(c, e):
-    col = rgb(e.o.get('color'), YELLOW) + (255,); wd = max(6, c.W // 130)
+    col = rgb(e.o.get('color'), YELLOW) + (255,); wd = max(10, c.W // 75)
     lay = Image.new('RGBA', (c.W, c.H), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
     rx, ry = c.fw * 1.0, c.fw * 1.3
     angs = np.linspace(-1.9, -1.9 + 2 * math.pi * 1.08, 70)
@@ -703,7 +703,7 @@ def fx_scribble(c, e):
     al = clamp((e.d - c.lt) / 0.2)
     comp(c, to_np(lay), 0, 0, al)
     if c.lt > 0.7:
-        lab = text_img(e.o.get('text', 'me!'), c.W * 0.075, 'hand', col[:3], shadow=6)
+        lab = text_img(e.o.get('text', 'me!'), c.W * 0.11, 'hand', col[:3], shadow=6)
         place(c, lab, lx, ly - lab.height * 0.15, 0.7 + 0.3 * ease_back((c.lt - 0.7) / 0.3), 8, al)
 
 
@@ -2076,7 +2076,7 @@ def fx_tape_label(c, e):
     k = pop(c, 0.05, 0.25) * fade(c, e)
     if k <= 0: return
     def tape():
-        S = int(c.W * 0.055); t = text_img(e.o.get('text', 'your own reels'), S, 'hand', INKY)
+        S = int(c.W * 0.08); t = text_img(e.o.get('text', 'your own reels'), S, 'hand', INKY)
         w, h = int(t.width + S * 0.6), int(t.height + S * 0.2); o = max(4, S // 9)
         im = Image.new('RGBA', (w + o, h + o), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
         d.rectangle([o, o, w + o - 1, h + o - 1], fill=(17, 17, 17, 255)); d.rectangle([0, 0, w - 1, h - 1], fill=TAPE + (255,))
@@ -2108,14 +2108,14 @@ def fx_select_resize(c, e):
 def fx_wave_trim(c, e):
     al = pop(c, 0, 0.2) * fade(c, e)
     if al <= 0: return
-    p = ease_inout((c.lt - 0.25) / 0.5); pw, ph, ww = c.W * (0.84 - 0.4 * p), c.W * 0.2, c.W * 0.3
+    p = ease_inout((c.lt - 0.25) / 0.5); pw, ph, ww = c.W * (0.9 - 0.3 * p), c.W * 0.28, c.W * 0.45
     hts = cached(e, 'h', lambda: np.random.default_rng(3).uniform(0.15, 1, 60))
     lay = Image.new('RGBA', (int(pw) + 2, int(ph) + 2), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
     d.rectangle([0, 0, pw, ph], fill=INKY + (240,)); cx, cy = pw / 2, ph / 2; st = ww / len(hts)
     for j, h in enumerate(hts):
         x = cx - ww / 2 + j * st; v = h * ph * 0.36 * (0.55 + 0.45 * math.sin(j * 0.33))
         d.rectangle([x, cy - v, x + st * 0.45, cy + v], fill=CREAMY + (255,))
-    r, gap = c.W * 0.0045, c.W * 0.016
+    r, gap = c.W * 0.0065, c.W * 0.022
     for sd in (-1, 1):
         x = cx + sd * (ww / 2 + gap)
         while 0 < x < pw: d.ellipse([x - r, cy - r, x + r, cy + r], fill=RED + (255,)); x += sd * gap

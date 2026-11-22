@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import Blocks from '../../components/Blocks.astro';
 import BeforeAfter from '../../components/BeforeAfter.astro';
+import Feature from '../../components/Feature.astro';
 import Cmd from '../../components/Cmd.astro';
 import Credits from '../../components/Credits.astro';
 import { modules, templates, u, marketplaceAdd, pluginInstall, type Mod } from '../../lib';
@@ -28,7 +29,9 @@ const styleCount = templates.filter(t => t.topic === m.name).length;
         {styleCount > 0 && <p style="margin:12px 0 0;font-size:14px"><a href={u(`template/?topic=${encodeURIComponent(m.name)}`)}>Xem {styleCount} style →</a></p>}
       </div>
       <div>
-        {m.video.before || m.video.after
+        {(m.video as any).main
+          ? <Feature src={(m.video as any).main} audio={!!(m.video as any).audio} />
+          : m.video.before || m.video.after
           ? <BeforeAfter before={m.video.before} after={m.video.after} audio={(m.video as any).audio} minH={420} />
           : <div class="vframe" style="min-height:320px;display:flex;align-items:center;justify-content:center"><span class="label">Chưa có video</span></div>}
       </div>
