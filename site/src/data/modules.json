@@ -7,7 +7,9 @@
       "tiktok": "https://www.tiktok.com/@duy.nguyen.1604",
       "youtube": "",
       "github": "https://github.com/duynguyeenx96"
-    }
+    },
+    "zalo": { "link": "https://zaloapp.com/qr/g/nhc375qne8derj2qluti", "qr": "qr/zalo.png" },
+    "donate": { "qr": "qr/bank.png", "bank": "TPBank", "account": "06516324401", "name": "NGUYEN NGOC DUY" }
   },
   "flow": [
     "Quay",

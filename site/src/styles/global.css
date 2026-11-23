@@ -35,7 +35,8 @@ img,video{max-width:100%}
 
 header.top{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--line)}
 header.top .wrap{padding-top:16px;padding-bottom:16px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
-header.top .brand{font-family:var(--mono);font-size:13px;letter-spacing:.04em}
+header.top .brand{font-family:var(--mono);font-size:13px;letter-spacing:.04em;display:inline-flex;align-items:center;gap:10px}
+header.top .brand img{display:block;width:28px;height:28px}
 header.top nav{display:flex;gap:24px;font-size:14px;flex-wrap:wrap}
 header.top nav a[aria-current]{color:var(--accent)}
 @media (max-width:480px){header.top nav{gap:14px;font-size:13px}}

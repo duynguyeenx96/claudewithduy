@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import { u } from '../lib';
 import SocialFab from '../components/SocialFab.astro';
+import DonateFab from '../components/DonateFab.astro';
 interface Props { title: string; description: string; current?: 'module' | 'template' | 'install'; image?: string }
 const { title, description, current, image } = Astro.props;
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
@@ -29,7 +30,7 @@ const ogImage = image && Astro.site ? new URL(u(image), Astro.site).href : undef
 <body>
   <header class="top">
     <div class="wrap">
-      <a class="brand" href={u('')}>CLAUDE WITH DUY</a>
+      <a class="brand" href={u('')}><img src={u('logo.svg')} alt="" width="28" height="28" />CLAUDE WITH DUY</a>
       <nav>
         <a href={u('#module')} aria-current={current === 'module' ? 'page' : undefined}>Module</a>
         <a href={u('template/')} aria-current={current === 'template' ? 'page' : undefined}>Style</a>
@@ -42,6 +43,7 @@ const ogImage = image && Astro.site ? new URL(u(image), Astro.site).href : undef
   </header>
   <main><slot /></main>
   <SocialFab />
+  <DonateFab />
   <footer class="foot"><div class="wrap"><span>Claude with Duy</span><slot name="foot" /></div></footer>
   <script>
     // Hiện dần khi cuộn tới
