@@ -1,0 +1,415 @@
+{
+ "_note": "Từ api.vietqr.io/v2/{android,ios}-app-deeplinks. fill=1: app tự điền số TK, tiền, nội dung.",
+ "android": [
+  {
+   "id": "mb",
+   "name": "MB Bank",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/mb-android.webp",
+   "fill": 1
+  },
+  {
+   "id": "icb",
+   "name": "VietinBank iPay",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/icb-android.webp",
+   "fill": 1
+  },
+  {
+   "id": "bidv",
+   "name": "BIDV SmartBanking",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/bidv-android.webp",
+   "fill": 1
+  },
+  {
+   "id": "ocb",
+   "name": "OCB OMNI",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/ocb-android.webp",
+   "fill": 1
+  },
+  {
+   "id": "acb",
+   "name": "ACB ONE",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/acb-android.webp",
+   "fill": 1
+  },
+  {
+   "id": "vcb",
+   "name": "VCB Digibank",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/vcb-android.webp",
+   "fill": 0
+  },
+  {
+   "id": "vba",
+   "name": "Agribank Plus",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/vba-android.webp",
+   "fill": 0
+  },
+  {
+   "id": "tcb",
+   "name": "Techcombank Mobile",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/tcb-android.webp",
+   "fill": 0
+  },
+  {
+   "id": "vpb",
+   "name": "VPBank NEO",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/vpb-android.webp",
+   "fill": 0
+  },
+  {
+   "id": "cake",
+   "name": "CAKE - Ngân hàng số",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/cake-android.webp",
+   "fill": 0
+  },
+  {
+   "id": "tpb",
+   "name": "TPBank Mobile",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/tpb-android.webp",
+   "fill": 0
+  },
+  {
+   "id": "lpb",
+   "name": "LPBank",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/lpb-android.webp",
+   "fill": 0
+  },
+  {
+   "id": "timo",
+   "name": "Timo - Ngân hàng số by BVBank",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/timo-android.webp",
+   "fill": 0
+  },
+  {
+   "id": "vib-2",
+   "name": "MyVIB",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/vib-2-android.webp",
+   "fill": 0
+  },
+  {
+   "id": "hdb",
+   "name": "HDBank",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/hdb-android.webp",
+   "fill": 0
+  },
+  {
+   "id": "vib",
+   "name": "MyVIB",
+   "logo": "https://play-lh.googleusercontent.com/RRo7NaHuZaHpyJHJFPLp3ue4rK-BDe8MI4LquEFHs_mMtVET2ofH21PJn3t0vU7F3Q",
+   "fill": 0
+  },
+  {
+   "id": "shb",
+   "name": "SHB SAHA",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/shb-android.webp",
+   "fill": 0
+  },
+  {
+   "id": "seab",
+   "name": "SeAMobile",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/seab-android.webp",
+   "fill": 0
+  },
+  {
+   "id": "shbvn",
+   "name": "Shinhan SOL Việt Nam",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/shbvn-android.webp",
+   "fill": 0
+  },
+  {
+   "id": "scb",
+   "name": "SCB Mobile Banking",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/scb-android.webp",
+   "fill": 0
+  },
+  {
+   "id": "nab",
+   "name": "Nam A Bank Open Banking",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/nab-android.webp",
+   "fill": 0
+  },
+  {
+   "id": "abb",
+   "name": "ABBank",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/abb-android.webp",
+   "fill": 0
+  },
+  {
+   "id": "eib",
+   "name": "Eximbank EDigi",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/eib-android.webp",
+   "fill": 0
+  },
+  {
+   "id": "coopbank",
+   "name": "Co-opBank Mobile Banking",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/coopbank-android.webp",
+   "fill": 0
+  },
+  {
+   "id": "pvcb",
+   "name": "PVConnect",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/pvcb-android.webp",
+   "fill": 0
+  },
+  {
+   "id": "wvn",
+   "name": "Woori WON Vietnam",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/wvn-android.webp",
+   "fill": 0
+  },
+  {
+   "id": "klb",
+   "name": "KienlongBank Plus",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/klb-android.webp",
+   "fill": 0
+  },
+  {
+   "id": "bvb",
+   "name": "BAOVIET Smart",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/bvb-android.webp",
+   "fill": 0
+  },
+  {
+   "id": "vab",
+   "name": "Vietbank Digital Plus",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/vab-android.webp",
+   "fill": 0
+  },
+  {
+   "id": "ncb",
+   "name": "NCB iziMobile",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/ncb-android.webp",
+   "fill": 0
+  },
+  {
+   "id": "acb-biz",
+   "name": "ACB ONE Biz",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/acb-biz-android.webp",
+   "fill": 0
+  },
+  {
+   "id": "mbv",
+   "name": "MBV Bank",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/oceanbank-android.webp",
+   "fill": 0
+  },
+  {
+   "id": "pbvn",
+   "name": "PB engage VN",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/pbvn-android.webp",
+   "fill": 0
+  },
+  {
+   "id": "sgicb",
+   "name": "SAIGONBANK Smart Banking",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/sgicb-android.webp",
+   "fill": 0
+  },
+  {
+   "id": "cimb",
+   "name": "Octo by CIMB Vietnam",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/cimb-android.webp",
+   "fill": 0
+  }
+ ],
+ "ios": [
+  {
+   "id": "mb",
+   "name": "MB Bank",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/mb-ios.webp",
+   "fill": 1
+  },
+  {
+   "id": "icb",
+   "name": "VietinBank iPay",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/icb-ios.webp",
+   "fill": 1
+  },
+  {
+   "id": "bidv",
+   "name": "BIDV SmartBanking",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/bidv-ios.webp",
+   "fill": 1
+  },
+  {
+   "id": "acb",
+   "name": "ACB ONE",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/acb-ios.webp",
+   "fill": 1
+  },
+  {
+   "id": "ocb",
+   "name": "OCB OMNI",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/ocb-ios.webp",
+   "fill": 1
+  },
+  {
+   "id": "tcb",
+   "name": "Techcombank Mobile",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/tcb-ios.webp",
+   "fill": 0
+  },
+  {
+   "id": "vcb",
+   "name": "VCB Digibank",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/vcb-ios.webp",
+   "fill": 0
+  },
+  {
+   "id": "vpb",
+   "name": "VPBank NEO",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/vpb-ios.webp",
+   "fill": 0
+  },
+  {
+   "id": "vba",
+   "name": "Agribank Plus",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/vba-ios.webp",
+   "fill": 0
+  },
+  {
+   "id": "cake",
+   "name": "CAKE - Digital Bankin‪g",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/cake-ios.webp",
+   "fill": 0
+  },
+  {
+   "id": "tpb",
+   "name": "TPBank Mobile",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/tpb-ios.webp",
+   "fill": 0
+  },
+  {
+   "id": "lpb",
+   "name": "LPBank",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/lpb-ios.webp",
+   "fill": 0
+  },
+  {
+   "id": "timo",
+   "name": "Timo Digital Bank by BVBank",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/timo-ios.webp",
+   "fill": 0
+  },
+  {
+   "id": "vib-2",
+   "name": "MyVIB",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/vib-2-ios.webp",
+   "fill": 0
+  },
+  {
+   "id": "hdb",
+   "name": "HDBank",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/hdb-ios.webp",
+   "fill": 0
+  },
+  {
+   "id": "shb",
+   "name": "SHB SAHA",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/shb-ios.webp",
+   "fill": 0
+  },
+  {
+   "id": "seab",
+   "name": "SeAMobile",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/seab-ios.webp",
+   "fill": 0
+  },
+  {
+   "id": "scb",
+   "name": "SCB Mobile Banking",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/scb-ios.webp",
+   "fill": 0
+  },
+  {
+   "id": "shbvn",
+   "name": "Shinhan SOL Vietnam",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/shbvn-ios.webp",
+   "fill": 0
+  },
+  {
+   "id": "abb",
+   "name": "ABBank",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/abb-ios.webp",
+   "fill": 0
+  },
+  {
+   "id": "pvcb",
+   "name": "PVConnect",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/pvcb-ios.webp",
+   "fill": 0
+  },
+  {
+   "id": "eib",
+   "name": "Eximbank EDigi",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/eib-ios.webp",
+   "fill": 0
+  },
+  {
+   "id": "wvn",
+   "name": "Woori WON Vietnam",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/wvn-ios.webp",
+   "fill": 0
+  },
+  {
+   "id": "cimb",
+   "name": "OCTO by CIMB Vietnam",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/cimb-ios.webp",
+   "fill": 0
+  },
+  {
+   "id": "ncb",
+   "name": "NCB iziMobile",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/ncb-ios.webp",
+   "fill": 0
+  },
+  {
+   "id": "mbv",
+   "name": "MBV Bank",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/oceanbank-ios.webp",
+   "fill": 0
+  },
+  {
+   "id": "sgicb",
+   "name": "SAIGONBANK Smart Banking",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/sgicb-ios.webp",
+   "fill": 0
+  },
+  {
+   "id": "bvb",
+   "name": "BAOVIET Smart",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/bvb-ios.webp",
+   "fill": 0
+  },
+  {
+   "id": "acb-biz",
+   "name": "ACB ONE Biz",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/acb-biz-ios.webp",
+   "fill": 0
+  },
+  {
+   "id": "klb",
+   "name": "KienlongBank Plus",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/klb-ios.webp",
+   "fill": 0
+  },
+  {
+   "id": "pbvn",
+   "name": "PB engage VN",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/pbvn-ios.webp",
+   "fill": 0
+  },
+  {
+   "id": "coopbank",
+   "name": "Co-opBank Mobile Banking",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/coopbank-ios.webp",
+   "fill": 0
+  },
+  {
+   "id": "vab",
+   "name": "Vietbank Digital Plus",
+   "logo": "https://cdn.vietqr.io/bank-app-icon/vab-ios.webp",
+   "fill": 0
+  }
+ ]
+}

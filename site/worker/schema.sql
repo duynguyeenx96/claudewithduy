@@ -3,7 +3,9 @@ CREATE TABLE IF NOT EXISTS orders (
   code TEXT PRIMARY KEY,          -- CWD + 6 ký tự, nằm trong nội dung chuyển khoản
   pack TEXT NOT NULL,
   amount INTEGER NOT NULL,
+  name TEXT,
   email TEXT,
+  phone TEXT,
   secret TEXT,                    -- trả cho trang thanh toán; chỉ ai có nó mới thấy link tải
   status TEXT NOT NULL DEFAULT 'pending',  -- pending | paid (đã nhận tiền) | delivered (đã gửi email)
   note TEXT,

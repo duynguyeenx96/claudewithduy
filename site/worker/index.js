@@ -1,5 +1,5 @@
 // Worker của site: /api/* xử lý ở đây, còn lại trả file tĩnh trong dist.
-//   POST /api/order          {pack, email}  -> tạo đơn + QR + secret (chỉ khi SALES_OPEN = "1" và gói có giá)
+//   POST /api/order          {pack, name, email, phone, agree}  -> tạo đơn + QR + secret (chỉ khi SALES_OPEN = "1" và gói có giá)
 //   GET  /api/order/:code?t=<secret>        -> trạng thái đơn; đã trả thì kèm link tải
 //   POST /api/sepay                          -> webhook SePay (Authorization: Apikey <SEPAY_WEBHOOK_KEY>)
 //   GET  /api/download/:token                -> tải zip của gói từ R2 (7 ngày, 5 lượt)
@@ -46,14 +46,19 @@ async function createOrder(req, env) {
   const p = PRODUCTS[body.pack];
   if (!p || !p.price) return json({ error: 'chưa mở' }, 403);
   const email = String(body.email || '').trim().slice(0, 200);
+  const name = String(body.name || '').trim().replace(/\s+/g, ' ').slice(0, 100);
+  const phone = String(body.phone || '').replace(/[\s.\-()]/g, '').replace(/^\+84/, '0');
+  if (name.length < 2) return json({ error: 'tên không hợp lệ' }, 400);
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return json({ error: 'email không hợp lệ' }, 400);
+  if (!/^0\d{9,10}$/.test(phone)) return json({ error: 'số điện thoại không hợp lệ' }, 400);
+  if (body.agree !== true) return json({ error: 'chưa đồng ý điều kiện' }, 400);
   if (!env.SEPAY_ACC || !env.SEPAY_BANK) return json({ error: 'chưa cấu hình tài khoản nhận' }, 503);
   const secret = randHex(16);
   let code;
   for (let i = 0; i < 5; i++) {
     code = newCode();
-    const r = await env.DB.prepare('INSERT OR IGNORE INTO orders (code, pack, amount, email, secret) VALUES (?, ?, ?, ?, ?)')
-      .bind(code, body.pack, p.price, email, secret).run();
+    const r = await env.DB.prepare('INSERT OR IGNORE INTO orders (code, pack, amount, email, secret, name, phone) VALUES (?, ?, ?, ?, ?, ?, ?)')
+      .bind(code, body.pack, p.price, email, secret, name, phone).run();
     if (r.meta.changes) break;
     code = null;
   }
@@ -108,7 +113,7 @@ function receipt(o, p, link, t, env) {
     ['Thời gian', vnTime(o.paid_at)], ['Mã giao dịch', t.referenceCode || t.id],
   ];
   const html = `<div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;max-width:520px;margin:0 auto;color:#1a1a1a;line-height:1.55">
-<p>Chào bạn,</p>
+<p>Chào ${esc(o.name || 'bạn')},</p>
 <p>Mình đã nhận được tiền cho đơn <b>${esc(o.code)}</b>. Cảm ơn bạn đã ủng hộ.</p>
 <p style="margin:24px 0"><a href="${esc(link)}" style="background:#c2410c;color:#fff;text-decoration:none;padding:12px 20px;border-radius:6px;display:inline-block">Tải ${esc(p.name)}</a></p>
 <p style="font-size:14px;color:#555">Link dùng được ${LINK_DAYS} ngày, tối đa 5 lần tải. Hết hạn thì trả lời email này, mình gửi link mới.</p>
@@ -124,7 +129,7 @@ function receipt(o, p, link, t, env) {
 <p>Duy<br><a href="https://claudewithduy.io.vn" style="color:#c2410c">claudewithduy.io.vn</a></p>
 <p style="font-size:12px;color:#999;margin-top:28px">Đây là biên nhận thanh toán, không phải hoá đơn điện tử.</p>
 </div>`;
-  const plain = `Chào bạn,\n\nMình đã nhận được tiền cho đơn ${o.code}. Cảm ơn bạn đã ủng hộ.\n\nTải ${p.name}: ${link}\n(Link dùng được ${LINK_DAYS} ngày, tối đa 5 lần tải. Hết hạn thì trả lời email này.)\n\nBIÊN NHẬN THANH TOÁN\n${rows.map(([k, v]) => `${k}: ${v}`).join('\n')}\n\nVào nhóm Zalo (hỏi cách dùng, xem hiệu ứng mới): ${ZALO_LINK}\n\nDuy\nclaudewithduy.io.vn\n\nĐây là biên nhận thanh toán, không phải hoá đơn điện tử.`;
+  const plain = `Chào ${o.name || 'bạn'},\n\nMình đã nhận được tiền cho đơn ${o.code}. Cảm ơn bạn đã ủng hộ.\n\nTải ${p.name}: ${link}\n(Link dùng được ${LINK_DAYS} ngày, tối đa 5 lần tải. Hết hạn thì trả lời email này.)\n\nBIÊN NHẬN THANH TOÁN\n${rows.map(([k, v]) => `${k}: ${v}`).join('\n')}\n\nVào nhóm Zalo (hỏi cách dùng, xem hiệu ứng mới): ${ZALO_LINK}\n\nDuy\nclaudewithduy.io.vn\n\nĐây là biên nhận thanh toán, không phải hoá đơn điện tử.`;
   return { html, plain };
 }
 
@@ -140,7 +145,7 @@ async function afterPayment(t, code, paid, env) {
     if (err) await env.DB.prepare('UPDATE orders SET note = ? WHERE code = ?').bind(err, code).run();
     else await env.DB.prepare("UPDATE orders SET status = 'delivered', delivered_at = datetime('now') WHERE code = ?").bind(code).run();
     const s = `Đơn mới ${o.code} · ${p.name} · ${vnd(amount)}`;
-    const body = `Khách: ${o.email}\nGói: ${p.name}\nSố tiền: ${vnd(amount)}\nNội dung CK: ${t.content || ''}\nEmail biên nhận: ${err ? 'LỖI, ' + err : 'đã gửi'}`;
+    const body = `Khách: ${o.name || ''} · ${o.email} · ${o.phone || ''}\nGói: ${p.name}\nSố tiền: ${vnd(amount)}\nNội dung CK: ${t.content || ''}\nEmail biên nhận: ${err ? 'LỖI, ' + err : 'đã gửi'}`;
     await sendMail(env, env.NOTIFY_EMAIL, s, `<pre style="font:14px/1.5 monospace">${esc(body)}</pre>`, body);
   } else if (!code && DONATE_RE.test(`${t.content || ''} ${t.description || ''}`.toUpperCase().replace(/[^A-Z0-9]/g, ''))) {
     const body = `Số tiền: ${vnd(amount)}\nNội dung CK: ${t.content || ''}\nMã giao dịch: ${t.referenceCode || t.id}`;

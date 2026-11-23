@@ -1,15 +1,20 @@
 ---
 // Trang mua: /mua/?goi=<id>. Chỉ gói có giá trong worker/products.js mới mua được;
 // Worker còn chặn thêm bằng SALES_OPEN. Đơn đang dở lưu trong localStorage để tải lại trang vẫn tiếp tục.
+// Điện thoại: nút "Chuyển khoản bằng app" mở app ngân hàng qua deeplink VietQR (src/data/bank-apps.json).
 import Base from '../layouts/Base.astro';
 import { fxPro, zalo, donate, u } from '../lib';
 import { PRODUCTS } from '../../worker/products.js';
+import bankApps from '../data/bank-apps.json';
 const priced = Object.fromEntries(
   Object.entries(PRODUCTS as Record<string, { name: string; price: number | null }>)
     .filter(([, p]) => p.price)
     .map(([id, p]) => [id, { name: p.name, price: p.price, desc: fxPro.find(f => f.id === id)?.desc ?? '', count: fxPro.find(f => f.id === id)?.count ?? '' }]),
 );
+// Mã ngân hàng nhận tiền cho deeplink (ba=<stk>@<mã>). TPBank = tpb.
+const BA_CODE = 'tpb';
 const lock = 'M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm-3 8V7a3 3 0 1 1 6 0v3H9Z';
+const cfg = { prods: priced, apps: { ios: bankApps.ios, android: bankApps.android }, ba: BA_CODE };
 ---
 <Base title="Mua gói: Claude with Duy" description="Thanh toán gói hiệu ứng bằng chuyển khoản QR." current="fx" noindex bare>
   <div class="wrap buy">
@@ -22,27 +27,43 @@ const lock = 'M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0
       <p><a class="btn" href={zalo.link}>Vào nhóm Zalo</a></p>
     </section>
 
-    <section id="s-form" hidden>
-      <div class="label">Thanh toán</div>
-      <h1 class="h1 t" data-f="name"></h1>
-      <p class="desc" data-f="desc"></p>
-      <div class="sum"><span data-f="count"></span><b data-f="price"></b></div>
-      <form id="f" novalidate>
+    <section id="s-form" class="cols" hidden>
+      <div class="prod">
+        <div class="label">Thanh toán</div>
+        <h1 class="h1 t" data-f="name"></h1>
+        <p class="desc" data-f="desc"></p>
+        <div class="sum"><span data-f="count"></span><b data-f="price"></b></div>
+        <ul class="gets">
+          <li>File zip đủ skill, hướng dẫn cài trong README</li>
+          <li>Link tải gửi ngay khi tiền vào, kèm biên nhận</li>
+          <li>Hỏi đáp trong nhóm Zalo</li>
+        </ul>
+      </div>
+      <form id="f" class="card" novalidate>
+        <p class="kicker">Vui lòng điền chính xác thông tin</p>
+        <h2 class="ct">Thông tin nhận gói</h2>
+        <label for="nm">Họ và tên</label>
+        <input id="nm" autocomplete="name" required placeholder="Tên của bạn" />
         <label for="em">Email nhận gói</label>
         <input id="em" type="email" inputmode="email" autocomplete="email" required placeholder="ban@gmail.com" />
-        <p class="hint">Link tải và biên nhận gửi vào email này. Gõ đúng nhé.</p>
+        <p class="hint">Link tải và biên nhận gửi vào email này. Gõ sai là không nhận được.</p>
+        <label for="ph">Số điện thoại</label>
+        <input id="ph" type="tel" inputmode="tel" autocomplete="tel" required placeholder="09xx xxx xxx" />
+        <label class="agree"><input id="ag" type="checkbox" /><span>Tôi đã đọc <a href="#dieu-kien" id="open-terms">Chuẩn bị &amp; điều kiện</a> và đồng ý mua sản phẩm số, không hoàn tiền sau khi mua.</span></label>
         <p class="err" id="ferr" role="alert"></p>
-        <button class="btn solid" type="submit" id="fbtn">Tạo mã QR</button>
+        <button class="pay-btn" type="submit" id="fbtn"><span>Thanh toán <span data-f="price"></span></span><span aria-hidden="true">→</span></button>
+        <div class="note-row"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M3 6.5h18v11H3z M3 7l9 6 9-6"/></svg><span>Tiền vào là hệ thống tự gửi email kèm link tải tới email bạn điền, thường chưa tới 1 phút.</span></div>
+        <div class="warn"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M12 3 2 20h20L12 3Z M12 10v4.5 M12 17.2v.3"/></svg><span>Sản phẩm số, <b>không hoàn tiền</b> sau khi mua.</span></div>
       </form>
     </section>
 
     <section id="s-pay" hidden>
       <div class="label">Bước 2 · Chuyển khoản</div>
-      <h1 class="h1 t">Quét mã để trả <span data-f="price"></span></h1>
+      <h1 class="h1 t">Chuyển <span data-f="price"></span> để nhận gói</h1>
+      <button type="button" class="pay-btn app-btn" id="open-banks" hidden><span>Chuyển khoản qua app</span><span aria-hidden="true">→</span></button>
       <div class="pay">
-        <div class="qr"><img id="qr" alt="Mã QR chuyển khoản" width="300" height="300" /></div>
+        <div class="qr"><img id="qr" alt="Mã QR chuyển khoản" width="300" height="300" /><p class="qr-cap" id="qr-cap">Mở app ngân hàng, quét mã. Số tiền và nội dung đã điền sẵn.</p></div>
         <div class="info">
-          <p class="m">Mở app ngân hàng, quét mã. Số tiền và nội dung đã điền sẵn, không cần sửa.</p>
           <dl>
             <div><dt>Ngân hàng</dt><dd data-f="bank"></dd></div>
             <div><dt>Số tài khoản</dt><dd><span data-f="acc"></span><button type="button" class="cp" data-copy="" data-k="acc">Chép</button></dd></div>
@@ -53,7 +74,7 @@ const lock = 'M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0
           <p class="m small">Chuyển tay thì nhớ ghi đúng nội dung <b data-f="code"></b>, không thì hệ thống không nhận ra đơn.</p>
           <p class="wait" id="wait" aria-live="polite"><span class="dot"></span>Đang chờ tiền vào…</p>
           <p class="m small" id="slow" hidden>Lâu quá chưa thấy? Tiền vẫn được ghi lại. Trả lời email biên nhận hoặc nhắn <a href={zalo.link}>nhóm Zalo</a>, mình kiểm tra tay.</p>
-          <button type="button" class="link" id="reset">Nhập lại email</button>
+          <button type="button" class="link" id="reset">Sửa thông tin</button>
         </div>
       </div>
     </section>
@@ -70,31 +91,65 @@ const lock = 'M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0
       </div>
     </section>
 
+    <section id="dieu-kien" class="terms" hidden>
+      <h2 class="ct">Chuẩn bị &amp; điều kiện</h2>
+      <h3>Cần chuẩn bị</h3>
+      <ul>
+        <li>Máy Mac hoặc Windows đã cài Claude Code, dùng gói Claude Pro trở lên.</li>
+        <li>Node.js, Python 3 và FFmpeg. README trong gói có lệnh cài từng bước.</li>
+        <li>Video người nói quay ổn định, mặt rõ. Hiệu ứng bám mặt chạy tốt nhất khi máy quay đứng yên.</li>
+      </ul>
+      <h3>Điều kiện</h3>
+      <ul>
+        <li>Đây là sản phẩm số, bạn nhận file ngay sau khi thanh toán nên không hoàn tiền.</li>
+        <li>Bạn được dùng gói cho video của mình, kể cả video bán hàng hay làm cho khách. Không bán lại hoặc chia sẻ file gói.</li>
+        <li>Link tải dùng được 7 ngày, tối đa 5 lần. Hết hạn thì trả lời email biên nhận để lấy link mới.</li>
+        <li>Kẹt chỗ nào cứ hỏi trong nhóm Zalo hoặc trả lời email biên nhận.</li>
+      </ul>
+      <button type="button" class="btn sm" id="close-terms">Đã hiểu</button>
+    </section>
+
     <noscript><p class="lead">Trang này cần bật JavaScript để tạo mã QR.</p></noscript>
   </div>
 
-  <script is:inline id="prod" type="application/json" set:html={JSON.stringify(priced)}></script>
+  <div class="sheet" id="sheet" hidden>
+    <div class="sheet-bg" data-close></div>
+    <div class="sheet-box" role="dialog" aria-modal="true" aria-labelledby="sheet-t">
+      <div class="sheet-hd"><b id="sheet-t">Chọn app ngân hàng</b><button type="button" class="x" data-close aria-label="Đóng">×</button></div>
+      <p class="sheet-sub">App có dấu <span class="fill">tự điền</span> mở ra là có sẵn số tài khoản, số tiền và nội dung. App khác: nội dung <b data-f="code"></b> đã được chép sẵn, vào app dán vào ô nội dung.</p>
+      <input id="bank-q" type="search" placeholder="Tìm ngân hàng" autocomplete="off" />
+      <div class="banks" id="banks"></div>
+    </div>
+  </div>
+
+  <script is:inline id="cfg" type="application/json" set:html={JSON.stringify(cfg)}></script>
   <script>
     type P = { name: string; price: number; desc: string; count: string };
-    type O = { code: string; secret: string; amount: number; qr: string; acc: string; bank: string; email: string };
-    const prods: Record<string, P> = JSON.parse(document.getElementById('prod')!.textContent || '{}');
+    type O = { code: string; secret: string; amount: number; qr: string; acc: string; bank: string; email: string; name: string; phone: string };
+    type App = { id: string; name: string; logo: string; fill: number };
+    const cfg: { prods: Record<string, P>; apps: { ios: App[]; android: App[] }; ba: string } = JSON.parse(document.getElementById('cfg')!.textContent || '{}');
     const goi = new URLSearchParams(location.search).get('goi') || '';
-    const p = prods[goi];
+    const p = cfg.prods[goi];
     const key = 'cwd-order-' + goi;
     const $ = (id: string) => document.getElementById(id)!;
     const vnd = (n: number) => n.toLocaleString('vi-VN') + 'đ';
     const fill = (f: string, v: string) => document.querySelectorAll<HTMLElement>(`[data-f="${f}"]`).forEach(e => (e.textContent = v));
-    const show = (id: string) => ['s-closed', 's-form', 's-pay', 's-done'].forEach(s => ($(s).hidden = s !== id));
+    const steps = ['s-closed', 's-form', 's-pay', 's-done'];
+    const show = (id: string) => { steps.forEach(s => ($(s).hidden = s !== id)); scrollTo(0, 0); };
     const load = (): O | null => { try { return JSON.parse(localStorage.getItem(key) || 'null'); } catch { return null; } };
     const save = (o: O | null) => { try { o ? localStorage.setItem(key, JSON.stringify(o)) : localStorage.removeItem(key); } catch {} };
-    let timer = 0;
+    const ua = navigator.userAgent;
+    const os: 'ios' | 'android' | null = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1) ? 'ios' : /Android/.test(ua) ? 'android' : null;
+    let timer = 0, cur: O | null = null;
 
     function pay(o: O) {
+      cur = o;
       fill('code', o.code); fill('acc', o.acc); fill('bank', o.bank); fill('price', vnd(o.amount)); fill('email', o.email);
       (document.querySelector('[data-k="acc"]') as HTMLElement).dataset.copy = o.acc;
       (document.querySelector('[data-k="amount"]') as HTMLElement).dataset.copy = String(o.amount);
       (document.querySelector('[data-k="code"]') as HTMLElement).dataset.copy = o.code;
       ($('qr') as HTMLImageElement).src = o.qr;
+      if (os) { $('open-banks').hidden = false; $('qr-cap').textContent = 'Hoặc chụp màn hình mã này, mở app ngân hàng và chọn quét ảnh.'; }
       show('s-pay');
       const t0 = Date.now();
       const tick = async () => {
@@ -103,9 +158,8 @@ const lock = 'M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0
           if (r.ok) {
             const d = await r.json();
             if (d.status !== 'pending') {
-              fill('email', o.email);
               if (d.download) ($('dl') as HTMLAnchorElement).href = d.download; else $('dl').hidden = true;
-              show('s-done'); save(null); return;
+              closeSheet(); show('s-done'); save(null); return;
             }
           }
         } catch {}
@@ -115,6 +169,38 @@ const lock = 'M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0
       timer = window.setTimeout(tick, 3000);
     }
 
+    // Bảng chọn app ngân hàng (chỉ điện thoại).
+    function renderBanks(q = '') {
+      if (!os || !cur) return;
+      const s = q.trim().toLowerCase();
+      const list = cfg.apps[os].filter(a => !s || a.name.toLowerCase().includes(s) || a.id.includes(s));
+      const box = $('banks'); box.textContent = '';
+      for (const a of list) {
+        const href = `https://dl.vietqr.io/pay?app=${a.id}&ba=${cur.acc}@${cfg.ba}&am=${cur.amount}&tn=${encodeURIComponent(cur.code)}`;
+        const el = document.createElement('a'); el.className = 'bank'; el.href = href; el.rel = 'noopener';
+        const img = document.createElement('img'); img.src = a.logo; img.alt = ''; img.width = 48; img.height = 48; img.loading = 'lazy';
+        const nm = document.createElement('span'); nm.textContent = a.name;
+        el.append(img, nm);
+        if (a.fill) { const f = document.createElement('span'); f.className = 'fill'; f.textContent = 'tự điền'; el.append(f); }
+        el.addEventListener('click', async e => {
+          e.preventDefault();
+          try { await navigator.clipboard.writeText(cur!.code); } catch {}
+          location.href = href;
+        });
+        box.append(el);
+      }
+      if (!list.length) box.textContent = 'Không thấy ngân hàng này. Quét QR hoặc chuyển tay theo thông tin bên dưới nhé.';
+    }
+    function closeSheet() { $('sheet').hidden = true; document.body.style.overflow = ''; }
+    $('open-banks').addEventListener('click', () => { renderBanks(); ($('bank-q') as HTMLInputElement).value = ''; $('sheet').hidden = false; document.body.style.overflow = 'hidden'; });
+    document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', closeSheet));
+    $('bank-q').addEventListener('input', e => renderBanks((e.target as HTMLInputElement).value));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
+
+    // Điều kiện: mở ngay dưới form, đóng thì quay lại ô đồng ý.
+    $('open-terms').addEventListener('click', e => { e.preventDefault(); $('dieu-kien').hidden = false; $('dieu-kien').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+    $('close-terms').addEventListener('click', () => { $('dieu-kien').hidden = true; $('ag').scrollIntoView({ block: 'center' }); });
+
     if (!p) show('s-closed');
     else {
       fill('name', p.name); fill('desc', p.desc); fill('count', p.count); fill('price', vnd(p.price));
@@ -122,42 +208,71 @@ const lock = 'M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0
       if (o) pay(o); else show('s-form');
       $('f').addEventListener('submit', async e => {
         e.preventDefault();
-        const em = ($('em') as HTMLInputElement).value.trim(), err = $('ferr'), btn = $('fbtn') as HTMLButtonElement;
+        const val = (id: string) => ($(id) as HTMLInputElement).value.trim();
+        const nm = val('nm'), em = val('em'), ph = val('ph').replace(/[\s.\-()]/g, '').replace(/^\+84/, '0');
+        const err = $('ferr'), btn = $('fbtn') as HTMLButtonElement;
+        const bad = (m: string, id: string) => { err.textContent = m; $(id).focus(); };
         err.textContent = '';
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) { err.textContent = 'Email chưa đúng, kiểm tra lại giúp mình.'; return; }
-        btn.disabled = true; btn.textContent = 'Đang tạo…';
+        if (nm.length < 2) return bad('Điền họ tên giúp mình nhé.', 'nm');
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) return bad('Email chưa đúng, kiểm tra lại giúp mình.', 'em');
+        if (!/^0\d{9,10}$/.test(ph)) return bad('Số điện thoại chưa đúng, ví dụ 0912345678.', 'ph');
+        if (!($('ag') as HTMLInputElement).checked) return bad('Đánh dấu đồng ý điều kiện để tiếp tục nhé.', 'ag');
+        btn.disabled = true;
         try {
-          const r = await fetch('/api/order', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ pack: goi, email: em }) });
+          const r = await fetch('/api/order', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ pack: goi, name: nm, email: em, phone: ph, agree: true }) });
           const d = await r.json();
           if (r.status === 403) { show('s-closed'); return; }
           if (!r.ok) throw new Error(d.error || 'lỗi');
-          const o: O = { ...d, email: em };
+          const o: O = { ...d, email: em, name: nm, phone: ph };
           save(o); pay(o);
-        } catch (x) {
+        } catch {
           err.textContent = 'Chưa tạo được mã, thử lại sau ít phút nhé.';
-        } finally { btn.disabled = false; btn.textContent = 'Tạo mã QR'; }
+        } finally { btn.disabled = false; }
       });
-      $('reset').addEventListener('click', () => { clearTimeout(timer); save(null); show('s-form'); });
+      $('reset').addEventListener('click', () => {
+        clearTimeout(timer);
+        if (cur) { ($('nm') as HTMLInputElement).value = cur.name || ''; ($('em') as HTMLInputElement).value = cur.email; ($('ph') as HTMLInputElement).value = cur.phone || ''; }
+        save(null); cur = null; $('open-banks').hidden = true; show('s-form');
+      });
     }
   </script>
   <style>
-    .buy{padding-top:48px;padding-bottom:112px;max-width:880px}
+    .buy{padding-top:48px;padding-bottom:112px;max-width:1040px}
     .back{display:inline-block;margin-bottom:32px;font-size:14px;color:var(--mute);text-decoration:none}
     .t{font-size:clamp(30px,4.5vw,48px);margin:8px 0 16px}
-    .desc{margin:0 0 20px;color:var(--ink2);max-width:600px}
-    .sum{display:flex;justify-content:space-between;gap:12px;max-width:440px;padding:14px 0;border-top:1px solid var(--ink);border-bottom:1px solid var(--line);margin-bottom:28px;font-size:15px}
-    .sum b{font-family:var(--mono);font-size:18px}
-    form{max-width:440px;display:flex;flex-direction:column;gap:8px}
-    label{font-weight:600;font-size:15px}
-    input{font:inherit;font-size:16px;padding:12px 14px;border:1px solid var(--line2);border-radius:4px;background:var(--bg);color:var(--ink)}
-    input:focus{outline:2px solid var(--accent);outline-offset:1px}
+    .cols{display:flex;flex-wrap:wrap;gap:40px 56px;align-items:flex-start}
+    .prod{flex:1 1 320px;min-width:0}
+    .desc{margin:0 0 20px;color:var(--ink2)}
+    .sum{display:flex;justify-content:space-between;gap:12px;padding:14px 0;border-top:1px solid var(--ink);border-bottom:1px solid var(--line);margin-bottom:20px;font-size:15px}
+    .sum b{font-family:var(--mono);font-size:20px}
+    .gets{margin:0;padding:0;list-style:none;display:grid;gap:10px;font-size:15px;color:var(--ink2)}
+    .gets li{padding-left:24px;position:relative}
+    .gets li::before{content:'✓';position:absolute;left:0;color:var(--accent);font-weight:700}
+    .card{flex:1 1 400px;max-width:520px;min-width:0;background:#fffdf8;border:1px solid var(--line);border-radius:16px;padding:32px 28px;display:flex;flex-direction:column;gap:8px;box-shadow:0 10px 30px rgba(60,40,10,.06)}
+    @media (max-width:520px){.card{padding:24px 18px;border-radius:12px}}
+    .kicker{margin:0;font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:500}
+    .ct{font-family:var(--serif);font-weight:600;font-size:28px;margin:6px 0 12px}
+    label{font-weight:600;font-size:15px;margin-top:10px}
+    .card input:not([type=checkbox]){font:inherit;font-size:16px;padding:14px 16px;border:1px solid var(--line2);border-radius:10px;background:var(--bg);color:var(--ink);width:100%;box-sizing:border-box}
+    .card input:focus{outline:2px solid var(--accent);outline-offset:1px}
     .hint{margin:0;font-size:13px;color:var(--mute)}
-    .err{margin:0;min-height:20px;font-size:14px;color:#b42318}
-    form .btn{align-self:flex-start}
-    .btn:disabled{opacity:.6;cursor:wait}
+    .agree{display:flex;gap:12px;align-items:flex-start;font-weight:400;font-size:14px;color:var(--ink2);margin-top:16px;cursor:pointer}
+    .agree input{width:22px;height:22px;flex:none;margin:0;accent-color:var(--accent)}
+    .agree a{color:var(--accent)}
+    .err{margin:4px 0 0;min-height:20px;font-size:14px;color:#b42318}
+    .pay-btn{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;padding:16px 20px;border:0;border-radius:10px;background:var(--accent);color:#fff;font:600 17px/1.2 var(--sans);cursor:pointer;box-shadow:0 8px 20px rgba(217,83,30,.22)}
+    .pay-btn:hover{filter:brightness(1.05)}
+    .pay-btn:disabled{opacity:.6;cursor:wait}
+    .pay-btn:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+    .note-row{display:flex;gap:12px;align-items:flex-start;margin-top:16px;padding-top:18px;border-top:1px solid var(--line);font-size:14px;color:var(--ink2)}
+    .note-row svg{color:var(--accent);flex:none;margin-top:1px}
+    .warn{display:flex;gap:12px;align-items:center;margin-top:8px;padding:14px 16px;border:1px solid #ecd9bf;background:#fdf3e4;border-radius:10px;font-size:14px;color:#6b4a1f}
+    .warn svg{flex:none}
+    .app-btn{max-width:440px;margin:4px 0 24px}
     .pay{display:flex;flex-wrap:wrap;gap:32px 40px;align-items:flex-start;margin-top:8px}
-    .qr{flex:0 0 auto;width:min(300px,100%);background:#fff;border:1px solid var(--line);border-radius:6px;padding:12px}
+    .qr{flex:0 0 auto;width:min(300px,100%);background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px;box-sizing:border-box}
     .qr img{display:block;width:100%;height:auto}
+    .qr-cap{margin:8px 4px 2px;font-size:13px;color:var(--mute);text-align:center}
     .info{flex:1 1 300px;min-width:0}
     .m{color:var(--ink2);margin:0 0 16px}
     .small{font-size:13px}
@@ -173,7 +288,22 @@ const lock = 'M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0
     @media (prefers-reduced-motion:reduce){.dot{animation:none}}
     .link{all:unset;cursor:pointer;font-size:13px;color:var(--mute);text-decoration:underline}
     .lockbig{color:var(--mute);margin-bottom:8px}
-    .zl{display:flex;gap:16px;align-items:center;margin-top:32px;padding:16px;border:1px solid var(--line);border-radius:6px;max-width:440px}
+    .zl{display:flex;gap:16px;align-items:center;margin-top:32px;padding:16px;border:1px solid var(--line);border-radius:10px;max-width:440px}
     .zl img{background:#fff;border-radius:4px;flex:none}
+    .terms{margin-top:48px;max-width:720px;padding:28px;border:1px solid var(--line);border-radius:12px;background:var(--bg2);scroll-margin-top:80px}
+    .terms h3{font-size:16px;margin:20px 0 8px}
+    .terms ul{margin:0;padding-left:20px;display:grid;gap:6px;color:var(--ink2);font-size:15px}
+    .terms .btn{margin-top:20px}
+    .sheet{position:fixed;inset:0;z-index:50}
+    .sheet-bg{position:absolute;inset:0;background:rgba(0,0,0,.45)}
+    .sheet-box{position:absolute;left:0;right:0;bottom:0;max-height:82vh;display:flex;flex-direction:column;background:var(--bg);border-radius:16px 16px 0 0;padding:16px 16px max(16px,env(safe-area-inset-bottom))}
+    .sheet-hd{display:flex;justify-content:space-between;align-items:center;font-size:17px}
+    .x{all:unset;cursor:pointer;font-size:28px;line-height:1;padding:0 6px;color:var(--mute)}
+    .sheet-sub{margin:8px 0 12px;font-size:13px;color:var(--ink2)}
+    #bank-q{font:inherit;font-size:16px;padding:10px 14px;border:1px solid var(--line2);border-radius:10px;background:#fff;margin-bottom:12px}
+    .banks{overflow-y:auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 8px;padding-bottom:8px;font-size:13px;color:var(--mute)}
+    .banks :global(.bank){display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;text-decoration:none;color:var(--ink);font-size:12px;line-height:1.25}
+    .banks :global(.bank img){width:48px;height:48px;border-radius:12px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+    .banks :global(.fill),.fill{display:inline-block;font-family:var(--mono);font-size:10px;padding:1px 6px;border-radius:3px;background:var(--accent);color:#fff}
   </style>
 </Base>
