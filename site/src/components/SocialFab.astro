@@ -1,5 +1,7 @@
 ---
-import { social, socialIcons, socialName } from '../lib';
+import { social, socialIcons, socialName, zalo, hasPublic, u } from '../lib';
+const showZalo = !!zalo.link;
+const zaloQr = hasPublic(zalo.qr);
 ---
 {social.length > 0 && (
   <nav class="fab" id="fab" aria-label="Theo dõi Claude with Duy">
@@ -14,6 +16,28 @@ import { social, socialIcons, socialName } from '../lib';
         </li>
       ))}
     </ul>
+    {showZalo && (
+      <>
+        <hr class="fab-hr" />
+        <div class="fab-zl">
+          <a href={zalo.link} target="_blank" rel="noopener" aria-label="Nhóm Zalo hỗ trợ">
+            <span class="fab-name">Hỗ trợ</span>
+            <span class="fab-ico zl-ico">
+              <svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true">
+                <defs><mask id="zl-m"><rect width="24" height="24" fill="#fff" /><text x="12" y="13.3" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="6.6" fill="#000">Zalo</text></mask></defs>
+                <path fill="currentColor" mask="url(#zl-m)" d="M6 3h12a4 4 0 0 1 4 4v7a4 4 0 0 1-4 4h-7.5L6 21.5V18a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4z" />
+              </svg>
+            </span>
+          </a>
+          {zaloQr && (
+            <div class="zl-pop" aria-hidden="true">
+              <img src={u(zalo.qr)} alt="" width="160" height="160" loading="lazy" />
+              <span>Quét bằng Zalo để vào nhóm hỗ trợ</span>
+            </div>
+          )}
+        </div>
+      </>
+    )}
   </nav>
 )}
 
@@ -28,7 +52,7 @@ import { social, socialIcons, socialName } from '../lib';
 </script>
 
 <style>
-  .fab{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));z-index:50;display:flex;flex-direction:column;align-items:flex-end;gap:10px;
+  .fab{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(32px,env(safe-area-inset-bottom));z-index:50;display:flex;flex-direction:column;align-items:flex-end;gap:10px;
     opacity:0;transform:translateY(16px);pointer-events:none;transition:opacity .25s ease,transform .25s ease}
   .fab.show{opacity:1;transform:none;pointer-events:auto}
   .fab-title{font:500 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--bg);background:var(--ink);padding:6px 10px;border-radius:999px}
@@ -39,11 +63,23 @@ import { social, socialIcons, socialName } from '../lib';
   .fab-list a:hover .fab-ico{background:var(--ink);color:var(--bg);transform:scale(1.06)}
   .fab-list a:focus-visible{outline:none}
   .fab-list a:focus-visible .fab-ico{outline:2px solid var(--accent);outline-offset:3px}
+  /* vạch ngăn + nút Zalo hỗ trợ */
+  .fab-hr{width:36px;margin:2px 12px 2px 0;border:0;border-top:1.5px solid var(--line2)}
+  .fab-zl{position:relative}
+  .fab-zl>a{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none}
+  .fab-zl>a:hover .fab-ico{background:var(--ink);color:var(--bg);transform:scale(1.06)}
+  .fab-zl>a:focus-visible{outline:none}
+  .fab-zl>a:focus-visible .fab-ico{outline:2px solid var(--accent);outline-offset:3px}
+  .zl-pop{position:absolute;right:72px;bottom:0;width:184px;padding:10px;background:var(--bg);border:1.5px solid var(--ink);border-radius:6px;box-shadow:0 12px 32px rgba(0,0,0,.18);text-align:center;
+    opacity:0;transform:translateX(6px);pointer-events:none;transition:opacity .18s ease,transform .18s ease}
+  .zl-pop img{display:block;width:100%;height:auto;border-radius:3px;background:#fff}
+  .zl-pop span{display:block;margin-top:8px;font:500 12px/1.35 var(--sans);color:var(--ink2)}
+  @media (hover:hover){.fab-zl:hover .zl-pop,.fab-zl:focus-within .zl-pop{opacity:1;transform:none}}
   /* điện thoại: chỉ giữ icon cho gọn, vẫn đủ lớn để bấm */
   @media (max-width: 640px){
     .fab-name{display:none}
     .fab-ico{width:52px;height:52px}
     .fab-ico svg{width:24px;height:24px}
   }
-  @media (prefers-reduced-motion: reduce){.fab,.fab-ico{transition:none}}
+  @media (prefers-reduced-motion: reduce){.fab,.fab-ico,.zl-pop{transition:none}}
 </style>

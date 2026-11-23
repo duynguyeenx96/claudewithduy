@@ -4,8 +4,8 @@ import Blocks from '../components/Blocks.astro';
 import BeforeAfter from '../components/BeforeAfter.astro';
 import Feature from '../components/Feature.astro';
 import Cmd from '../components/Cmd.astro';
-import { requirements as rq, modules, flow, site, u, pad, kinds, marketplaceAdd, pluginInstall, repoUrl, social, socialIcons as icons, zalo, hasPublic } from '../lib';
-const showZalo = hasPublic(zalo.qr);
+import { requirements as rq, modules, flow, site, u, pad, kinds, marketplaceAdd, pluginInstall, repoUrl, social, socialIcons as icons, donate, hasPublic } from '../lib';
+const showDonate = hasPublic(donate.qr);
 
 const ready = modules.filter(m => m.status === 'ready').length;
 const firstPlugin = modules.find(m => m.skill?.plugin)?.skill?.plugin ?? 'fx-pack';
@@ -161,13 +161,13 @@ const firstPlugin = modules.find(m => m.skill?.plugin)?.skill?.plugin ?? 'fx-pac
       <div class="label">06 / Liên hệ</div>
       <h2 class="h2" style="margin-bottom:24px">Nhắn cho mình</h2>
       <p class="p" style="max-width:380px">Báo lỗi, góp ý hay cần module riêng: mở issue hoặc nhắn mình.</p>
-      {showZalo && (
-        <div class="zl">
-          <img src={u(zalo.qr)} alt="Mã QR nhóm Zalo hỗ trợ Claude with Duy" width="160" height="160" loading="lazy" />
+      {showDonate && (
+        <div class="dn-inline">
+          <img src={u(donate.qr)} alt="Mã QR chuyển khoản ủng hộ (TPBank)" width="160" height="160" loading="lazy" />
           <div>
-            <h3 class="sub" style="font-size:20px;margin-bottom:8px">Nhóm Zalo hỗ trợ</h3>
-            <p class="p" style="font-size:15px">Cài lỗi, hỏi cách dùng module, khoe video: vào nhóm hỏi nhanh, mình và mọi người cùng trả lời.</p>
-            {zalo.link && <a class="btn sm" style="margin-top:14px" href={zalo.link} target="_blank" rel="noopener">Vào nhóm Zalo</a>}
+            <h3 class="sub" style="font-size:20px;margin-bottom:8px">Ủng hộ mình ly cà phê ☕</h3>
+            <p class="p" style="font-size:15px">Thấy module hữu ích thì ủng hộ chút đỉnh để mình duy trì gói Claude nha.</p>
+            <p class="p" style="font-size:14px;margin-top:10px;font-family:var(--mono)">{donate.bank} · {donate.account}<br />{donate.name}</p>
           </div>
         </div>
       )}
@@ -248,8 +248,10 @@ const firstPlugin = modules.find(m => m.skill?.plugin)?.skill?.plugin ?? 'fx-pac
   .faq p{margin:0;font-size:16px;line-height:1.6;color:var(--ink2);text-wrap:pretty}
   .soc{width:48px;height:48px;border:1px solid var(--ink);border-radius:4px;display:flex;align-items:center;justify-content:center}
   .soc:hover{background:var(--ink);color:var(--bg)}
-  .zl{display:flex;gap:20px;align-items:center;margin-top:32px;padding:16px;border:1px solid var(--ink);border-radius:4px;max-width:480px;flex-wrap:wrap}
-  .zl img{width:160px;height:160px;border-radius:4px;background:#fff;flex:none}
-  .zl>div{flex:1;min-width:200px}
+  .dn-inline{display:flex;gap:20px;align-items:center;margin-top:32px;padding:16px;border:1px solid var(--ink);border-radius:4px;max-width:480px;flex-wrap:wrap}
+  .dn-inline img{width:160px;height:160px;border-radius:4px;background:#fff;flex:none}
+  .dn-inline>div{flex:1;min-width:200px}
+  /* màn hình rộng: QR đã nằm sẵn ở lề trái (DonateQR), không lặp lại */
+  @media (min-width:1440px){.dn-inline{display:none}}
 </style>
 </Base>
