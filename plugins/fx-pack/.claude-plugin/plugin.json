@@ -1,9 +1,0 @@
-{
-  "name": "fx-pack",
-  "version": "1.0.0",
-  "description": "59 hiệu ứng cho video người nói, bám theo mặt.",
-  "author": { "name": "Claude with Duy" },
-  "homepage": "https://github.com/duynguyeenx96/claudewithduy/tree/main/plugins/fx-pack",
-  "repository": "https://github.com/duynguyeenx96/claudewithduy",
-  "license": "MIT"
-}

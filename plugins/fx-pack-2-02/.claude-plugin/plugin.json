@@ -1,0 +1,11 @@
+{
+  "name": "fx-pack-2-02",
+  "version": "0.1.0",
+  "description": "FX Pack 2-02: 3 hiệu ứng HyperFrames miễn phí cho A-roll dọc (light-leak, song-do-dam, dai-tin).",
+  "author": {
+    "name": "Claude with Duy"
+  },
+  "homepage": "https://github.com/duynguyeenx96/claudewithduy/tree/main/plugins/fx-pack-2-02",
+  "repository": "https://github.com/duynguyeenx96/claudewithduy",
+  "license": "MIT"
+}

@@ -1,0 +1,11 @@
+{
+  "name": "fx-pack-1",
+  "version": "1.0.0",
+  "description": "FX Pack 1: đủ 59 hiệu ứng cho video người nói, bám theo mặt, chữ và ảnh chui ra sau đầu. Muốn từng nhóm 10 hiệu ứng thì cài fx-pack-1-01 … 06.",
+  "author": {
+    "name": "Claude with Duy"
+  },
+  "homepage": "https://github.com/duynguyeenx96/claudewithduy/tree/main/plugins/fx-pack-1",
+  "repository": "https://github.com/duynguyeenx96/claudewithduy",
+  "license": "MIT"
+}

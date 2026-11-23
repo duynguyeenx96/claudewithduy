@@ -1,0 +1,331 @@
+{
+ "_note": "fx name -> HyperFrames registry item (Apache-2.0). box = [x, y, w, h] on the 1080x1920 frame. canvas = resize a 1920x1080 block. vars -> data-variable-values; text -> element #id text; consts -> top-level JS var; children -> inner HTML of the element carrying that attribute; css -> appended style. '{key}' pulls from the plan entry.",
+ "recipes": {
+  "dem-so": {
+   "item": "count-up",
+   "group": "Số liệu",
+   "vi": "Số đếm tăng",
+   "desc": "Một con số chạy từ start tới end rồi nảy nhẹ khi dừng.",
+   "box": [
+    60,
+    230,
+    960,
+    360
+   ],
+   "dur": 3,
+   "defaults": {
+    "start_value": 0,
+    "end_value": 100,
+    "prefix": "",
+    "suffix": "%",
+    "label": ""
+   },
+   "vars": {
+    "start": "{start_value}",
+    "end": "{end_value}",
+    "prefix": "{prefix}",
+    "suffix": "{suffix}",
+    "accent": "green",
+    "glow": true
+   },
+   "css": "#root .cu-stage{font-weight:900;text-shadow:0 6px 30px rgba(0,0,0,.55)}"
+  },
+  "vong-tien-do": {
+   "item": "conic-progress-ring",
+   "group": "Số liệu",
+   "vi": "Vòng tiến độ",
+   "desc": "Vòng tròn tô dần tới phần trăm, số ở giữa đếm theo.",
+   "box": [
+    330,
+    200,
+    420,
+    420
+   ],
+   "dur": 3,
+   "defaults": {
+    "progress": 80
+   },
+   "vars": {
+    "progress": "{progress}",
+    "thickness": 12,
+    "label": "{progress}"
+   }
+  },
+  "caption-karaoke": {
+   "item": "caption-pill-karaoke",
+   "kind": "component",
+   "group": "Caption",
+   "vi": "Caption viên thuốc karaoke",
+   "desc": "Phụ đề trong viên thuốc trắng, từ đang nói đậm lên.",
+   "canvas": [
+    1080,
+    1920
+   ],
+   "words": true,
+   "consts": {
+    "TRANSCRIPT": "{words}",
+    "DURATION": "{dur}",
+    "SAFE_ZONE_WIDTH": 920,
+    "PILL_MAX_WIDTH": 920,
+    "FONT_FAMILY": "Be Vietnam Pro",
+    "BASE_FONT_SIZE": 66,
+    "MIN_FONT_SIZE": 48,
+    "MAX_WORDS_PER_GROUP": 3,
+    "COLOR_INACTIVE": "#6b6b6b"
+   },
+   "replace": [
+    [
+     "family=Poppins:wght@700",
+     "family=Be+Vietnam+Pro:wght@700"
+    ]
+   ],
+   "css": ".safe-zone{width:920px !important;left:80px !important;transform:none !important;bottom:560px !important}.caption-group{width:920px !important}.caption-pill{max-width:920px !important;padding:16px 40px 18px !important}",
+   "defaults": {
+    "group_size": 3
+   }
+  },
+  "chu-giai-ma": {
+   "item": "caption-matrix-decode",
+   "kind": "component",
+   "group": "Caption",
+   "vi": "Chữ giải mã",
+   "desc": "Từng cụm chữ nhảy ký tự ngẫu nhiên rồi hiện đúng chữ.",
+   "canvas": [
+    1080,
+    1920
+   ],
+   "words": true,
+   "consts": {
+    "WORDS": "{words}",
+    "GROUPS": "{groups}"
+   },
+   "replace": [
+    [
+     "1760)",
+     "940)"
+    ],
+    [
+     ", 96, \"700\"",
+     ", 92, \"800\""
+    ]
+   ],
+   "css": "#sc-container{top:auto !important;height:600px;bottom:330px}.sc-word-wrap{color:#ffffff !important;font-family:'Be Vietnam Pro',sans-serif !important;font-weight:800 !important;text-shadow:0 4px 20px rgba(0,0,0,.85),0 0 2px #000}"
+  },
+  "ten-gach-chan": {
+   "item": "lt-accent-underline",
+   "kind": "block",
+   "group": "Kết video",
+   "vi": "Tên gạch chân",
+   "desc": "Tên trượt lên, vạch màu kéo ngang, chức danh hiện dưới.",
+   "canvas": [
+    1080,
+    1920
+   ],
+   "dur": 4.8,
+   "defaults": {
+    "name": "Tên của bạn",
+    "role": "Chức danh"
+   },
+   "text": {
+    "lt-name": "{name}",
+    "lt-role": "{role}"
+   },
+   "css": "#root .lt{left:80px;bottom:560px;padding:26px 34px;background:rgba(10,10,14,.62);border-radius:22px;backdrop-filter:blur(6px)}#root .lt-name{font-family:'Be Vietnam Pro',sans-serif;font-weight:900;font-size:84px}#root .lt-role{font-family:'Be Vietnam Pro',sans-serif;font-weight:500;font-size:34px}#root .lt-rule{background:{accent}}#root .lt-role{color:#f1f1f1}"
+  },
+  "ten-co-nhan": {
+   "item": "lt-kicker-name",
+   "kind": "block",
+   "group": "Kết video",
+   "vi": "Tên có nhãn nhỏ",
+   "desc": "Nhãn màu nhỏ phía trên, tên lớn bên dưới, không có nền.",
+   "canvas": [
+    1080,
+    1920
+   ],
+   "dur": 4.8,
+   "defaults": {
+    "kicker": "Tập 1",
+    "name": "Tên của bạn"
+   },
+   "text": {
+    "lt-kicker": "{kicker}",
+    "lt-name": "{name}"
+   },
+   "css": "#root .lt{left:80px;bottom:560px;padding:26px 34px;background:rgba(10,10,14,.62);border-radius:22px;backdrop-filter:blur(6px)}#root .lt-name{font-family:'Be Vietnam Pro',sans-serif;font-weight:900}#root .lt-kicker{font-family:'Be Vietnam Pro',sans-serif;font-weight:700}"
+  },
+  "thong-bao": {
+   "item": "notification-stack",
+   "group": "Giao diện",
+   "vi": "Chồng thông báo",
+   "desc": "Thẻ thông báo trượt vào và xếp chồng, thẻ mới nhất mở rộng.",
+   "box": [
+    40,
+    150,
+    1000,
+    700
+   ],
+   "dur": 4,
+   "defaults": {
+    "titles": "Đơn hàng mới,Có 12 bình luận,Video lên xu hướng",
+    "bodies": "Vừa bán thêm 1 khoá học,Mọi người hỏi link,Đạt 100K lượt xem"
+   },
+   "vars": {
+    "titles": "{titles}",
+    "bodies": "{bodies}",
+    "accent": "green",
+    "exit": "fade"
+   },
+   "css": "#root .ns-stage{width:86cqw !important}#root .ns-clip{place-items:start center !important;padding-top:3cqh}#root .ns-title{font-weight:700}#root{--ns-card-h:11cqh}"
+  },
+  "terminal": {
+   "item": "code-terminal-run",
+   "group": "Giao diện",
+   "vi": "Cửa sổ lệnh",
+   "desc": "Cửa sổ terminal gõ một lệnh, từng dòng kết quả in ra.",
+   "box": [
+    30,
+    170,
+    1020,
+    640
+   ],
+   "dur": 5,
+   "defaults": {
+    "command": "claude plugin install fx-pack-2",
+    "outputs_list": "đang tải 13 hiệu ứng|cài xong font Be Vietnam Pro|sẵn sàng"
+   },
+   "derive": {
+    "outputs": "<div data-terminal=\"output\"><span class=\"ct-muted\">-</span> {item}</div>"
+   },
+   "children": {
+    "data-slot=\"content\"": "<div data-terminal=\"command\">{command}</div>{outputs}"
+   },
+   "vars": {
+    "prompt_glyph": "$",
+    "cadence": "human",
+    "accent": "green",
+    "exit": "fade"
+   },
+   "css": "#root .ctr-stage{width:96cqw !important;max-width:96cqw !important}#root .ctr-clip{place-items:start center !important}"
+  },
+  "cta-cuoi": {
+   "item": "cta-close",
+   "group": "Kết video",
+   "vi": "CTA kết video",
+   "desc": "Câu kêu gọi hiện từng chữ, nút bấm bật lên bên dưới.",
+   "box": [
+    0,
+    1020,
+    1080,
+    620
+   ],
+   "dur": 3.5,
+   "defaults": {
+    "action": "Theo dõi để nhận skill",
+    "button": "Bình luận FX"
+   },
+   "vars": {
+    "action_line": "{action}",
+    "button_label": "{button}",
+    "accent": "green"
+   },
+   "css": "#root .cc-clip{background:transparent !important}",
+   "host_css": "text-shadow:0 6px 26px rgba(0,0,0,.7);"
+  },
+  "may-quay-rec": {
+   "item": "camcorder-hud",
+   "kind": "block",
+   "group": "Màu và look",
+   "vi": "Máy quay REC",
+   "desc": "Khung máy quay cũ: chấm REC, pin, ngày giờ, bộ đếm.",
+   "canvas": [
+    1080,
+    1920
+   ],
+   "dur": 4,
+   "defaults": {
+    "date": "19 THG 11 2026"
+   },
+   "replace": [
+    [
+     "JAN 01 2000<br />12:00 AM",
+     "{date}<br />09:41"
+    ],
+    [
+     "SP · 16:9",
+     "SP · 9:16"
+    ]
+   ],
+   "css": "#ch-hud .ch-corner{font-size:40px}#ch-hud .ch-record,#ch-hud .ch-battery{top:190px !important}#ch-hud .ch-date,#ch-hud .ch-counter{bottom:340px !important}#ch-hud .ch-record,#ch-hud .ch-date{left:70px !important}#ch-hud .ch-battery,#ch-hud .ch-counter{right:70px !important}"
+  },
+  "light-leak": {
+   "item": "organic-light-leak-overlay",
+   "kind": "block",
+   "group": "Chuyển cảnh",
+   "vi": "Lóe sáng phim",
+   "desc": "Vệt sáng cam ấm lướt qua khung như phim nhựa bị hở sáng.",
+   "canvas": [
+    1080,
+    1920
+   ],
+   "dur": 2.5
+  },
+  "song-do-dam": {
+   "item": "weight-wave",
+   "kind": "block",
+   "group": "Chữ động",
+   "vi": "Sóng độ đậm",
+   "desc": "Một làn sóng độ đậm chạy dọc dòng chữ.",
+   "canvas": [
+    1080,
+    1920
+   ],
+   "dur": 3,
+   "defaults": {
+    "text": "LÀM VIDEO BẰNG AI"
+   },
+   "vars": {
+    "text": "{text}",
+    "background": "rgba(0,0,0,0)",
+    "color": "#ffffff",
+    "sweepSpeed": 0.7
+   },
+   "css": "#ww-stage{top:auto !important;height:520px;bottom:300px}#ww-line{font-size:86px !important;text-align:center;max-width:980px;flex-wrap:wrap;justify-content:center;text-shadow:0 6px 28px rgba(0,0,0,.6)}"
+  },
+  "dai-tin": {
+   "item": "news-ticker",
+   "kind": "block",
+   "group": "Giao diện",
+   "vi": "Dải tin chạy",
+   "desc": "Thanh tin tức có nhãn LIVE, tiêu đề và dòng chữ chạy ngang.",
+   "canvas": [
+    1080,
+    1920
+   ],
+   "dur": 5,
+   "defaults": {
+    "label": "Nóng",
+    "headline": "Tin mới",
+    "items_list": "Bộ hiệu ứng miễn phí|Cài bằng một dòng lệnh|Không cần biết edit",
+    "brand": "Claude with Duy"
+   },
+   "derive": {
+    "items": "<span class=\"nt-item\"><span class=\"nt-separator\"></span>{item}</span>"
+   },
+   "text": {
+    "nt-label": "{label}",
+    "nt-time": "09:41"
+   },
+   "children": {
+    "id=\"nt-ticker-track\"": "{items}{items}",
+    "id=\"nt-headline\"": "{headline}"
+   },
+   "css": "#nt-time{display:none !important}",
+   "replace": [
+    [
+     "<div class=\"nt-desk\">Global Desk</div>",
+     "<div class=\"nt-desk\">{brand}</div>"
+    ]
+   ]
+  }
+ }
+}

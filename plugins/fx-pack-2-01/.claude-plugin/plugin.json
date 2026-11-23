@@ -1,0 +1,11 @@
+{
+  "name": "fx-pack-2-01",
+  "version": "0.1.0",
+  "description": "FX Pack 2-01: 10 hiệu ứng HyperFrames miễn phí cho A-roll dọc (dem-so, vong-tien-do, caption-karaoke, chu-giai-ma, ten-gach-chan, ten-co-nhan, thong-bao, terminal, cta-cuoi, may-quay-rec).",
+  "author": {
+    "name": "Claude with Duy"
+  },
+  "homepage": "https://github.com/duynguyeenx96/claudewithduy/tree/main/plugins/fx-pack-2-01",
+  "repository": "https://github.com/duynguyeenx96/claudewithduy",
+  "license": "MIT"
+}

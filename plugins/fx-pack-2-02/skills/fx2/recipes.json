@@ -1,0 +1,75 @@
+{
+ "_note": "fx name -> HyperFrames registry item (Apache-2.0). box = [x, y, w, h] on the 1080x1920 frame. canvas = resize a 1920x1080 block. vars -> data-variable-values; text -> element #id text; consts -> top-level JS var; children -> inner HTML of the element carrying that attribute; css -> appended style. '{key}' pulls from the plan entry.",
+ "recipes": {
+  "light-leak": {
+   "item": "organic-light-leak-overlay",
+   "kind": "block",
+   "group": "Chuyển cảnh",
+   "vi": "Lóe sáng phim",
+   "desc": "Vệt sáng cam ấm lướt qua khung như phim nhựa bị hở sáng.",
+   "canvas": [
+    1080,
+    1920
+   ],
+   "dur": 2.5
+  },
+  "song-do-dam": {
+   "item": "weight-wave",
+   "kind": "block",
+   "group": "Chữ động",
+   "vi": "Sóng độ đậm",
+   "desc": "Một làn sóng độ đậm chạy dọc dòng chữ.",
+   "canvas": [
+    1080,
+    1920
+   ],
+   "dur": 3,
+   "defaults": {
+    "text": "LÀM VIDEO BẰNG AI"
+   },
+   "vars": {
+    "text": "{text}",
+    "background": "rgba(0,0,0,0)",
+    "color": "#ffffff",
+    "sweepSpeed": 0.7
+   },
+   "css": "#ww-stage{top:auto !important;height:520px;bottom:300px}#ww-line{font-size:86px !important;text-align:center;max-width:980px;flex-wrap:wrap;justify-content:center;text-shadow:0 6px 28px rgba(0,0,0,.6)}"
+  },
+  "dai-tin": {
+   "item": "news-ticker",
+   "kind": "block",
+   "group": "Giao diện",
+   "vi": "Dải tin chạy",
+   "desc": "Thanh tin tức có nhãn LIVE, tiêu đề và dòng chữ chạy ngang.",
+   "canvas": [
+    1080,
+    1920
+   ],
+   "dur": 5,
+   "defaults": {
+    "label": "Nóng",
+    "headline": "Tin mới",
+    "items_list": "Bộ hiệu ứng miễn phí|Cài bằng một dòng lệnh|Không cần biết edit",
+    "brand": "Claude with Duy"
+   },
+   "derive": {
+    "items": "<span class=\"nt-item\"><span class=\"nt-separator\"></span>{item}</span>"
+   },
+   "text": {
+    "nt-label": "{label}",
+    "nt-time": "09:41"
+   },
+   "children": {
+    "id=\"nt-ticker-track\"": "{items}{items}",
+    "id=\"nt-headline\"": "{headline}"
+   },
+   "css": "#nt-time{display:none !important}",
+   "replace": [
+    [
+     "<div class=\"nt-desk\">Global Desk</div>",
+     "<div class=\"nt-desk\">{brand}</div>"
+    ]
+   ]
+  }
+ }
+}

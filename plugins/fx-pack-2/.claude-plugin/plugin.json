@@ -1,0 +1,11 @@
+{
+  "name": "fx-pack-2",
+  "version": "0.1.0",
+  "description": "FX Pack 2: đủ 13 hiệu ứng HyperFrames miễn phí (Apache-2.0) cho A-roll dọc: caption karaoke, chữ giải mã, số đếm, thông báo, terminal, thanh tên, dải tin, máy quay REC, CTA. Từng nhóm: fx-pack-2-01 (10), fx-pack-2-02 (3).",
+  "author": {
+    "name": "Claude with Duy"
+  },
+  "homepage": "https://github.com/duynguyeenx96/claudewithduy/tree/main/plugins/fx-pack-2",
+  "repository": "https://github.com/duynguyeenx96/claudewithduy",
+  "license": "MIT"
+}

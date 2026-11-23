@@ -4,13 +4,15 @@ import Cmd from '../components/Cmd.astro';
 import SoundBtn from '../components/SoundBtn.astro';
 import { fxFree, fxPro, u, pad, pluginInstall, marketplaceAdd } from '../lib';
 const total = fxFree.length + fxPro.length;
-const nFx = fxFree.reduce((a, m) => a + (m.effects?.length ?? 0), 0);
+const full = fxFree.filter(m => (m as any).full);
+const nFx = full.reduce((a, m) => a + (m.effects?.length ?? 0), 0);
+const groups = full.map(f => ({ f, subs: fxFree.filter(m => (m as any).pack === (f as any).pack && !(m as any).full) }));
 ---
-<Base title="FX Pack: Claude with Duy" description={`Các gói hiệu ứng cho video người nói: ${fxFree.length} gói miễn phí (${nFx} hiệu ứng) và các gói đang làm.`} current="fx" image="og.jpg">
+<Base title="FX Pack: Claude with Duy" description={`Các gói hiệu ứng cho video người nói: ${nFx} hiệu ứng miễn phí và các gói đang làm.`} current="fx" image="og.jpg">
   <div class="wrap" style="padding-top:72px;padding-bottom:24px">
     <div class="label" style="margin-bottom:16px">FX Pack</div>
     <h1 class="h1" style="font-size:clamp(36px,5vw,60px);margin:0 0 20px">Gói hiệu ứng</h1>
-    <p class="lead" style="margin:0;max-width:720px">Hiệu ứng cho video người nói, bám theo mặt, chữ và ảnh chui được ra sau đầu. Cài từng gói, gọi bằng <code class="inl">/effects</code> trong Claude Code.</p>
+    <p class="lead" style="margin:0;max-width:720px">Hiệu ứng cho video người nói, bám theo mặt, chữ và ảnh chui được ra sau đầu. Mỗi bộ có gói đủ và các gói nhỏ khoảng 10 hiệu ứng, cài gói nào cũng được.</p>
   </div>
   <div class="wrap layout">
     <aside>
@@ -25,43 +27,53 @@ const nFx = fxFree.reduce((a, m) => a + (m.effects?.length ?? 0), 0);
     </aside>
     <div style="flex:1 1 320px;min-width:0">
       <div class="bar"><h2 id="tt">Tất cả</h2><span class="label" id="tn">{total} gói</span></div>
-      <div class="grid">
-        {fxFree.map(m => (
-          <article data-kind="free">
-            <div class="vframe dark card" data-demo>
-              <video src={u(m.video.main!)} muted loop playsinline preload="metadata" data-audio=""></video>
-              <SoundBtn />
-              <span class="mark free">Miễn phí</span>
-            </div>
-            <div class="label" style="font-size:11px">{m.effects?.length} hiệu ứng</div>
-            <h3><a href={u(`module/${m.id}/`)}>{m.name}</a></h3>
-            <p class="desc">{m.desc}</p>
-            <Cmd text={pluginInstall(m.skill!.plugin!)} />
-            <a class="more" href={u(`module/${m.id}/#hieu-ung`)}>Xem {m.effects?.length} hiệu ứng →</a>
-          </article>
-        ))}
-        {fxPro.map(p => (
-          <article data-kind="pro">
-            <div class="vframe card pro-card">
-              <span class="label empty">Đang quay</span>
-              <span class="mark pro">Bán sau</span>
-            </div>
-            <div class="label" style="font-size:11px">{p.count}</div>
-            <h3>{p.name}</h3>
-            <p class="desc">{p.desc}</p>
-            <p class="note">Đang quay và chỉnh. Gói này sẽ bán, chưa định ngày.</p>
-          </article>
-        ))}
-      </div>
+      {groups.map(({ f, subs }) => (
+        <section class="pk" data-kind="free">
+          <h3 class="pk-h">{f.name} <span class="label">{f.effects?.length} hiệu ứng · gói đủ + {subs.length} gói nhỏ</span></h3>
+          <div class="grid">
+            {[f, ...subs].map(m => (
+              <article data-kind="free" class={(m as any).full ? 'full' : ''}>
+                <div class="vframe dark card" data-demo>
+                  <video src={u(m.video.main!)} muted loop playsinline preload="metadata" data-audio=""></video>
+                  <SoundBtn />
+                  <span class="mark free">Miễn phí</span>{(m as any).full && <span class="mark all">Gói đủ</span>}
+                </div>
+                <div class="label" style="font-size:11px">{m.effects?.length} hiệu ứng</div>
+                <h4><a href={u(`module/${m.id}/`)}>{m.name}</a></h4>
+                <p class="desc">{m.desc}</p>
+                <Cmd text={pluginInstall(m.skill!.plugin!)} />
+                <a class="more" href={u(`module/${m.id}/#hieu-ung`)}>Xem {m.effects?.length} hiệu ứng →</a>
+              </article>
+            ))}
+          </div>
+        </section>
+      ))}
+      <section class="pk" data-kind="pro">
+        <h3 class="pk-h">Bán sau <span class="label">đang quay và chỉnh</span></h3>
+        <div class="grid">
+          {fxPro.map(p => (
+            <article data-kind="pro">
+              <div class="vframe card pro-card">
+                <span class="label empty">Đang quay</span>
+                <span class="mark pro">Bán sau</span>
+              </div>
+              <div class="label" style="font-size:11px">{p.count}</div>
+              <h4>{p.name}</h4>
+              <p class="desc">{p.desc}</p>
+              <p class="note">Đang quay và chỉnh. Gói này sẽ bán, chưa định ngày.</p>
+            </article>
+          ))}
+        </div>
+      </section>
     </div>
   </div>
   <script>
     const btns = document.querySelectorAll<HTMLButtonElement>('.t');
-    const cards = document.querySelectorAll<HTMLElement>('article[data-kind]');
+    const cards = document.querySelectorAll<HTMLElement>('section.pk');
     const names: Record<string, string> = { all: 'Tất cả', free: 'Miễn phí', pro: 'Bán sau' };
     function pick(t: string) {
       let n = 0;
-      cards.forEach(c => { const ok = t === 'all' || c.dataset.kind === t; c.hidden = !ok; if (ok) n++; });
+      cards.forEach(c => { const ok = t === 'all' || c.dataset.kind === t; c.hidden = !ok; if (ok) n += c.querySelectorAll('article').length; });
       btns.forEach(b => b.classList.toggle('on', b.dataset.t === t));
       document.getElementById('tt')!.textContent = names[t];
       document.getElementById('tn')!.textContent = n + ' gói';
@@ -86,14 +98,18 @@ const nFx = fxFree.reduce((a, m) => a + (m.effects?.length ?? 0), 0);
     .card{aspect-ratio:16/9;border-radius:4px;position:relative;display:flex;align-items:center;justify-content:center}
     .pro-card{background:var(--bg2);border:1px dashed var(--line)}
     .empty{font-size:11px}
-    article h3{font-family:var(--serif);font-weight:600;font-size:21px;line-height:1.2;margin:-6px 0 0}
-    article h3 a{color:inherit;text-decoration:none}
-    article h3 a:hover{color:var(--accent)}
+    article h4{font-family:var(--serif);font-weight:600;font-size:21px;line-height:1.2;margin:-6px 0 0}
+    article h4 a{color:inherit;text-decoration:none}
+    article h4 a:hover{color:var(--accent)}
     .desc{margin:-4px 0 0;font-size:14px;line-height:1.5;color:var(--ink2)}
     .note{margin:0;font-size:13px;color:var(--mute)}
     .more{font-size:14px}
     .mark{position:absolute;top:10px;left:10px;font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;padding:3px 8px;border-radius:3px;z-index:2}
     .mark.free{background:var(--accent);color:#fff}
+    .mark.all{left:auto;right:10px;background:var(--ink);color:var(--bg)}
+    .pk{margin-bottom:64px}
+    .pk-h{font-family:var(--serif);font-weight:600;font-size:24px;margin:0 0 20px;display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+    article.full h4{color:var(--accent)}
     .mark.pro{background:var(--ink);color:var(--bg)}
     .inl{font-family:var(--mono);font-size:13px;color:var(--accent);background:var(--bg2);padding:1px 6px;border-radius:3px}
   </style>

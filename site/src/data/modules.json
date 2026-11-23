@@ -78,16 +78,16 @@
       }
     },
     {
-      "id": "fx-free-01",
-      "name": "FX Free 01 · Camera & ánh sáng",
-      "desc": "10 hiệu ứng miễn phí cho video người nói. Máy quay bám mặt, đẩy vào, tắt đèn, chỉnh màu điện ảnh.",
+      "id": "fx-pack-1",
+      "name": "FX Pack 1",
+      "desc": "Đủ 59 hiệu ứng miễn phí cho video người nói. Tự bám theo mặt, chữ và ảnh chui được ra sau đầu. Muốn gọn thì cài từng gói 10 hiệu ứng bên dưới.",
       "chips": [
-        "10 hiệu ứng",
+        "59 hiệu ứng",
         "Miễn phí",
         "Bám theo mặt"
       ],
       "video": {
-        "main": "videos/modules/fx-free-01.mp4",
+        "main": "videos/modules/fx-pack.mp4",
         "audio": true
       },
       "credits": [
@@ -127,9 +127,313 @@
           "Python 3.12",
           "FFmpeg"
         ],
-        "cmd": "/fx-free-01:effects video.mp4",
-        "plugin": "fx-free-01",
-        "note": "Một trong 6 gói tách từ FX Pack 59 hiệu ứng. Gốc từ claude-video-effects (Vibha Ramprakash, MIT); 8 hiệu ứng lấy từ một gói hiệu ứng khác, không phải từ repo gốc."
+        "cmd": "/fx-pack-1:effects video.mp4",
+        "plugin": "fx-pack-1",
+        "note": "Gốc từ claude-video-effects (Vibha Ramprakash, MIT); 8 hiệu ứng lấy từ một gói hiệu ứng khác, không phải từ repo gốc."
+      },
+      "effects": [
+        {
+          "fx": "locked-on",
+          "desc": "Khung góc bắt dính vào mặt, camera bám theo"
+        },
+        {
+          "fx": "lean-in",
+          "desc": "Zoom giật nhanh vào đúng một từ"
+        },
+        {
+          "fx": "slow-push",
+          "desc": "Đẩy chậm vào mặt, phòng nhoè dần"
+        },
+        {
+          "fx": "over-the-shoulder-zoom",
+          "desc": "Camera đẩy vào góc trên, biểu đồ kính bật cạnh đầu, rồi sang góc kia"
+        },
+        {
+          "fx": "spotlight",
+          "desc": "Tắt đèn cả phòng, chỉ còn người sáng"
+        },
+        {
+          "fx": "moody",
+          "desc": "Chỉnh màu trầm (moody, đen trắng, ấm, lạnh, rực)"
+        },
+        {
+          "fx": "swipe",
+          "desc": "Thanh trượt trước/sau quét ngang người"
+        },
+        {
+          "fx": "rabbit-hole",
+          "desc": "Khung hình xoáy hút vào chính nó"
+        },
+        {
+          "fx": "cinema",
+          "desc": "Bìa phim tài liệu: người đen trắng, vòng tròn vàng, tít nảy từng chữ",
+          "extra": true
+        },
+        {
+          "fx": "cinema-v1",
+          "desc": "Bản 1 của cinema: tít lớn đập vào, hạt phim",
+          "extra": true
+        },
+        {
+          "fx": "backdrop-word",
+          "desc": "Một chữ khổng lồ rơi xuống sau lưng"
+        },
+        {
+          "fx": "huge-strike",
+          "desc": "Một chữ serif khổng lồ sau đầu bị gạch đỏ"
+        },
+        {
+          "fx": "crayon-write",
+          "desc": "Bút sáp đỏ viết chữ sau đầu, gạch chân rồi bay đi"
+        },
+        {
+          "fx": "red-collage",
+          "desc": "Người đen trắng, chữ đỏ khổng lồ phía sau, 3 dòng chữ đập vào"
+        },
+        {
+          "fx": "pastel-word",
+          "desc": "Phòng tím pastel, chữ lớn sau lưng, thẻ hồ sơ được follow"
+        },
+        {
+          "fx": "led-sign",
+          "desc": "Đèn tắt, biển LED phát sáng tự gõ chữ sau lưng"
+        },
+        {
+          "fx": "match-cut",
+          "desc": "Trang báo cắt liên tục trên một từ, khoá trong hộp đỏ sau đầu"
+        },
+        {
+          "fx": "spotlight-type",
+          "desc": "Tắt đèn, một từ tự gõ từng chữ trên đầu",
+          "extra": true
+        },
+        {
+          "fx": "spotlight-neon",
+          "desc": "Phòng tối, chữ neon kính phát sáng bật từng chữ sau lưng",
+          "extra": true
+        },
+        {
+          "fx": "cover-star",
+          "desc": "Bạn thành bìa tạp chí, tít nằm sau đầu"
+        },
+        {
+          "fx": "noise",
+          "desc": "Reels chồng dần sau đầu, cứ 1/4 giây thêm một cái"
+        },
+        {
+          "fx": "orbit",
+          "desc": "Reels bay vòng quanh đầu, trước mặt ở dưới, sau đầu ở trên"
+        },
+        {
+          "fx": "carousel-spin",
+          "desc": "Reels quay quanh bạn như băng chuyền 3D rồi dừng"
+        },
+        {
+          "fx": "fan-build",
+          "desc": "Bìa reel chia bài thành hình quạt sau đầu, từng lá một"
+        },
+        {
+          "fx": "profile-wall",
+          "desc": "Lưới reel phủ kín tường sau lưng, bộ đếm chạy lên"
+        },
+        {
+          "fx": "place-in-grid",
+          "desc": "Bạn thu vào ô giữa lưới 3x3, 8 reel bật quanh kèm lượt xem"
+        },
+        {
+          "fx": "phone-fan",
+          "desc": "Reels xoè ra như tay cầm bài dưới dòng tít"
+        },
+        {
+          "fx": "check-pills",
+          "desc": "Phòng giấy kẻ ô, bảng reel sau lưng, con trỏ bấm các nút xanh"
+        },
+        {
+          "fx": "headline-wall",
+          "desc": "Tít bài của bạn chồng lên sau đầu, rồi hiện tổng"
+        },
+        {
+          "fx": "gold-collage",
+          "desc": "Người đen trắng, chữ vàng kim khổng lồ có vệt sáng, dòng chữ bên cạnh",
+          "extra": true
+        },
+        {
+          "fx": "todo",
+          "desc": "Thẻ checklist cạnh đầu, tự tích khi bạn nói"
+        },
+        {
+          "fx": "checklist",
+          "desc": "Danh sách việc kiểu Claude dưới cằm, từng bước quay rồi tích xanh"
+        },
+        {
+          "fx": "apple-toggles",
+          "desc": "Thẻ cài đặt iPhone bật từng công tắc một"
+        },
+        {
+          "fx": "the-bill",
+          "desc": "In lời dặn như tờ hoá đơn lên tường trên đầu"
+        },
+        {
+          "fx": "lineup",
+          "desc": "Ô đánh số xoè hình vòng cung trên đầu"
+        },
+        {
+          "fx": "tier-list",
+          "desc": "Bảng xếp hạng rơi xuống, Claude bay vào hạng S"
+        },
+        {
+          "fx": "glass-widgets",
+          "desc": "Widget kính mờ bay quanh đầu"
+        },
+        {
+          "fx": "messages",
+          "desc": "Thông báo iMessage bật lên lần lượt, xếp chồng"
+        },
+        {
+          "fx": "comment-box",
+          "desc": "Thanh bình luận Instagram gõ chữ rồi đăng"
+        },
+        {
+          "fx": "tap",
+          "desc": "Nút Follow bật lên rồi chuyển thành Following"
+        },
+        {
+          "fx": "liquid-glass-graph",
+          "desc": "Thẻ kính lỏng dưới cằm, biểu đồ leo, số đếm lên"
+        },
+        {
+          "fx": "split-graph",
+          "desc": "Thẻ trên cùng với biểu đồ 7 cột nảy lên, cột số 1 phát sáng có vương miện",
+          "extra": true
+        },
+        {
+          "fx": "split-graph-v1",
+          "desc": "Bản 1 của split-graph: cột mọc dần, số đếm lên, bạn ở 55% dưới",
+          "extra": true
+        },
+        {
+          "fx": "timeline",
+          "desc": "Màu phim đỏ sẫm, timeline dựng phim, mã REC, đầu phát sáng"
+        },
+        {
+          "fx": "wave-trim",
+          "desc": "Sóng âm giọng bạn, đoạn im lặng hai đầu co lại biến mất"
+        },
+        {
+          "fx": "select-resize",
+          "desc": "Khung chọn xanh bắt lấy con số, con trỏ kéo to ra"
+        },
+        {
+          "fx": "editor",
+          "desc": "Giao diện phần mềm dựng phim chi tiết bao quanh bạn, timeline 6 track",
+          "extra": true
+        },
+        {
+          "fx": "countdown-flip",
+          "desc": "Đồng hồ lật 3, 2, 1 trên đầu"
+        },
+        {
+          "fx": "broll-split",
+          "desc": "B-roll ở trên kèm nhãn giá, bạn ở dưới"
+        },
+        {
+          "fx": "tape-label",
+          "desc": "Dải băng dính vàng ghi câu của bạn dán ngang ngực"
+        },
+        {
+          "fx": "scribble",
+          "desc": "Nét bút dạ tự vẽ quanh người"
+        },
+        {
+          "fx": "pause-point",
+          "desc": "Dừng hình, mũi tên vẽ tay chỉ vào bạn"
+        },
+        {
+          "fx": "reject-stamp",
+          "desc": "Con dấu đỏ to đập xuống màn hình"
+        },
+        {
+          "fx": "uninstall",
+          "desc": "Thanh gỡ cài đặt nhiễu glitch làm vỡ khung hình"
+        },
+        {
+          "fx": "reel-frame",
+          "desc": "Video thu nhỏ thành thẻ reel Instagram"
+        },
+        {
+          "fx": "shortcut-rain",
+          "desc": "Phím bàn phím mưa xuống sau lưng"
+        },
+        {
+          "fx": "headline-box",
+          "desc": "Zoom vào kèm tít 2 dòng, dòng 2 trong hộp trắng"
+        },
+        {
+          "fx": "split-headline",
+          "desc": "Thẻ tít trượt xuống, đẩy bạn xuống nửa dưới"
+        },
+        {
+          "fx": "dot-reveal",
+          "desc": "Khung hình hiện dần từ chấm sáng rồi bật về hình thật"
+        }
+      ],
+      "group": "fx",
+      "pack": 1,
+      "full": true
+    },
+    {
+      "id": "fx-pack-1-01",
+      "name": "FX Pack 1-01 · Camera & ánh sáng",
+      "desc": "10 hiệu ứng miễn phí cho video người nói. Máy quay bám mặt, đẩy vào, tắt đèn, chỉnh màu điện ảnh.",
+      "chips": [
+        "10 hiệu ứng",
+        "Miễn phí",
+        "Bám theo mặt"
+      ],
+      "video": {
+        "main": "videos/modules/fx-pack-1-01.mp4",
+        "audio": true
+      },
+      "credits": [
+        {
+          "name": "claude-video-effects",
+          "url": "https://github.com/Vibha-Ramprakash/claude-video-effects",
+          "by": "Vibha Ramprakash",
+          "license": "MIT",
+          "use": "mã gốc của bộ hiệu ứng"
+        },
+        {
+          "name": "YuNet (opencv_zoo)",
+          "url": "https://github.com/opencv/opencv_zoo",
+          "by": "OpenCV",
+          "license": "MIT",
+          "use": "model dò mặt"
+        },
+        {
+          "name": "MediaPipe",
+          "url": "https://github.com/google-ai-edge/mediapipe",
+          "by": "Google",
+          "license": "Apache-2.0",
+          "use": "model tách người khỏi nền"
+        },
+        {
+          "name": "FFmpeg",
+          "url": "https://github.com/FFmpeg/FFmpeg",
+          "by": "FFmpeg",
+          "license": "LGPL/GPL",
+          "use": "xử lý video, âm thanh"
+        }
+      ],
+      "status": "ready",
+      "skill": {
+        "req": [
+          "Claude Code",
+          "Python 3.12",
+          "FFmpeg"
+        ],
+        "cmd": "/fx-pack-1-01:effects video.mp4",
+        "plugin": "fx-pack-1-01",
+        "note": "Một trong 6 gói tách từ FX Pack 1 (59 hiệu ứng). Gốc từ claude-video-effects (Vibha Ramprakash, MIT); 8 hiệu ứng lấy từ một gói hiệu ứng khác, không phải từ repo gốc."
       },
       "effects": [
         {
@@ -175,11 +479,12 @@
           "extra": true
         }
       ],
-      "group": "fx"
+      "group": "fx",
+      "pack": 1
     },
     {
-      "id": "fx-free-02",
-      "name": "FX Free 02 · Chữ sau đầu",
+      "id": "fx-pack-1-02",
+      "name": "FX Pack 1-02 · Chữ sau đầu",
       "desc": "10 hiệu ứng miễn phí cho video người nói. Chữ khổng lồ nằm sau lưng người nói: rơi xuống, gạch, viết sáp, đèn LED, neon, bìa tạp chí.",
       "chips": [
         "10 hiệu ứng",
@@ -187,7 +492,7 @@
         "Bám theo mặt"
       ],
       "video": {
-        "main": "videos/modules/fx-free-02.mp4",
+        "main": "videos/modules/fx-pack-1-02.mp4",
         "audio": true
       },
       "credits": [
@@ -227,9 +532,9 @@
           "Python 3.12",
           "FFmpeg"
         ],
-        "cmd": "/fx-free-02:effects video.mp4",
-        "plugin": "fx-free-02",
-        "note": "Một trong 6 gói tách từ FX Pack 59 hiệu ứng. Gốc từ claude-video-effects (Vibha Ramprakash, MIT); 8 hiệu ứng lấy từ một gói hiệu ứng khác, không phải từ repo gốc."
+        "cmd": "/fx-pack-1-02:effects video.mp4",
+        "plugin": "fx-pack-1-02",
+        "note": "Một trong 6 gói tách từ FX Pack 1 (59 hiệu ứng). Gốc từ claude-video-effects (Vibha Ramprakash, MIT); 8 hiệu ứng lấy từ một gói hiệu ứng khác, không phải từ repo gốc."
       },
       "effects": [
         {
@@ -275,11 +580,12 @@
           "desc": "Bạn thành bìa tạp chí, tít nằm sau đầu"
         }
       ],
-      "group": "fx"
+      "group": "fx",
+      "pack": 1
     },
     {
-      "id": "fx-free-03",
-      "name": "FX Free 03 · Ảnh & reels quanh đầu",
+      "id": "fx-pack-1-03",
+      "name": "FX Pack 1-03 · Ảnh & reels quanh đầu",
       "desc": "10 hiệu ứng miễn phí cho video người nói. Ảnh, reels, bìa video bay quanh, xếp sau, xoè quạt, lấp tường.",
       "chips": [
         "10 hiệu ứng",
@@ -287,7 +593,7 @@
         "Bám theo mặt"
       ],
       "video": {
-        "main": "videos/modules/fx-free-03.mp4",
+        "main": "videos/modules/fx-pack-1-03.mp4",
         "audio": true
       },
       "credits": [
@@ -327,9 +633,9 @@
           "Python 3.12",
           "FFmpeg"
         ],
-        "cmd": "/fx-free-03:effects video.mp4",
-        "plugin": "fx-free-03",
-        "note": "Một trong 6 gói tách từ FX Pack 59 hiệu ứng. Gốc từ claude-video-effects (Vibha Ramprakash, MIT); 8 hiệu ứng lấy từ một gói hiệu ứng khác, không phải từ repo gốc."
+        "cmd": "/fx-pack-1-03:effects video.mp4",
+        "plugin": "fx-pack-1-03",
+        "note": "Một trong 6 gói tách từ FX Pack 1 (59 hiệu ứng). Gốc từ claude-video-effects (Vibha Ramprakash, MIT); 8 hiệu ứng lấy từ một gói hiệu ứng khác, không phải từ repo gốc."
       },
       "effects": [
         {
@@ -374,11 +680,12 @@
           "extra": true
         }
       ],
-      "group": "fx"
+      "group": "fx",
+      "pack": 1
     },
     {
-      "id": "fx-free-04",
-      "name": "FX Free 04 · Thẻ & danh sách",
+      "id": "fx-pack-1-04",
+      "name": "FX Pack 1-04 · Thẻ & danh sách",
       "desc": "10 hiệu ứng miễn phí cho video người nói. Thẻ giao diện trên video: checklist, công tắc iPhone, hoá đơn, tier list, tin nhắn, comment, nút Follow.",
       "chips": [
         "10 hiệu ứng",
@@ -386,7 +693,7 @@
         "Bám theo mặt"
       ],
       "video": {
-        "main": "videos/modules/fx-free-04.mp4",
+        "main": "videos/modules/fx-pack-1-04.mp4",
         "audio": true
       },
       "credits": [
@@ -426,9 +733,9 @@
           "Python 3.12",
           "FFmpeg"
         ],
-        "cmd": "/fx-free-04:effects video.mp4",
-        "plugin": "fx-free-04",
-        "note": "Một trong 6 gói tách từ FX Pack 59 hiệu ứng. Gốc từ claude-video-effects (Vibha Ramprakash, MIT); 8 hiệu ứng lấy từ một gói hiệu ứng khác, không phải từ repo gốc."
+        "cmd": "/fx-pack-1-04:effects video.mp4",
+        "plugin": "fx-pack-1-04",
+        "note": "Một trong 6 gói tách từ FX Pack 1 (59 hiệu ứng). Gốc từ claude-video-effects (Vibha Ramprakash, MIT); 8 hiệu ứng lấy từ một gói hiệu ứng khác, không phải từ repo gốc."
       },
       "effects": [
         {
@@ -472,11 +779,12 @@
           "desc": "Nút Follow bật lên rồi chuyển thành Following"
         }
       ],
-      "group": "fx"
+      "group": "fx",
+      "pack": 1
     },
     {
-      "id": "fx-free-05",
-      "name": "FX Free 05 · Số liệu & dựng",
+      "id": "fx-pack-1-05",
+      "name": "FX Pack 1-05 · Số liệu & dựng",
       "desc": "9 hiệu ứng miễn phí cho video người nói. Biểu đồ, số đếm, timeline dựng, sóng âm, đồng hồ lật, B-roll.",
       "chips": [
         "9 hiệu ứng",
@@ -484,7 +792,7 @@
         "Bám theo mặt"
       ],
       "video": {
-        "main": "videos/modules/fx-free-05.mp4",
+        "main": "videos/modules/fx-pack-1-05.mp4",
         "audio": true
       },
       "credits": [
@@ -524,9 +832,9 @@
           "Python 3.12",
           "FFmpeg"
         ],
-        "cmd": "/fx-free-05:effects video.mp4",
-        "plugin": "fx-free-05",
-        "note": "Một trong 6 gói tách từ FX Pack 59 hiệu ứng. Gốc từ claude-video-effects (Vibha Ramprakash, MIT); 8 hiệu ứng lấy từ một gói hiệu ứng khác, không phải từ repo gốc."
+        "cmd": "/fx-pack-1-05:effects video.mp4",
+        "plugin": "fx-pack-1-05",
+        "note": "Một trong 6 gói tách từ FX Pack 1 (59 hiệu ứng). Gốc từ claude-video-effects (Vibha Ramprakash, MIT); 8 hiệu ứng lấy từ một gói hiệu ứng khác, không phải từ repo gốc."
       },
       "effects": [
         {
@@ -569,11 +877,12 @@
           "desc": "B-roll ở trên kèm nhãn giá, bạn ở dưới"
         }
       ],
-      "group": "fx"
+      "group": "fx",
+      "pack": 1
     },
     {
-      "id": "fx-free-06",
-      "name": "FX Free 06 · Nhãn & điểm nhấn",
+      "id": "fx-pack-1-06",
+      "name": "FX Pack 1-06 · Nhãn & điểm nhấn",
       "desc": "10 hiệu ứng miễn phí cho video người nói. Băng dính, vẽ nguệch ngoạc, mũi tên dừng hình, con dấu, glitch, mưa phím, tiêu đề, hiện từ chấm.",
       "chips": [
         "10 hiệu ứng",
@@ -581,7 +890,7 @@
         "Bám theo mặt"
       ],
       "video": {
-        "main": "videos/modules/fx-free-06.mp4",
+        "main": "videos/modules/fx-pack-1-06.mp4",
         "audio": true
       },
       "credits": [
@@ -621,9 +930,9 @@
           "Python 3.12",
           "FFmpeg"
         ],
-        "cmd": "/fx-free-06:effects video.mp4",
-        "plugin": "fx-free-06",
-        "note": "Một trong 6 gói tách từ FX Pack 59 hiệu ứng. Gốc từ claude-video-effects (Vibha Ramprakash, MIT); 8 hiệu ứng lấy từ một gói hiệu ứng khác, không phải từ repo gốc."
+        "cmd": "/fx-pack-1-06:effects video.mp4",
+        "plugin": "fx-pack-1-06",
+        "note": "Một trong 6 gói tách từ FX Pack 1 (59 hiệu ứng). Gốc từ claude-video-effects (Vibha Ramprakash, MIT); 8 hiệu ứng lấy từ một gói hiệu ứng khác, không phải từ repo gốc."
       },
       "effects": [
         {
@@ -667,7 +976,293 @@
           "desc": "Khung hình hiện dần từ chấm sáng rồi bật về hình thật"
         }
       ],
-      "group": "fx"
+      "group": "fx",
+      "pack": 1
+    },
+    {
+      "id": "fx-pack-2",
+      "name": "FX Pack 2",
+      "desc": "Đủ 13 hiệu ứng miễn phí từ registry HyperFrames cho video dọc: caption karaoke, chữ giải mã, số đếm, thông báo, terminal, thanh tên, dải tin, máy quay REC, CTA.",
+      "chips": [
+        "13 hiệu ứng",
+        "Miễn phí",
+        "Caption, số liệu, CTA"
+      ],
+      "video": {
+        "main": "videos/modules/fx-pack-2.mp4",
+        "audio": true
+      },
+      "credits": [
+        {
+          "name": "HyperFrames registry",
+          "url": "https://github.com/heygen-com/hyperframes",
+          "by": "HeyGen",
+          "license": "Apache-2.0",
+          "use": "các mẫu hiệu ứng, tải về lúc dựng"
+        },
+        {
+          "name": "Be Vietnam Pro",
+          "url": "https://github.com/bettergui/BeVietnamPro",
+          "by": "Lâm Bảo và cộng sự",
+          "license": "OFL-1.1",
+          "use": "phông chữ tiếng Việt"
+        },
+        {
+          "name": "whisper.cpp",
+          "url": "https://github.com/ggml-org/whisper.cpp",
+          "by": "ggml",
+          "license": "MIT",
+          "use": "lấy mốc từng từ cho caption"
+        },
+        {
+          "name": "FFmpeg",
+          "url": "https://github.com/FFmpeg/FFmpeg",
+          "by": "FFmpeg",
+          "license": "LGPL/GPL",
+          "use": "xử lý video, âm thanh"
+        }
+      ],
+      "status": "ready",
+      "skill": {
+        "req": [
+          "Claude Code",
+          "Node.js",
+          "Python 3",
+          "FFmpeg"
+        ],
+        "cmd": "/fx-pack-2:fx2 video.mp4",
+        "plugin": "fx-pack-2",
+        "note": "Mẫu từ registry HyperFrames (HeyGen, Apache-2.0), tải về lúc dựng; plugin chỉ ghi cách chỉnh chữ, màu, vị trí."
+      },
+      "effects": [
+        {
+          "fx": "dem-so",
+          "desc": "Số đếm tăng: Một con số chạy từ start tới end rồi nảy nhẹ khi dừng."
+        },
+        {
+          "fx": "vong-tien-do",
+          "desc": "Vòng tiến độ: Vòng tròn tô dần tới phần trăm, số ở giữa đếm theo."
+        },
+        {
+          "fx": "caption-karaoke",
+          "desc": "Caption viên thuốc karaoke: Phụ đề trong viên thuốc trắng, từ đang nói đậm lên."
+        },
+        {
+          "fx": "chu-giai-ma",
+          "desc": "Chữ giải mã: Từng cụm chữ nhảy ký tự ngẫu nhiên rồi hiện đúng chữ."
+        },
+        {
+          "fx": "ten-gach-chan",
+          "desc": "Tên gạch chân: Tên trượt lên, vạch màu kéo ngang, chức danh hiện dưới."
+        },
+        {
+          "fx": "ten-co-nhan",
+          "desc": "Tên có nhãn nhỏ: Nhãn màu nhỏ phía trên, tên lớn bên dưới, không có nền."
+        },
+        {
+          "fx": "thong-bao",
+          "desc": "Chồng thông báo: Thẻ thông báo trượt vào và xếp chồng, thẻ mới nhất mở rộng."
+        },
+        {
+          "fx": "terminal",
+          "desc": "Cửa sổ lệnh: Cửa sổ terminal gõ một lệnh, từng dòng kết quả in ra."
+        },
+        {
+          "fx": "cta-cuoi",
+          "desc": "CTA kết video: Câu kêu gọi hiện từng chữ, nút bấm bật lên bên dưới."
+        },
+        {
+          "fx": "may-quay-rec",
+          "desc": "Máy quay REC: Khung máy quay cũ: chấm REC, pin, ngày giờ, bộ đếm."
+        },
+        {
+          "fx": "light-leak",
+          "desc": "Lóe sáng phim: Vệt sáng cam ấm lướt qua khung như phim nhựa bị hở sáng."
+        },
+        {
+          "fx": "song-do-dam",
+          "desc": "Sóng độ đậm: Một làn sóng độ đậm chạy dọc dòng chữ."
+        },
+        {
+          "fx": "dai-tin",
+          "desc": "Dải tin chạy: Thanh tin tức có nhãn LIVE, tiêu đề và dòng chữ chạy ngang."
+        }
+      ],
+      "group": "fx",
+      "pack": 2,
+      "full": true
+    },
+    {
+      "id": "fx-pack-2-01",
+      "name": "FX Pack 2-01",
+      "desc": "10 hiệu ứng miễn phí từ registry HyperFrames: số đếm tăng, vòng tiến độ, caption viên thuốc karaoke, chữ giải mã, tên gạch chân, tên có nhãn nhỏ, chồng thông báo, cửa sổ lệnh, cta kết video, máy quay rec.",
+      "chips": [
+        "10 hiệu ứng",
+        "Miễn phí",
+        "HyperFrames"
+      ],
+      "video": {
+        "main": "videos/modules/fx-pack-2-01.mp4",
+        "audio": true
+      },
+      "credits": [
+        {
+          "name": "HyperFrames registry",
+          "url": "https://github.com/heygen-com/hyperframes",
+          "by": "HeyGen",
+          "license": "Apache-2.0",
+          "use": "các mẫu hiệu ứng, tải về lúc dựng"
+        },
+        {
+          "name": "Be Vietnam Pro",
+          "url": "https://github.com/bettergui/BeVietnamPro",
+          "by": "Lâm Bảo và cộng sự",
+          "license": "OFL-1.1",
+          "use": "phông chữ tiếng Việt"
+        },
+        {
+          "name": "whisper.cpp",
+          "url": "https://github.com/ggml-org/whisper.cpp",
+          "by": "ggml",
+          "license": "MIT",
+          "use": "lấy mốc từng từ cho caption"
+        },
+        {
+          "name": "FFmpeg",
+          "url": "https://github.com/FFmpeg/FFmpeg",
+          "by": "FFmpeg",
+          "license": "LGPL/GPL",
+          "use": "xử lý video, âm thanh"
+        }
+      ],
+      "status": "ready",
+      "skill": {
+        "req": [
+          "Claude Code",
+          "Node.js",
+          "Python 3",
+          "FFmpeg"
+        ],
+        "cmd": "/fx-pack-2-01:fx2 video.mp4",
+        "plugin": "fx-pack-2-01",
+        "note": "Một phần của FX Pack 2 (13 hiệu ứng). Mẫu từ registry HyperFrames (HeyGen, Apache-2.0), tải về lúc dựng; plugin chỉ ghi cách chỉnh chữ, màu, vị trí."
+      },
+      "effects": [
+        {
+          "fx": "dem-so",
+          "desc": "Số đếm tăng: Một con số chạy từ start tới end rồi nảy nhẹ khi dừng."
+        },
+        {
+          "fx": "vong-tien-do",
+          "desc": "Vòng tiến độ: Vòng tròn tô dần tới phần trăm, số ở giữa đếm theo."
+        },
+        {
+          "fx": "caption-karaoke",
+          "desc": "Caption viên thuốc karaoke: Phụ đề trong viên thuốc trắng, từ đang nói đậm lên."
+        },
+        {
+          "fx": "chu-giai-ma",
+          "desc": "Chữ giải mã: Từng cụm chữ nhảy ký tự ngẫu nhiên rồi hiện đúng chữ."
+        },
+        {
+          "fx": "ten-gach-chan",
+          "desc": "Tên gạch chân: Tên trượt lên, vạch màu kéo ngang, chức danh hiện dưới."
+        },
+        {
+          "fx": "ten-co-nhan",
+          "desc": "Tên có nhãn nhỏ: Nhãn màu nhỏ phía trên, tên lớn bên dưới, không có nền."
+        },
+        {
+          "fx": "thong-bao",
+          "desc": "Chồng thông báo: Thẻ thông báo trượt vào và xếp chồng, thẻ mới nhất mở rộng."
+        },
+        {
+          "fx": "terminal",
+          "desc": "Cửa sổ lệnh: Cửa sổ terminal gõ một lệnh, từng dòng kết quả in ra."
+        },
+        {
+          "fx": "cta-cuoi",
+          "desc": "CTA kết video: Câu kêu gọi hiện từng chữ, nút bấm bật lên bên dưới."
+        },
+        {
+          "fx": "may-quay-rec",
+          "desc": "Máy quay REC: Khung máy quay cũ: chấm REC, pin, ngày giờ, bộ đếm."
+        }
+      ],
+      "group": "fx",
+      "pack": 2
+    },
+    {
+      "id": "fx-pack-2-02",
+      "name": "FX Pack 2-02",
+      "desc": "3 hiệu ứng miễn phí từ registry HyperFrames: lóe sáng phim, sóng độ đậm, dải tin chạy.",
+      "chips": [
+        "3 hiệu ứng",
+        "Miễn phí",
+        "HyperFrames"
+      ],
+      "video": {
+        "main": "videos/modules/fx-pack-2-02.mp4",
+        "audio": true
+      },
+      "credits": [
+        {
+          "name": "HyperFrames registry",
+          "url": "https://github.com/heygen-com/hyperframes",
+          "by": "HeyGen",
+          "license": "Apache-2.0",
+          "use": "các mẫu hiệu ứng, tải về lúc dựng"
+        },
+        {
+          "name": "Be Vietnam Pro",
+          "url": "https://github.com/bettergui/BeVietnamPro",
+          "by": "Lâm Bảo và cộng sự",
+          "license": "OFL-1.1",
+          "use": "phông chữ tiếng Việt"
+        },
+        {
+          "name": "whisper.cpp",
+          "url": "https://github.com/ggml-org/whisper.cpp",
+          "by": "ggml",
+          "license": "MIT",
+          "use": "lấy mốc từng từ cho caption"
+        },
+        {
+          "name": "FFmpeg",
+          "url": "https://github.com/FFmpeg/FFmpeg",
+          "by": "FFmpeg",
+          "license": "LGPL/GPL",
+          "use": "xử lý video, âm thanh"
+        }
+      ],
+      "status": "ready",
+      "skill": {
+        "req": [
+          "Claude Code",
+          "Node.js",
+          "Python 3",
+          "FFmpeg"
+        ],
+        "cmd": "/fx-pack-2-02:fx2 video.mp4",
+        "plugin": "fx-pack-2-02",
+        "note": "Một phần của FX Pack 2 (13 hiệu ứng). Mẫu từ registry HyperFrames (HeyGen, Apache-2.0), tải về lúc dựng; plugin chỉ ghi cách chỉnh chữ, màu, vị trí."
+      },
+      "effects": [
+        {
+          "fx": "light-leak",
+          "desc": "Lóe sáng phim: Vệt sáng cam ấm lướt qua khung như phim nhựa bị hở sáng."
+        },
+        {
+          "fx": "song-do-dam",
+          "desc": "Sóng độ đậm: Một làn sóng độ đậm chạy dọc dòng chữ."
+        },
+        {
+          "fx": "dai-tin",
+          "desc": "Dải tin chạy: Thanh tin tức có nhãn LIVE, tiêu đề và dòng chữ chạy ngang."
+        }
+      ],
+      "group": "fx",
+      "pack": 2
     },
     {
       "id": "chuan-hoa-giong",
@@ -1061,8 +1656,8 @@
   },
   "fxPro": [
     {
-      "id": "fx-pro-01",
-      "name": "FX Pro 01 · FX Reel",
+      "id": "fx-pack-3",
+      "name": "FX Pack 3 · FX Reel",
       "count": "20 hiệu ứng",
       "desc": "Đọc liền 20 tên hiệu ứng trong 20 giây, mỗi hiệu ứng chạy ngay trên người nói: con trỏ AI, nhân bản, vòng chữ, tờ tiền, tan biến…"
     },

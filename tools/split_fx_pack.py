@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
-"""Tách plugin fx-pack (59 hiệu ứng, nguồn) thành 6 gói free fx-free-01..06, mỗi gói ~10 hiệu ứng theo chủ đề.
+"""Tách các gói FX thành gói nhỏ ~10 hiệu ứng (gói đủ vẫn giữ):
+  fx-pack-1 (59, claude-video-effects) -> fx-pack-1-01..06 theo chủ đề
+  fx-pack-2 (13, registry HyperFrames) -> fx-pack-2-01 (10 đầu), fx-pack-2-02 (3 còn lại)
 
-Nguồn duy nhất vẫn là plugins/fx-pack/skills/effects: sửa engine ở đó rồi chạy lại file này.
+Nguồn duy nhất vẫn là plugins/fx-pack-1/skills/effects: sửa engine ở đó rồi chạy lại file này.
 Mỗi gói là bản chép đủ engine (git lưu file trùng 1 lần), thêm pack.json để fx_vi.py chỉ mở các hiệu ứng của gói.
 Dùng: python3 tools/split_fx_pack.py
 """
@@ -9,7 +11,7 @@ import json, os, re, shutil
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
-SRC = REPO / 'plugins/fx-pack/skills/effects'
+SRC = REPO / 'plugins/fx-pack-1/skills/effects'
 SKIP = {'.venv', '__pycache__', '.DS_Store', 'sfx', 'SKILL.md', 'README.md'}
 
 PACKS = [
@@ -68,21 +70,21 @@ def looks_block():
 
 SKILL_TMPL = '''---
 name: effects
-description: FX Free {num} · {title}. Add one of {n} talking-head video effects: {names}. Effects track the speaker's face and can sit behind their head. Use when the user types /effects, names one of these effects, or asks for this kind of effect. Tiếng Việt: "hiệu ứng", {vi}.
+description: FX Pack 1-{num} · {title}. Add one of {n} talking-head video effects: {names}. Effects track the speaker's face and can sit behind their head. Use when the user types /effects, names one of these effects, or asks for this kind of effect. Tiếng Việt: "hiệu ứng", {vi}.
 ---
 
 > Đọc `README.md` cạnh file này trước (lệnh chạy, phông tiếng Việt, vùng an toàn).
 
-# FX Free {num} · {title} ({n} hiệu ứng)
+# FX Pack 1-{num} · {title} ({n} hiệu ứng)
 
-Gói này nằm trong bộ FX Free của Claude with Duy (6 gói, 59 hiệu ứng, miễn phí). Gói này chỉ có {n} hiệu ứng bên dưới.
+Gói này nằm trong bộ FX Pack 1 của Claude with Duy (59 hiệu ứng miễn phí, chia 6 gói; gói đủ 59 là `fx-pack-1`). Gói này chỉ có {n} hiệu ứng bên dưới.
 Người dùng nhắc tới hiệu ứng không có ở đây: nói nó nằm trong gói nào (xem cuối file) và cách cài, đừng cố làm thay bằng hiệu ứng khác.
 
 The user is usually not technical. Keep replies short and friendly, do the work for them, and never ask them to run commands themselves.
 All paths below are relative to this skill's folder: `${{CLAUDE_SKILL_DIR}}`. Use the absolute path in commands.
 
 ## 1. First run: set up (once)
-Run `bash "${{CLAUDE_SKILL_DIR}}/scripts/setup.sh"`. Its last line is `READY <python>` (the first time takes 1 to 3 minutes; every FX Free pack shares this setup, so later packs are instant). Call that python `PY` and use it for every command below.
+Run `bash "${{CLAUDE_SKILL_DIR}}/scripts/setup.sh"`. Its last line is `READY <python>` (the first time takes 1 to 3 minutes; every FX pack shares this setup, so later packs are instant). Call that python `PY` and use it for every command below.
 - `NEED_FFMPEG`: install it for them. On a Mac: `brew install ffmpeg` (if `brew` is missing, tell them to install Homebrew from brew.sh first). On Windows: `winget install ffmpeg`.
 - `NEED_PYTHON`: install Python 3.12 (Mac: `brew install python@3.12`, Windows: `winget install Python.Python.3.12`), then run setup again.
 
@@ -118,9 +120,9 @@ Always run `custom/fx_vi.py` (Vietnamese text works), never `scripts/fx.py` dire
 - Zoom never goes past 2x, so the video stays sharp.
 - This skill adds visuals only. Sound effects and captions are up to the user.
 
-## Các gói FX Free khác
+## Các gói FX Pack 1 khác
 {others}
-Cài thêm gói: `/plugin install fx-free-0N@claudewithduy` (đã thêm marketplace `duynguyeenx96/claudewithduy`).
+Cài thêm gói: `/plugin install fx-pack-1-0N@claudewithduy`, hoặc cả 59 hiệu ứng: `/plugin install fx-pack-1@claudewithduy` (đã thêm marketplace `duynguyeenx96/claudewithduy`).
 '''
 
 VI = {'01': '"zoom vào mặt", "tắt đèn chỉ còn người", "chỉnh màu điện ảnh"', '02': '"chữ sau lưng", "chữ to sau đầu", "chữ neon", "bìa tạp chí"',
@@ -132,36 +134,68 @@ def main():
     rows, looks = source_rows(), looks_block()
     allnames = [n for p in PACKS for n in p[3]]
     assert len(allnames) == len(set(allnames)) == 59, len(allnames)
-    where = {n: f'fx-free-{p[0]}' for p in PACKS for n in p[3]}
+    where = {n: f'fx-pack-1-{p[0]}' for p in PACKS for n in p[3]}
     lic = (SRC / 'LICENSE').read_text(encoding='utf-8')
     for num, title, blurb, names in PACKS:
-        dst = REPO / f'plugins/fx-free-{num}'
+        dst = REPO / f'plugins/fx-pack-1-{num}'
         if dst.exists(): shutil.rmtree(dst)
         sk = dst / 'skills/effects'
         shutil.copytree(SRC, sk, ignore=lambda d, fs: [f for f in fs if f in SKIP])
-        (sk / 'pack.json').write_text(json.dumps({'name': f'fx-free-{num}', 'title': title, 'effects': names,
+        (sk / 'pack.json').write_text(json.dumps({'name': f'fx-pack-1-{num}', 'title': title, 'effects': names,
                                                   'others': {k: v for k, v in where.items() if k not in names}},
                                                  ensure_ascii=False, indent=1), encoding='utf-8')
         tbl = '\n'.join(f'| {i} | `{n}` | {rows[n][0]} | {rows[n][1]} |' for i, n in enumerate(names, 1))
         lk = [it for n in names for it in looks.get(n, [])]
         lkb = ('\n**Named looks** (same effect, a fancier look; they don\'t add to the count):\n' + '\n'.join(f'- {x}' for x in lk) + '\n') if lk else ''
-        others = '\n'.join(f'- `fx-free-{p[0]}` · {p[1]}: ' + ', '.join(p[3]) for p in PACKS if p[0] != num)
+        others = '\n'.join(f'- `fx-pack-1-{p[0]}` · {p[1]}: ' + ', '.join(p[3]) for p in PACKS if p[0] != num)
         (sk / 'SKILL.md').write_text(SKILL_TMPL.format(num=num, title=title, n=len(names), names=', '.join(names), vi=VI[num],
                                                        ex=names[0], rows=tbl, looks=lkb, others=others), encoding='utf-8')
         readme = (SRC / 'README.md').read_text(encoding='utf-8')
-        readme = re.sub(r'^# .*$', f'# FX Free {num} · {title} ({len(names)} hiệu ứng)', readme, count=1, flags=re.M)
-        readme = readme.replace('Nguồn: skill', f'Một trong 6 gói tách từ FX Pack (59 hiệu ứng). Gói này: {", ".join(names)}.\n\nNguồn: skill', 1)
+        readme = re.sub(r'^# .*$', f'# FX Pack 1-{num} · {title} ({len(names)} hiệu ứng)', readme, count=1, flags=re.M)
+        readme = readme.replace('Nguồn: skill', f'Một trong 6 gói tách từ FX Pack 1 (59 hiệu ứng, gói đủ là `fx-pack-1`). Gói này: {", ".join(names)}.\n\nNguồn: skill', 1)
         (sk / 'README.md').write_text(readme, encoding='utf-8')
         (dst / '.claude-plugin').mkdir(parents=True)
         (dst / '.claude-plugin/plugin.json').write_text(json.dumps({
-            'name': f'fx-free-{num}', 'version': '1.0.0',
-            'description': f'FX Free {num} · {title}: {len(names)} hiệu ứng cho video người nói. {blurb}.',
+            'name': f'fx-pack-1-{num}', 'version': '1.0.0',
+            'description': f'FX Pack 1-{num} · {title}: {len(names)} hiệu ứng cho video người nói. {blurb}.',
             'author': {'name': 'Claude with Duy'},
-            'homepage': f'https://github.com/duynguyeenx96/claudewithduy/tree/main/plugins/fx-free-{num}',
+            'homepage': f'https://github.com/duynguyeenx96/claudewithduy/tree/main/plugins/fx-pack-1-{num}',
             'repository': 'https://github.com/duynguyeenx96/claudewithduy', 'license': 'MIT'}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
         assert (sk / 'LICENSE').read_text(encoding='utf-8') == lic
-        print(f'fx-free-{num}: {len(names)} hiệu ứng')
+        print(f'fx-pack-1-{num}: {len(names)} hiệu ứng')
+
+
+FX2 = REPO / 'plugins/fx-pack-2'
+
+
+def split_fx2(size=10):
+    import copy
+    rec = json.loads((FX2 / 'skills/fx2/recipes.json').read_text(encoding='utf-8'))
+    names = list(rec['recipes'])
+    chunks = [names[i:i + size] for i in range(0, len(names), size)]
+    skill = (FX2 / 'skills/fx2/SKILL.md').read_text(encoding='utf-8')
+    for k, part in enumerate(chunks, 1):
+        num = f'{k:02d}'; name = f'fx-pack-2-{num}'; dst = REPO / f'plugins/{name}'
+        if dst.exists(): shutil.rmtree(dst)
+        shutil.copytree(FX2, dst, ignore=lambda d, fs: [f for f in fs if f in {'node_modules', '__pycache__', '.DS_Store'}])
+        r2 = copy.deepcopy(rec); r2['recipes'] = {n: rec['recipes'][n] for n in part}
+        (dst / 'skills/fx2/recipes.json').write_text(json.dumps(r2, ensure_ascii=False, indent=1) + '\n', encoding='utf-8')
+        sk = skill
+        sk = re.sub(r'^\| `([\w-]+)` \|.*\n', lambda m: m.group(0) if m.group(1) in part else '', sk, flags=re.M)
+        sk = sk.replace('## Hiệu ứng (13, đợt 1)', f'## Hiệu ứng ({len(part)} trong 13)')
+        others = [n for n in names if n not in part]
+        sk = sk.replace('Danh sách đầy đủ, mô tả và cách ánh xạ nằm ở `recipes.json`.',
+                        f'Gói {name} chỉ có {len(part)} hiệu ứng trên. Các hiệu ứng khác ({", ".join(others)}) nằm ở gói khác của FX Pack 2; '
+                        f'cả 13 hiệu ứng: `/plugin install fx-pack-2@claudewithduy`. Mô tả và cách ánh xạ nằm ở `recipes.json`.')
+        sk = re.sub(r'^description: (.*)$', lambda m: f'description: FX Pack 2-{num} ({len(part)} hiệu ứng: {", ".join(part)}). ' + m.group(1), sk, count=1, flags=re.M)
+        (dst / 'skills/fx2/SKILL.md').write_text(sk, encoding='utf-8')
+        pj = json.loads((FX2 / '.claude-plugin/plugin.json').read_text(encoding='utf-8'))
+        pj.update(name=name, description=f'FX Pack 2-{num}: {len(part)} hiệu ứng HyperFrames miễn phí cho A-roll dọc ({", ".join(part)}).',
+                  homepage=f'https://github.com/duynguyeenx96/claudewithduy/tree/main/plugins/{name}')
+        (dst / '.claude-plugin/plugin.json').write_text(json.dumps(pj, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+        print(f'{name}: {len(part)} hiệu ứng')
 
 
 if __name__ == '__main__':
     main()
+    split_fx2()

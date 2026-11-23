@@ -1,0 +1,11 @@
+{
+  "name": "fx-pack-1-05",
+  "version": "1.0.0",
+  "description": "FX Pack 1-05 · Số liệu & dựng: 9 hiệu ứng cho video người nói. Biểu đồ, số đếm, timeline dựng, sóng âm, đồng hồ lật, B-roll.",
+  "author": {
+    "name": "Claude with Duy"
+  },
+  "homepage": "https://github.com/duynguyeenx96/claudewithduy/tree/main/plugins/fx-pack-1-05",
+  "repository": "https://github.com/duynguyeenx96/claudewithduy",
+  "license": "MIT"
+}

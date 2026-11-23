@@ -1,0 +1,10 @@
+{
+  "name": "fx2-project",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npx --yes hyperframes@0.9.69 preview",
+    "check": "npx --yes hyperframes@0.9.69 check",
+    "render": "npx --yes hyperframes@0.9.69 render"
+  }
+}
