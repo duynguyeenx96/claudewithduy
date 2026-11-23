@@ -72,7 +72,7 @@ const cfg = { prods: priced, apps: { ios: bankApps.ios, android: bankApps.androi
             <div class="hl"><dt>Nội dung</dt><dd><b data-f="code"></b><button type="button" class="cp" data-copy="" data-k="code">Chép</button></dd></div>
           </dl>
           <p class="m small">Chuyển tay thì nhớ ghi đúng nội dung <b data-f="code"></b>, không thì hệ thống không nhận ra đơn.</p>
-          <p class="wait" id="wait" aria-live="polite"><span class="dot"></span>Đang chờ tiền vào…</p>
+          <p class="wait" id="wait" aria-live="polite"><span class="dot"></span>Đang xác nhận giao dịch...</p>
           <p class="m small" id="slow" hidden>Lâu quá chưa thấy? Tiền vẫn được ghi lại. Trả lời email biên nhận hoặc nhắn <a href={zalo.link}>nhóm Zalo</a>, mình kiểm tra tay.</p>
           <button type="button" class="link" id="reset">Sửa thông tin</button>
         </div>
@@ -91,8 +91,11 @@ const cfg = { prods: priced, apps: { ios: bankApps.ios, android: bankApps.androi
       </div>
     </section>
 
-    <section id="dieu-kien" class="terms" hidden>
-      <h2 class="ct">Chuẩn bị &amp; điều kiện</h2>
+    <div class="modal" id="dieu-kien" hidden>
+    <div class="modal-bg" data-tclose></div>
+    <section class="terms" role="dialog" aria-modal="true" aria-labelledby="terms-t">
+      <button type="button" class="x tx" data-tclose aria-label="Đóng">×</button>
+      <h2 class="ct" id="terms-t">Chuẩn bị &amp; điều kiện</h2>
       <h3>Cần chuẩn bị</h3>
       <ul>
         <li>Máy Mac hoặc Windows đã cài Claude Code, dùng gói Claude Pro trở lên.</li>
@@ -106,8 +109,9 @@ const cfg = { prods: priced, apps: { ios: bankApps.ios, android: bankApps.androi
         <li>Link tải dùng được 7 ngày, tối đa 5 lần. Hết hạn thì trả lời email biên nhận để lấy link mới.</li>
         <li>Kẹt chỗ nào cứ hỏi trong nhóm Zalo hoặc trả lời email biên nhận.</li>
       </ul>
-      <button type="button" class="btn sm" id="close-terms">Đã hiểu</button>
+      <button type="button" class="btn solid sm" data-tclose>Đã hiểu</button>
     </section>
+    </div>
 
     <noscript><p class="lead">Trang này cần bật JavaScript để tạo mã QR.</p></noscript>
   </div>
@@ -195,11 +199,12 @@ const cfg = { prods: priced, apps: { ios: bankApps.ios, android: bankApps.androi
     $('open-banks').addEventListener('click', () => { renderBanks(); ($('bank-q') as HTMLInputElement).value = ''; $('sheet').hidden = false; document.body.style.overflow = 'hidden'; });
     document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', closeSheet));
     $('bank-q').addEventListener('input', e => renderBanks((e.target as HTMLInputElement).value));
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeSheet(); closeTerms(); } });
 
     // Điều kiện: mở ngay dưới form, đóng thì quay lại ô đồng ý.
-    $('open-terms').addEventListener('click', e => { e.preventDefault(); $('dieu-kien').hidden = false; $('dieu-kien').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
-    $('close-terms').addEventListener('click', () => { $('dieu-kien').hidden = true; $('ag').scrollIntoView({ block: 'center' }); });
+    const closeTerms = () => { if ($('dieu-kien').hidden) return; $('dieu-kien').hidden = true; document.body.style.overflow = ''; $('ag').focus(); };
+    $('open-terms').addEventListener('click', e => { e.preventDefault(); $('dieu-kien').hidden = false; document.body.style.overflow = 'hidden'; (document.querySelector('.terms .btn') as HTMLElement).focus(); });
+    document.querySelectorAll('[data-tclose]').forEach(b => b.addEventListener('click', closeTerms));
 
     if (!p) show('s-closed');
     else {
@@ -290,10 +295,16 @@ const cfg = { prods: priced, apps: { ios: bankApps.ios, android: bankApps.androi
     .lockbig{color:var(--mute);margin-bottom:8px}
     .zl{display:flex;gap:16px;align-items:center;margin-top:32px;padding:16px;border:1px solid var(--line);border-radius:10px;max-width:440px}
     .zl img{background:#fff;border-radius:4px;flex:none}
-    .terms{margin-top:48px;max-width:720px;padding:28px;border:1px solid var(--line);border-radius:12px;background:var(--bg2);scroll-margin-top:80px}
+    .modal{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:16px}
+    .modal[hidden]{display:none}
+    .modal-bg{position:absolute;inset:0;background:rgba(0,0,0,.45)}
+    .terms{position:relative;width:100%;max-width:640px;max-height:calc(100vh - 32px);overflow-y:auto;box-sizing:border-box;padding:32px 28px 28px;border-radius:16px;background:#fffdf8;box-shadow:0 20px 50px rgba(0,0,0,.2)}
+    @media (max-width:520px){.terms{padding:24px 18px 20px}}
+    .terms .ct{margin-top:0;padding-right:32px}
+    .terms .tx{position:absolute;top:14px;right:16px}
     .terms h3{font-size:16px;margin:20px 0 8px}
     .terms ul{margin:0;padding-left:20px;display:grid;gap:6px;color:var(--ink2);font-size:15px}
-    .terms .btn{margin-top:20px}
+    .terms .btn{margin-top:24px;width:100%;text-align:center}
     .sheet{position:fixed;inset:0;z-index:50}
     .sheet-bg{position:absolute;inset:0;background:rgba(0,0,0,.45)}
     .sheet-box{position:absolute;left:0;right:0;bottom:0;max-height:82vh;display:flex;flex-direction:column;background:var(--bg);border-radius:16px 16px 0 0;padding:16px 16px max(16px,env(safe-area-inset-bottom))}
