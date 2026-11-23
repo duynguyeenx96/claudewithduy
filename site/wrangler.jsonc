@@ -13,10 +13,16 @@
   "d1_databases": [
     { "binding": "DB", "database_name": "claudewithduy-shop", "database_id": "4658b351-0378-4e2b-82f4-6a5516fd6f49" }
   ],
+  "r2_buckets": [
+    { "binding": "FILES", "bucket_name": "claudewithduy-shop-files" }
+  ],
   "vars": {
     "SALES_OPEN": "0",
+    "DOWNLOADS_OPEN": "1",
     "SEPAY_ACC": "06516324401",
-    "SEPAY_BANK": "TPBank"
+    "SEPAY_BANK": "TPBank",
+    "SITE_URL": "https://claudewithduy.io.vn",
+    "MAIL_FROM": "Duy · Claude with Duy <don@claudewithduy.io.vn>"
   }
-  // Secret (wrangler secret put): SEPAY_WEBHOOK_KEY
+  // Secret (wrangler secret put): SEPAY_WEBHOOK_KEY, RESEND_API_KEY, NOTIFY_EMAIL
 }

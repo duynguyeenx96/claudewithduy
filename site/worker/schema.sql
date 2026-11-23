@@ -4,7 +4,8 @@ CREATE TABLE IF NOT EXISTS orders (
   pack TEXT NOT NULL,
   amount INTEGER NOT NULL,
   email TEXT,
-  status TEXT NOT NULL DEFAULT 'pending',  -- pending | paid (đã nhận tiền, chờ giao tay) | delivered
+  secret TEXT,                    -- trả cho trang thanh toán; chỉ ai có nó mới thấy link tải
+  status TEXT NOT NULL DEFAULT 'pending',  -- pending | paid (đã nhận tiền) | delivered (đã gửi email)
   note TEXT,
   created_at TEXT NOT NULL DEFAULT (datetime('now')),
   paid_at TEXT,
@@ -19,4 +20,12 @@ CREATE TABLE IF NOT EXISTS payments (
   content TEXT,
   raw TEXT,
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+-- Link tải: hết hạn sau 7 ngày, tối đa 5 lượt. Gửi lại link = thêm dòng mới cho cùng đơn.
+CREATE TABLE IF NOT EXISTS downloads (
+  token TEXT PRIMARY KEY,
+  code TEXT NOT NULL,
+  expires_at TEXT NOT NULL,
+  uses INTEGER NOT NULL DEFAULT 0,
+  max_uses INTEGER NOT NULL DEFAULT 5
 );
