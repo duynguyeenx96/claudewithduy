@@ -3,8 +3,9 @@ import '../styles/global.css';
 import { u } from '../lib';
 import SocialFab from '../components/SocialFab.astro';
 import DonateQR from '../components/DonateQR.astro';
-interface Props { title: string; description: string; current?: 'module' | 'template' | 'fx' | 'install'; image?: string }
-const { title, description, current, image } = Astro.props;
+interface Props { title: string; description: string; current?: 'module' | 'template' | 'fx' | 'install'; image?: string; noindex?: boolean; bare?: boolean }
+// bare: bỏ nút nổi và QR ủng hộ (trang mua: tránh đè nút Chép và quét nhầm QR ủng hộ thay vì QR đơn).
+const { title, description, current, image, noindex, bare } = Astro.props;
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
 const ogImage = image && Astro.site ? new URL(u(image), Astro.site).href : undefined;
 ---
@@ -15,6 +16,7 @@ const ogImage = image && Astro.site ? new URL(u(image), Astro.site).href : undef
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{title}</title>
   <meta name="description" content={description} />
+  {noindex && <meta name="robots" content="noindex" />}
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:type" content="website" />
@@ -43,8 +45,8 @@ const ogImage = image && Astro.site ? new URL(u(image), Astro.site).href : undef
     </div>
   </header>
   <main><slot /></main>
-  <SocialFab />
-  <DonateQR />
+  {!bare && <SocialFab />}
+  {!bare && <DonateQR />}
   <footer class="foot"><div class="wrap"><span>Claude with Duy</span><slot name="foot" /></div></footer>
   <script>
     // Hiện dần khi cuộn tới

@@ -3,6 +3,9 @@ import Base from '../layouts/Base.astro';
 import Cmd from '../components/Cmd.astro';
 import SoundBtn from '../components/SoundBtn.astro';
 import { fxFree, fxPro, u, pad, pluginInstall, marketplaceAdd } from '../lib';
+import { PRODUCTS } from '../../worker/products.js';
+// Gói có giá trong worker/products.js thì hiện nút Mua, còn lại giữ khoá + Chưa mở.
+const price = (id: string) => (PRODUCTS as Record<string, { price: number | null }>)[id]?.price ?? null;
 const total = fxFree.length + fxPro.length;
 const full = fxFree.filter(m => (m as any).full);
 const nFx = full.reduce((a, m) => a + (m.effects?.length ?? 0), 0);
@@ -55,12 +58,14 @@ const groups = full.map(f => ({ f, subs: fxFree.filter(m => (m as any).pack === 
             <article data-kind="pro">
               <div class="vframe card pro-card">
                 <span class="big-lock"><svg class="lock" viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path fill="currentColor" d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm-3 8V7a3 3 0 1 1 6 0v3H9Z"/></svg></span>
-                <span class="mark pro"><svg class="lock" viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path fill="currentColor" d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm-3 8V7a3 3 0 1 1 6 0v3H9Z"/></svg>Chưa mở</span>
+                {!price(p.id) && <span class="mark pro"><svg class="lock" viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path fill="currentColor" d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm-3 8V7a3 3 0 1 1 6 0v3H9Z"/></svg>Chưa mở</span>}
               </div>
               <div class="label" style="font-size:11px">{p.count}</div>
               <h4>{p.name}</h4>
               <p class="desc">{p.desc}</p>
-              <p class="note">Đang quay và chỉnh, chưa mở.</p>
+              {price(p.id)
+                ? <a class="btn solid sm buy" href={u(`mua/?goi=${p.id}`)}>Mua · {price(p.id)!.toLocaleString('vi-VN')}đ</a>
+                : <p class="note">Đang quay và chỉnh, chưa mở.</p>}
             </article>
           ))}
         </div>
@@ -114,6 +119,7 @@ const groups = full.map(f => ({ f, subs: fxFree.filter(m => (m as any).pack === 
     article.full h4{color:var(--accent)}
     .lk{display:inline-flex;align-items:center;gap:6px}
     .mark.pro{display:inline-flex;align-items:center;gap:5px;background:var(--ink);color:var(--bg)}
+    .buy{align-self:flex-start}
     .inl{font-family:var(--mono);font-size:13px;color:var(--accent);background:var(--bg2);padding:1px 6px;border-radius:3px}
   </style>
 </Base>

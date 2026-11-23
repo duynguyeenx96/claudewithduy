@@ -9,6 +9,6 @@ export default defineConfig({
   trailingSlash: 'ignore',
   integrations: [
     // Sinh sitemap-index.xml + sitemap-0.xml cho Google/Bing (bỏ trang 404).
-    sitemap({ filter: (page) => !/\/404\/?$/.test(page) }),
+    sitemap({ filter: (page) => !/\/(404|mua)\/?$/.test(page) }),
   ],
 });
