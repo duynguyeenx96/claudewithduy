@@ -67,8 +67,8 @@ const firstPlugin = modules.find(m => m.skill?.plugin)?.skill?.plugin ?? 'fx-pac
             <div class="num">{pad(i + 1)}</div>
             <div>
               <h3><a href={u('fx/')}>FX Pack</a></h3>
-              <p class="desc">{nFx} hiệu ứng miễn phí cho video người nói, trong {fxFull.length} bộ: {fxFull.map(f => `${f.name} (${f.effects?.length})`).join(', ')}. Mỗi bộ có gói đủ và các gói nhỏ khoảng 10 hiệu ứng. Thêm {fxPro.length} gói đang làm, sẽ bán sau.</p>
-              <div class="chips"><a class="chip chip-link" href={u('fx/?loai=free')}>{fxFree.length} gói miễn phí →</a><span class="chip">{nFx} hiệu ứng</span><span class="chip">{fxPro.length} gói bán sau</span></div>
+              <p class="desc">{nFx} hiệu ứng miễn phí cho video người nói, trong {fxFull.length} bộ: {fxFull.map(f => `${f.name} (${f.effects?.length})`).join(', ')}. Mỗi bộ có gói đủ và các gói nhỏ khoảng 10 hiệu ứng. Thêm {fxPro.length} gói đang làm, chưa mở.</p>
+              <div class="chips"><a class="chip chip-link" href={u('fx/?loai=free')}>{fxFree.length} gói miễn phí →</a><span class="chip">{nFx} hiệu ứng</span><span class="chip">{fxPro.length} gói chưa mở</span></div>
               <ul class="fx-packs">{fxFull.map(f => <li><a href={u(`module/${f.id}/`)}>{f.name}</a> · {fxFree.filter(m => (m as any).pack === (f as any).pack && !(m as any).full).length} gói nhỏ</li>)}</ul>
               <p style="margin:16px 0 0;font-size:14px"><a href={u('fx/')}>Xem tất cả gói →</a></p>
             </div>
