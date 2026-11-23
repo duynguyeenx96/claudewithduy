@@ -84,13 +84,13 @@ const showDonate = hasPublic(donate.qr);
   .fab-title{font:500 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--bg);background:var(--ink);padding:6px 10px;border-radius:999px}
   .fab-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
   .fab-list a{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none}
-  .fab-name{font:500 14px/1 var(--sans);background:var(--bg);border:1px solid var(--line2);padding:8px 12px;border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-  .fab-ico{width:60px;height:60px;border-radius:50%;display:grid;place-items:center;background:var(--bg);border:1.5px solid var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.16);transition:background .15s ease,color .15s ease,transform .15s ease}
+  .fab-name{display:none;font:500 14px/1 var(--sans);background:var(--bg);border:1px solid var(--line2);padding:8px 12px;border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,.08);white-space:nowrap}
+  .fab-ico{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:var(--bg);border:1.5px solid var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.16);transition:background .15s ease,color .15s ease,transform .15s ease}
   .fab-list a:hover .fab-ico{background:var(--ink);color:var(--bg);transform:scale(1.06)}
   .fab-list a:focus-visible{outline:none}
   .fab-list a:focus-visible .fab-ico{outline:2px solid var(--accent);outline-offset:3px}
   /* vạch ngăn + nút Zalo hỗ trợ */
-  .fab-hr{width:36px;margin:2px 12px 2px 0;border:0;border-top:1.5px solid var(--line2)}
+  .fab-hr{width:32px;margin:2px 8px 2px 0;border:0;border-top:1.5px solid var(--line2)}
   .fab-x{position:relative}
   .fab-x>a,.fab-x>button{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none;background:none;border:0;padding:0;font:inherit;cursor:pointer}
   .fab-x>a:hover .fab-ico,.fab-x>button:hover .fab-ico,.fab-dn.open .fab-ico{background:var(--ink);color:var(--bg);transform:scale(1.06)}
@@ -108,12 +108,17 @@ const showDonate = hasPublic(donate.qr);
   .fab-dn.open .fab-pop{opacity:1;visibility:visible;transform:none}
   /* màn hình rộng: QR ủng hộ đã nằm sẵn ở lề trái (DonateQR) */
   @media (min-width:1440px){.fab-dn{display:none}}
-  /* điện thoại: chỉ giữ icon cho gọn, vẫn đủ lớn để bấm */
-  @media (max-width: 640px){
-    .fab-name{display:none}
-    .fab-ico{width:52px;height:52px}
-    .fab-ico svg{width:24px;height:24px}
-    .fab-pop{right:64px}
+  .fab-ico svg{width:22px;height:22px}
+  .fab-pop{right:60px}
+  /* Lề phải hẹp: chỉ icon, nhãn chữ hiện khi rê chuột (không đè nội dung) */
+  @media (hover:hover){.fab-list a:hover .fab-name,.fab-x>a:hover .fab-name,.fab-x>button:hover .fab-name{display:block}}
+  /* lề đủ rộng cho icon lớn */
+  @media (min-width:1440px){
+    .fab-ico{width:60px;height:60px}
+    .fab-ico svg{width:26px;height:26px}
+    .fab-pop{right:72px}
   }
+  /* lề đủ rộng cho cả nhãn chữ: hiện sẵn */
+  @media (min-width:1640px){.fab-name{display:block}}
   @media (prefers-reduced-motion: reduce){.fab-ico,.fab-pop{transition:none}}
 </style>
