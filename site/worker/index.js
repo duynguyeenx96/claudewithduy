@@ -13,6 +13,8 @@ const ALPHA = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 const LINK_DAYS = 7;
 // QR ủng hộ trên site (public/qr/bank.png) có sẵn nội dung "Ung ho Duy ly cafe".
 const DONATE_RE = /UNGHO|CAFE|COFFEE/;
+// Nhóm Zalo, giống site.zalo trong src/data/modules.json; ảnh QR lấy từ /qr/zalo.png của site.
+const ZALO_LINK = 'https://zaloapp.com/qr/g/nhc375qne8derj2qluti';
 
 const json = (data, status = 200) =>
   new Response(JSON.stringify(data), { status, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' } });
@@ -100,7 +102,7 @@ async function sendMail(env, to, subject, html, plain, replyTo) {
   return r.ok ? null : `resend ${r.status}: ${(await r.text()).slice(0, 300)}`;
 }
 
-function receipt(o, p, link, t) {
+function receipt(o, p, link, t, env) {
   const rows = [
     ['Mã đơn', o.code], ['Gói', p.name], ['Số tiền', vnd(o.amount)],
     ['Thời gian', vnTime(o.paid_at)], ['Mã giao dịch', t.referenceCode || t.id],
@@ -113,10 +115,16 @@ function receipt(o, p, link, t) {
 <h3 style="font-size:15px;margin:28px 0 8px">Biên nhận thanh toán</h3>
 <table style="border-collapse:collapse;font-size:14px;width:100%">${rows.map(([k, v]) => `<tr><td style="padding:6px 0;color:#666;border-bottom:1px solid #eee">${k}</td><td style="padding:6px 0;text-align:right;border-bottom:1px solid #eee">${esc(v)}</td></tr>`).join('')}</table>
 <p style="font-size:14px;margin-top:24px">Cách cài có trong file README trong gói. Kẹt chỗ nào cứ trả lời email này.</p>
+<div style="margin:28px 0;padding:16px;border:1px solid #eee;border-radius:8px;text-align:center">
+<p style="margin:0 0 4px;font-weight:600">Vào nhóm Zalo</p>
+<p style="margin:0 0 12px;font-size:14px;color:#555">Hỏi cách dùng, xem hiệu ứng mới, góp ý cho gói.</p>
+<a href="${ZALO_LINK}"><img src="${env.SITE_URL}/qr/zalo.png" width="160" height="160" alt="Mã QR nhóm Zalo" style="display:block;margin:0 auto 12px;border:0"></a>
+<a href="${ZALO_LINK}" style="font-size:14px;color:#c2410c">Đang xem trên điện thoại? Bấm vào đây để vào nhóm</a>
+</div>
 <p>Duy<br><a href="https://claudewithduy.io.vn" style="color:#c2410c">claudewithduy.io.vn</a></p>
 <p style="font-size:12px;color:#999;margin-top:28px">Đây là biên nhận thanh toán, không phải hoá đơn điện tử.</p>
 </div>`;
-  const plain = `Chào bạn,\n\nMình đã nhận được tiền cho đơn ${o.code}. Cảm ơn bạn đã ủng hộ.\n\nTải ${p.name}: ${link}\n(Link dùng được ${LINK_DAYS} ngày, tối đa 5 lần tải. Hết hạn thì trả lời email này.)\n\nBIÊN NHẬN THANH TOÁN\n${rows.map(([k, v]) => `${k}: ${v}`).join('\n')}\n\nDuy\nclaudewithduy.io.vn\n\nĐây là biên nhận thanh toán, không phải hoá đơn điện tử.`;
+  const plain = `Chào bạn,\n\nMình đã nhận được tiền cho đơn ${o.code}. Cảm ơn bạn đã ủng hộ.\n\nTải ${p.name}: ${link}\n(Link dùng được ${LINK_DAYS} ngày, tối đa 5 lần tải. Hết hạn thì trả lời email này.)\n\nBIÊN NHẬN THANH TOÁN\n${rows.map(([k, v]) => `${k}: ${v}`).join('\n')}\n\nVào nhóm Zalo (hỏi cách dùng, xem hiệu ứng mới): ${ZALO_LINK}\n\nDuy\nclaudewithduy.io.vn\n\nĐây là biên nhận thanh toán, không phải hoá đơn điện tử.`;
   return { html, plain };
 }
 
@@ -127,7 +135,7 @@ async function afterPayment(t, code, paid, env) {
     const o = await env.DB.prepare('SELECT * FROM orders WHERE code = ?').bind(code).first();
     const p = PRODUCTS[o.pack] || { name: o.pack };
     const link = await newLink(code, env);
-    const m = receipt(o, p, link, t);
+    const m = receipt(o, p, link, t, env);
     const err = await sendMail(env, o.email, `Biên nhận ${o.code} · ${p.name}`, m.html, m.plain, env.NOTIFY_EMAIL);
     if (err) await env.DB.prepare('UPDATE orders SET note = ? WHERE code = ?').bind(err, code).run();
     else await env.DB.prepare("UPDATE orders SET status = 'delivered', delivered_at = datetime('now') WHERE code = ?").bind(code).run();
