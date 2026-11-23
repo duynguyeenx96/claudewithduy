@@ -1,0 +1,11 @@
+{
+  "name": "fx-free-04",
+  "version": "1.0.0",
+  "description": "FX Free 04 · Thẻ & danh sách: 10 hiệu ứng cho video người nói. Thẻ giao diện trên video: checklist, công tắc iPhone, hoá đơn, tier list, tin nhắn, comment, nút Follow.",
+  "author": {
+    "name": "Claude with Duy"
+  },
+  "homepage": "https://github.com/duynguyeenx96/claudewithduy/tree/main/plugins/fx-free-04",
+  "repository": "https://github.com/duynguyeenx96/claudewithduy",
+  "license": "MIT"
+}

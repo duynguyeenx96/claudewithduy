@@ -4,16 +4,22 @@ import Blocks from '../components/Blocks.astro';
 import BeforeAfter from '../components/BeforeAfter.astro';
 import Feature from '../components/Feature.astro';
 import Cmd from '../components/Cmd.astro';
-import { requirements as rq, modules, flow, site, u, pad, kinds, marketplaceAdd, pluginInstall, repoUrl, social, socialIcons as icons } from '../lib';
+import { requirements as rq, modules, fxFree, fxPro, flow, site, u, pad, kinds, marketplaceAdd, pluginInstall, repoUrl, social, socialIcons as icons } from '../lib';
 
 const ready = modules.filter(m => m.status === 'ready').length;
-const firstPlugin = modules.find(m => m.skill?.plugin)?.skill?.plugin ?? 'fx-pack';
+// 6 gói FX Free gộp thành 1 thẻ dẫn sang tab FX Pack
+const fxAt = modules.findIndex(m => (m as any).group === 'fx');
+const items: any[] = modules.filter(m => !(m as any).group);
+if (fxAt >= 0) items.splice(fxAt, 0, { fxCard: true });
+const readyN = items.filter(m => m.fxCard || m.status === 'ready').length;
+const nFx = fxFree.reduce((a, m) => a + (m.effects?.length ?? 0), 0);
+const firstPlugin = modules.find(m => m.skill?.plugin)?.skill?.plugin ?? 'fx-free-01';
 ---
 <Base title="Claude with Duy: skill và tool dựng video cho Claude Code" description="Skill cho Claude Code và tool chạy local để dựng video. Cài bằng một lệnh." image="og.jpg">
 
 <section id="top" class="wrap hero">
   <div data-r>
-    <div class="label" style="margin-bottom:28px">Claude with Duy / {pad(modules.length)} module, {pad(ready)} dùng được ngay</div>
+    <div class="label" style="margin-bottom:28px">Claude with Duy / {pad(items.length)} module, {pad(readyN)} dùng được ngay</div>
     <h1 class="h1">Nói với <span class="accent">Claude</span> bạn muốn làm video như thế nào!</h1>
     <p class="lead" style="margin:0 0 40px">Skill cho Claude Code và tool chạy local, tách ra từ flow dựng video mình dùng hằng ngày.</p>
     <div style="display:flex;gap:12px;flex-wrap:wrap">
@@ -50,10 +56,28 @@ const firstPlugin = modules.find(m => m.skill?.plugin)?.skill?.plugin ?? 'fx-pac
       <button type="button" class="f" data-f="skill">Skill</button>
       <button type="button" class="f" data-f="tool">Tool</button>
     </div>
-    <span class="label" style="margin-left:auto;font-size:12px" id="count">{modules.length} module</span>
+    <span class="label" style="margin-left:auto;font-size:12px" id="count">{items.length} module</span>
   </div>
   <div>
-    {modules.map((m, i) => (
+    {items.map((m, i) => m.fxCard ? (
+      <article class="mod" data-kinds="skill" data-r>
+        <div class="mod-grid" style={i % 2 ? 'direction:rtl' : ''}>
+          <div class="mod-info">
+            <div class="num">{pad(i + 1)}</div>
+            <div>
+              <h3><a href={u('fx/')}>FX Pack</a></h3>
+              <p class="desc">{fxFree.length} gói hiệu ứng miễn phí cho video người nói ({nFx} hiệu ứng, khoảng 10 mỗi gói), bám theo mặt, chữ và ảnh chui ra sau đầu. Thêm {fxPro.length} gói đang làm, sẽ bán sau.</p>
+              <div class="chips"><a class="chip chip-link" href={u('fx/?loai=free')}>{fxFree.length} gói miễn phí →</a><span class="chip">{nFx} hiệu ứng</span><span class="chip">{fxPro.length} gói bán sau</span></div>
+              <ul class="fx-packs">{fxFree.map(f => <li><a href={u(`module/${f.id}/`)}>{f.name}</a></li>)}</ul>
+              <p style="margin:16px 0 0;font-size:14px"><a href={u('fx/')}>Xem tất cả gói →</a></p>
+            </div>
+          </div>
+          <div style="direction:ltr;align-self:stretch">
+            <Feature src="videos/modules/fx-pack.mp4" audio />
+          </div>
+        </div>
+      </article>
+    ) : (
       <article class="mod" data-kinds={kinds(m)} data-r>
         <div class="mod-grid" style={i % 2 ? 'direction:rtl' : ''}>
           <div class="mod-info">
@@ -94,7 +118,7 @@ const firstPlugin = modules.find(m => m.skill?.plugin)?.skill?.plugin ?? 'fx-pac
         <div class="bar">skill / Claude Code</div>
         <pre><span>$ claude</span>
 <span class="c">&gt; {marketplaceAdd}</span>
-<span class="c">&gt; {pluginInstall('fx-pack')}</span>
+<span class="c">&gt; {pluginInstall('fx-free-01')}</span>
 <span class="c">&gt; thêm hiệu ứng orbit vào video.mp4 giây 3 tới 6</span>
 <span class="m">Đang dò mặt và tách người...</span>
 <span class="m">Đã xuất khung kiểm, đang render...</span>
@@ -191,6 +215,9 @@ const firstPlugin = modules.find(m => m.skill?.plugin)?.skill?.plugin ?? 'fx-pac
 </script>
 
 <style>
+  .fx-packs{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:6px;font-size:15px}
+  .fx-packs a{color:inherit}
+  .fx-packs a:hover{color:var(--accent)}
   .hero{padding-top:96px;padding-bottom:112px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:64px;align-items:center}
   .phone{width:min(270px,100%);aspect-ratio:9/16;border:1px solid var(--ink);border-radius:4px;padding:10px}
   .pad-s{padding-top:88px;padding-bottom:88px}

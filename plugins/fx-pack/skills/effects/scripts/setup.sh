@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 # One-time setup for the effects skill. Safe to run again.
 # Last line on success: "READY <path to python>" — use that python for every command.
-# The venv lives in $CLAUDE_PLUGIN_DATA when installed as a plugin (survives plugin updates),
+# The venv lives in ~/.claudewithduy/fx-venv when installed as a plugin (shared by all FX packs, survives updates),
 # otherwise next to the skill in .venv.
 set -e
 SKILL="$(cd "$(dirname "$0")/.." && pwd)"
-VENV="${CLAUDE_PLUGIN_DATA:+$CLAUDE_PLUGIN_DATA/venv}"
+# Cài dạng plugin: mọi gói FX của Claude with Duy dùng chung 1 venv, cài nhiều gói không tải lại thư viện.
+VENV="${CLAUDE_PLUGIN_DATA:+${CLAUDEWITHDUY_FX_VENV:-$HOME/.claudewithduy/fx-venv}}"
 VENV="${VENV:-$SKILL/.venv}"
 
 if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then

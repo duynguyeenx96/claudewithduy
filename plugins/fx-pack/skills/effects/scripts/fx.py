@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""45 starter video effects for Claude
+"""45 starter video effects for Claude, by @vibha.in.progress
 
 One effect:    python fx.py orbit in.mp4 out.mp4 --start 3.2 --end 6
 Many effects:  python fx.py --plan plan.json in.mp4 out.mp4

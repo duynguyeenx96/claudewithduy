@@ -3,7 +3,7 @@ import '../styles/global.css';
 import { u } from '../lib';
 import SocialFab from '../components/SocialFab.astro';
 import DonateQR from '../components/DonateQR.astro';
-interface Props { title: string; description: string; current?: 'module' | 'template' | 'install'; image?: string }
+interface Props { title: string; description: string; current?: 'module' | 'template' | 'fx' | 'install'; image?: string }
 const { title, description, current, image } = Astro.props;
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
 const ogImage = image && Astro.site ? new URL(u(image), Astro.site).href : undefined;
@@ -33,6 +33,7 @@ const ogImage = image && Astro.site ? new URL(u(image), Astro.site).href : undef
       <a class="brand" href={u('')}><img src={u('logo.svg')} alt="" width="28" height="28" />CLAUDE WITH DUY</a>
       <nav>
         <a href={u('#module')} aria-current={current === 'module' ? 'page' : undefined}>Module</a>
+        <a href={u('fx/')} aria-current={current === 'fx' ? 'page' : undefined}>FX Pack</a>
         <a href={u('template/')} aria-current={current === 'template' ? 'page' : undefined}>Style</a>
         <a href={u('#cach-cai')} aria-current={current === 'install' ? 'page' : undefined}>Cách cài</a>
         <a href={u('#cau-hinh')}>Cấu hình</a>

@@ -8,8 +8,16 @@
       "youtube": "",
       "github": "https://github.com/duynguyeenx96"
     },
-    "zalo": { "link": "https://zaloapp.com/qr/g/nhc375qne8derj2qluti", "qr": "qr/zalo.png" },
-    "donate": { "qr": "qr/bank.png", "bank": "TPBank", "account": "06516324401", "name": "NGUYEN NGOC DUY" }
+    "zalo": {
+      "link": "https://zaloapp.com/qr/g/nhc375qne8derj2qluti",
+      "qr": "qr/zalo.png"
+    },
+    "donate": {
+      "qr": "qr/bank.png",
+      "bank": "TPBank",
+      "account": "06516324401",
+      "name": "NGUYEN NGOC DUY"
+    }
   },
   "flow": [
     "Quay",
@@ -70,16 +78,16 @@
       }
     },
     {
-      "id": "fx-pack",
-      "name": "FX Pack",
-      "desc": "59 hiệu ứng gắn lên video người nói. Tự bám theo mặt, chữ và ảnh chui được ra sau đầu.",
+      "id": "fx-free-01",
+      "name": "FX Free 01 · Camera & ánh sáng",
+      "desc": "10 hiệu ứng miễn phí cho video người nói. Máy quay bám mặt, đẩy vào, tắt đèn, chỉnh màu điện ảnh.",
       "chips": [
-        "59 hiệu ứng",
-        "Bám theo mặt",
-        "Sau đầu"
+        "10 hiệu ứng",
+        "Miễn phí",
+        "Bám theo mặt"
       ],
       "video": {
-        "main": "videos/modules/fx-pack.mp4",
+        "main": "videos/modules/fx-free-01.mp4",
         "audio": true
       },
       "credits": [
@@ -119,42 +127,30 @@
           "Python 3.12",
           "FFmpeg"
         ],
-        "cmd": "/fx-pack:effects video.mp4",
-        "plugin": "fx-pack",
-        "note": "Gốc từ claude-video-effects, thêm 8 hiệu ứng."
+        "cmd": "/fx-free-01:effects video.mp4",
+        "plugin": "fx-free-01",
+        "note": "Một trong 6 gói tách từ FX Pack 59 hiệu ứng. Gốc từ claude-video-effects (Vibha Ramprakash, MIT); 8 hiệu ứng lấy từ một gói hiệu ứng khác, không phải từ repo gốc."
       },
       "effects": [
         {
-          "fx": "noise",
-          "desc": "Reels chồng dần sau đầu, cứ 1/4 giây thêm một cái"
-        },
-        {
-          "fx": "lineup",
-          "desc": "Ô đánh số xoè hình vòng cung trên đầu"
-        },
-        {
           "fx": "locked-on",
           "desc": "Khung góc bắt dính vào mặt, camera bám theo"
-        },
-        {
-          "fx": "orbit",
-          "desc": "Reels bay vòng quanh đầu, trước mặt ở dưới, sau đầu ở trên"
         },
         {
           "fx": "lean-in",
           "desc": "Zoom giật nhanh vào đúng một từ"
         },
         {
-          "fx": "backdrop-word",
-          "desc": "Một chữ khổng lồ rơi xuống sau lưng"
+          "fx": "slow-push",
+          "desc": "Đẩy chậm vào mặt, phòng nhoè dần"
+        },
+        {
+          "fx": "over-the-shoulder-zoom",
+          "desc": "Camera đẩy vào góc trên, biểu đồ kính bật cạnh đầu, rồi sang góc kia"
         },
         {
           "fx": "spotlight",
           "desc": "Tắt đèn cả phòng, chỉ còn người sáng"
-        },
-        {
-          "fx": "the-bill",
-          "desc": "In lời dặn như tờ hoá đơn lên tường trên đầu"
         },
         {
           "fx": "moody",
@@ -165,8 +161,307 @@
           "desc": "Thanh trượt trước/sau quét ngang người"
         },
         {
+          "fx": "rabbit-hole",
+          "desc": "Khung hình xoáy hút vào chính nó"
+        },
+        {
+          "fx": "cinema",
+          "desc": "Bìa phim tài liệu: người đen trắng, vòng tròn vàng, tít nảy từng chữ",
+          "extra": true
+        },
+        {
+          "fx": "cinema-v1",
+          "desc": "Bản 1 của cinema: tít lớn đập vào, hạt phim",
+          "extra": true
+        }
+      ],
+      "group": "fx"
+    },
+    {
+      "id": "fx-free-02",
+      "name": "FX Free 02 · Chữ sau đầu",
+      "desc": "10 hiệu ứng miễn phí cho video người nói. Chữ khổng lồ nằm sau lưng người nói: rơi xuống, gạch, viết sáp, đèn LED, neon, bìa tạp chí.",
+      "chips": [
+        "10 hiệu ứng",
+        "Miễn phí",
+        "Bám theo mặt"
+      ],
+      "video": {
+        "main": "videos/modules/fx-free-02.mp4",
+        "audio": true
+      },
+      "credits": [
+        {
+          "name": "claude-video-effects",
+          "url": "https://github.com/Vibha-Ramprakash/claude-video-effects",
+          "by": "Vibha Ramprakash",
+          "license": "MIT",
+          "use": "mã gốc của bộ hiệu ứng"
+        },
+        {
+          "name": "YuNet (opencv_zoo)",
+          "url": "https://github.com/opencv/opencv_zoo",
+          "by": "OpenCV",
+          "license": "MIT",
+          "use": "model dò mặt"
+        },
+        {
+          "name": "MediaPipe",
+          "url": "https://github.com/google-ai-edge/mediapipe",
+          "by": "Google",
+          "license": "Apache-2.0",
+          "use": "model tách người khỏi nền"
+        },
+        {
+          "name": "FFmpeg",
+          "url": "https://github.com/FFmpeg/FFmpeg",
+          "by": "FFmpeg",
+          "license": "LGPL/GPL",
+          "use": "xử lý video, âm thanh"
+        }
+      ],
+      "status": "ready",
+      "skill": {
+        "req": [
+          "Claude Code",
+          "Python 3.12",
+          "FFmpeg"
+        ],
+        "cmd": "/fx-free-02:effects video.mp4",
+        "plugin": "fx-free-02",
+        "note": "Một trong 6 gói tách từ FX Pack 59 hiệu ứng. Gốc từ claude-video-effects (Vibha Ramprakash, MIT); 8 hiệu ứng lấy từ một gói hiệu ứng khác, không phải từ repo gốc."
+      },
+      "effects": [
+        {
+          "fx": "backdrop-word",
+          "desc": "Một chữ khổng lồ rơi xuống sau lưng"
+        },
+        {
+          "fx": "huge-strike",
+          "desc": "Một chữ serif khổng lồ sau đầu bị gạch đỏ"
+        },
+        {
+          "fx": "crayon-write",
+          "desc": "Bút sáp đỏ viết chữ sau đầu, gạch chân rồi bay đi"
+        },
+        {
+          "fx": "red-collage",
+          "desc": "Người đen trắng, chữ đỏ khổng lồ phía sau, 3 dòng chữ đập vào"
+        },
+        {
+          "fx": "pastel-word",
+          "desc": "Phòng tím pastel, chữ lớn sau lưng, thẻ hồ sơ được follow"
+        },
+        {
+          "fx": "led-sign",
+          "desc": "Đèn tắt, biển LED phát sáng tự gõ chữ sau lưng"
+        },
+        {
+          "fx": "match-cut",
+          "desc": "Trang báo cắt liên tục trên một từ, khoá trong hộp đỏ sau đầu"
+        },
+        {
+          "fx": "spotlight-type",
+          "desc": "Tắt đèn, một từ tự gõ từng chữ trên đầu",
+          "extra": true
+        },
+        {
+          "fx": "spotlight-neon",
+          "desc": "Phòng tối, chữ neon kính phát sáng bật từng chữ sau lưng",
+          "extra": true
+        },
+        {
+          "fx": "cover-star",
+          "desc": "Bạn thành bìa tạp chí, tít nằm sau đầu"
+        }
+      ],
+      "group": "fx"
+    },
+    {
+      "id": "fx-free-03",
+      "name": "FX Free 03 · Ảnh & reels quanh đầu",
+      "desc": "10 hiệu ứng miễn phí cho video người nói. Ảnh, reels, bìa video bay quanh, xếp sau, xoè quạt, lấp tường.",
+      "chips": [
+        "10 hiệu ứng",
+        "Miễn phí",
+        "Bám theo mặt"
+      ],
+      "video": {
+        "main": "videos/modules/fx-free-03.mp4",
+        "audio": true
+      },
+      "credits": [
+        {
+          "name": "claude-video-effects",
+          "url": "https://github.com/Vibha-Ramprakash/claude-video-effects",
+          "by": "Vibha Ramprakash",
+          "license": "MIT",
+          "use": "mã gốc của bộ hiệu ứng"
+        },
+        {
+          "name": "YuNet (opencv_zoo)",
+          "url": "https://github.com/opencv/opencv_zoo",
+          "by": "OpenCV",
+          "license": "MIT",
+          "use": "model dò mặt"
+        },
+        {
+          "name": "MediaPipe",
+          "url": "https://github.com/google-ai-edge/mediapipe",
+          "by": "Google",
+          "license": "Apache-2.0",
+          "use": "model tách người khỏi nền"
+        },
+        {
+          "name": "FFmpeg",
+          "url": "https://github.com/FFmpeg/FFmpeg",
+          "by": "FFmpeg",
+          "license": "LGPL/GPL",
+          "use": "xử lý video, âm thanh"
+        }
+      ],
+      "status": "ready",
+      "skill": {
+        "req": [
+          "Claude Code",
+          "Python 3.12",
+          "FFmpeg"
+        ],
+        "cmd": "/fx-free-03:effects video.mp4",
+        "plugin": "fx-free-03",
+        "note": "Một trong 6 gói tách từ FX Pack 59 hiệu ứng. Gốc từ claude-video-effects (Vibha Ramprakash, MIT); 8 hiệu ứng lấy từ một gói hiệu ứng khác, không phải từ repo gốc."
+      },
+      "effects": [
+        {
+          "fx": "noise",
+          "desc": "Reels chồng dần sau đầu, cứ 1/4 giây thêm một cái"
+        },
+        {
+          "fx": "orbit",
+          "desc": "Reels bay vòng quanh đầu, trước mặt ở dưới, sau đầu ở trên"
+        },
+        {
+          "fx": "carousel-spin",
+          "desc": "Reels quay quanh bạn như băng chuyền 3D rồi dừng"
+        },
+        {
+          "fx": "fan-build",
+          "desc": "Bìa reel chia bài thành hình quạt sau đầu, từng lá một"
+        },
+        {
+          "fx": "profile-wall",
+          "desc": "Lưới reel phủ kín tường sau lưng, bộ đếm chạy lên"
+        },
+        {
+          "fx": "place-in-grid",
+          "desc": "Bạn thu vào ô giữa lưới 3x3, 8 reel bật quanh kèm lượt xem"
+        },
+        {
+          "fx": "phone-fan",
+          "desc": "Reels xoè ra như tay cầm bài dưới dòng tít"
+        },
+        {
+          "fx": "check-pills",
+          "desc": "Phòng giấy kẻ ô, bảng reel sau lưng, con trỏ bấm các nút xanh"
+        },
+        {
+          "fx": "headline-wall",
+          "desc": "Tít bài của bạn chồng lên sau đầu, rồi hiện tổng"
+        },
+        {
+          "fx": "gold-collage",
+          "desc": "Người đen trắng, chữ vàng kim khổng lồ có vệt sáng, dòng chữ bên cạnh",
+          "extra": true
+        }
+      ],
+      "group": "fx"
+    },
+    {
+      "id": "fx-free-04",
+      "name": "FX Free 04 · Thẻ & danh sách",
+      "desc": "10 hiệu ứng miễn phí cho video người nói. Thẻ giao diện trên video: checklist, công tắc iPhone, hoá đơn, tier list, tin nhắn, comment, nút Follow.",
+      "chips": [
+        "10 hiệu ứng",
+        "Miễn phí",
+        "Bám theo mặt"
+      ],
+      "video": {
+        "main": "videos/modules/fx-free-04.mp4",
+        "audio": true
+      },
+      "credits": [
+        {
+          "name": "claude-video-effects",
+          "url": "https://github.com/Vibha-Ramprakash/claude-video-effects",
+          "by": "Vibha Ramprakash",
+          "license": "MIT",
+          "use": "mã gốc của bộ hiệu ứng"
+        },
+        {
+          "name": "YuNet (opencv_zoo)",
+          "url": "https://github.com/opencv/opencv_zoo",
+          "by": "OpenCV",
+          "license": "MIT",
+          "use": "model dò mặt"
+        },
+        {
+          "name": "MediaPipe",
+          "url": "https://github.com/google-ai-edge/mediapipe",
+          "by": "Google",
+          "license": "Apache-2.0",
+          "use": "model tách người khỏi nền"
+        },
+        {
+          "name": "FFmpeg",
+          "url": "https://github.com/FFmpeg/FFmpeg",
+          "by": "FFmpeg",
+          "license": "LGPL/GPL",
+          "use": "xử lý video, âm thanh"
+        }
+      ],
+      "status": "ready",
+      "skill": {
+        "req": [
+          "Claude Code",
+          "Python 3.12",
+          "FFmpeg"
+        ],
+        "cmd": "/fx-free-04:effects video.mp4",
+        "plugin": "fx-free-04",
+        "note": "Một trong 6 gói tách từ FX Pack 59 hiệu ứng. Gốc từ claude-video-effects (Vibha Ramprakash, MIT); 8 hiệu ứng lấy từ một gói hiệu ứng khác, không phải từ repo gốc."
+      },
+      "effects": [
+        {
           "fx": "todo",
           "desc": "Thẻ checklist cạnh đầu, tự tích khi bạn nói"
+        },
+        {
+          "fx": "checklist",
+          "desc": "Danh sách việc kiểu Claude dưới cằm, từng bước quay rồi tích xanh"
+        },
+        {
+          "fx": "apple-toggles",
+          "desc": "Thẻ cài đặt iPhone bật từng công tắc một"
+        },
+        {
+          "fx": "the-bill",
+          "desc": "In lời dặn như tờ hoá đơn lên tường trên đầu"
+        },
+        {
+          "fx": "lineup",
+          "desc": "Ô đánh số xoè hình vòng cung trên đầu"
+        },
+        {
+          "fx": "tier-list",
+          "desc": "Bảng xếp hạng rơi xuống, Claude bay vào hạng S"
+        },
+        {
+          "fx": "glass-widgets",
+          "desc": "Widget kính mờ bay quanh đầu"
+        },
+        {
+          "fx": "messages",
+          "desc": "Thông báo iMessage bật lên lần lượt, xếp chồng"
         },
         {
           "fx": "comment-box",
@@ -175,10 +470,177 @@
         {
           "fx": "tap",
           "desc": "Nút Follow bật lên rồi chuyển thành Following"
+        }
+      ],
+      "group": "fx"
+    },
+    {
+      "id": "fx-free-05",
+      "name": "FX Free 05 · Số liệu & dựng",
+      "desc": "9 hiệu ứng miễn phí cho video người nói. Biểu đồ, số đếm, timeline dựng, sóng âm, đồng hồ lật, B-roll.",
+      "chips": [
+        "9 hiệu ứng",
+        "Miễn phí",
+        "Bám theo mặt"
+      ],
+      "video": {
+        "main": "videos/modules/fx-free-05.mp4",
+        "audio": true
+      },
+      "credits": [
+        {
+          "name": "claude-video-effects",
+          "url": "https://github.com/Vibha-Ramprakash/claude-video-effects",
+          "by": "Vibha Ramprakash",
+          "license": "MIT",
+          "use": "mã gốc của bộ hiệu ứng"
+        },
+        {
+          "name": "YuNet (opencv_zoo)",
+          "url": "https://github.com/opencv/opencv_zoo",
+          "by": "OpenCV",
+          "license": "MIT",
+          "use": "model dò mặt"
+        },
+        {
+          "name": "MediaPipe",
+          "url": "https://github.com/google-ai-edge/mediapipe",
+          "by": "Google",
+          "license": "Apache-2.0",
+          "use": "model tách người khỏi nền"
+        },
+        {
+          "name": "FFmpeg",
+          "url": "https://github.com/FFmpeg/FFmpeg",
+          "by": "FFmpeg",
+          "license": "LGPL/GPL",
+          "use": "xử lý video, âm thanh"
+        }
+      ],
+      "status": "ready",
+      "skill": {
+        "req": [
+          "Claude Code",
+          "Python 3.12",
+          "FFmpeg"
+        ],
+        "cmd": "/fx-free-05:effects video.mp4",
+        "plugin": "fx-free-05",
+        "note": "Một trong 6 gói tách từ FX Pack 59 hiệu ứng. Gốc từ claude-video-effects (Vibha Ramprakash, MIT); 8 hiệu ứng lấy từ một gói hiệu ứng khác, không phải từ repo gốc."
+      },
+      "effects": [
+        {
+          "fx": "liquid-glass-graph",
+          "desc": "Thẻ kính lỏng dưới cằm, biểu đồ leo, số đếm lên"
+        },
+        {
+          "fx": "split-graph",
+          "desc": "Thẻ trên cùng với biểu đồ 7 cột nảy lên, cột số 1 phát sáng có vương miện",
+          "extra": true
+        },
+        {
+          "fx": "split-graph-v1",
+          "desc": "Bản 1 của split-graph: cột mọc dần, số đếm lên, bạn ở 55% dưới",
+          "extra": true
+        },
+        {
+          "fx": "timeline",
+          "desc": "Màu phim đỏ sẫm, timeline dựng phim, mã REC, đầu phát sáng"
+        },
+        {
+          "fx": "wave-trim",
+          "desc": "Sóng âm giọng bạn, đoạn im lặng hai đầu co lại biến mất"
+        },
+        {
+          "fx": "select-resize",
+          "desc": "Khung chọn xanh bắt lấy con số, con trỏ kéo to ra"
+        },
+        {
+          "fx": "editor",
+          "desc": "Giao diện phần mềm dựng phim chi tiết bao quanh bạn, timeline 6 track",
+          "extra": true
+        },
+        {
+          "fx": "countdown-flip",
+          "desc": "Đồng hồ lật 3, 2, 1 trên đầu"
+        },
+        {
+          "fx": "broll-split",
+          "desc": "B-roll ở trên kèm nhãn giá, bạn ở dưới"
+        }
+      ],
+      "group": "fx"
+    },
+    {
+      "id": "fx-free-06",
+      "name": "FX Free 06 · Nhãn & điểm nhấn",
+      "desc": "10 hiệu ứng miễn phí cho video người nói. Băng dính, vẽ nguệch ngoạc, mũi tên dừng hình, con dấu, glitch, mưa phím, tiêu đề, hiện từ chấm.",
+      "chips": [
+        "10 hiệu ứng",
+        "Miễn phí",
+        "Bám theo mặt"
+      ],
+      "video": {
+        "main": "videos/modules/fx-free-06.mp4",
+        "audio": true
+      },
+      "credits": [
+        {
+          "name": "claude-video-effects",
+          "url": "https://github.com/Vibha-Ramprakash/claude-video-effects",
+          "by": "Vibha Ramprakash",
+          "license": "MIT",
+          "use": "mã gốc của bộ hiệu ứng"
+        },
+        {
+          "name": "YuNet (opencv_zoo)",
+          "url": "https://github.com/opencv/opencv_zoo",
+          "by": "OpenCV",
+          "license": "MIT",
+          "use": "model dò mặt"
+        },
+        {
+          "name": "MediaPipe",
+          "url": "https://github.com/google-ai-edge/mediapipe",
+          "by": "Google",
+          "license": "Apache-2.0",
+          "use": "model tách người khỏi nền"
+        },
+        {
+          "name": "FFmpeg",
+          "url": "https://github.com/FFmpeg/FFmpeg",
+          "by": "FFmpeg",
+          "license": "LGPL/GPL",
+          "use": "xử lý video, âm thanh"
+        }
+      ],
+      "status": "ready",
+      "skill": {
+        "req": [
+          "Claude Code",
+          "Python 3.12",
+          "FFmpeg"
+        ],
+        "cmd": "/fx-free-06:effects video.mp4",
+        "plugin": "fx-free-06",
+        "note": "Một trong 6 gói tách từ FX Pack 59 hiệu ứng. Gốc từ claude-video-effects (Vibha Ramprakash, MIT); 8 hiệu ứng lấy từ một gói hiệu ứng khác, không phải từ repo gốc."
+      },
+      "effects": [
+        {
+          "fx": "tape-label",
+          "desc": "Dải băng dính vàng ghi câu của bạn dán ngang ngực"
+        },
+        {
+          "fx": "scribble",
+          "desc": "Nét bút dạ tự vẽ quanh người"
         },
         {
           "fx": "pause-point",
           "desc": "Dừng hình, mũi tên vẽ tay chỉ vào bạn"
+        },
+        {
+          "fx": "reject-stamp",
+          "desc": "Con dấu đỏ to đập xuống màn hình"
         },
         {
           "fx": "uninstall",
@@ -193,182 +655,19 @@
           "desc": "Phím bàn phím mưa xuống sau lưng"
         },
         {
-          "fx": "reject-stamp",
-          "desc": "Con dấu đỏ to đập xuống màn hình"
-        },
-        {
-          "fx": "countdown-flip",
-          "desc": "Đồng hồ lật 3, 2, 1 trên đầu"
-        },
-        {
-          "fx": "rabbit-hole",
-          "desc": "Khung hình xoáy hút vào chính nó"
-        },
-        {
-          "fx": "cover-star",
-          "desc": "Bạn thành bìa tạp chí, tít nằm sau đầu"
-        },
-        {
-          "fx": "scribble",
-          "desc": "Nét bút dạ tự vẽ quanh người"
-        },
-        {
-          "fx": "glass-widgets",
-          "desc": "Widget kính mờ bay quanh đầu"
-        },
-        {
-          "fx": "red-collage",
-          "desc": "Người đen trắng, chữ đỏ khổng lồ phía sau, 3 dòng chữ đập vào"
+          "fx": "headline-box",
+          "desc": "Zoom vào kèm tít 2 dòng, dòng 2 trong hộp trắng"
         },
         {
           "fx": "split-headline",
           "desc": "Thẻ tít trượt xuống, đẩy bạn xuống nửa dưới"
         },
         {
-          "fx": "pastel-word",
-          "desc": "Phòng tím pastel, chữ lớn sau lưng, thẻ hồ sơ được follow"
-        },
-        {
-          "fx": "check-pills",
-          "desc": "Phòng giấy kẻ ô, bảng reel sau lưng, con trỏ bấm các nút xanh"
-        },
-        {
-          "fx": "timeline",
-          "desc": "Màu phim đỏ sẫm, timeline dựng phim, mã REC, đầu phát sáng"
-        },
-        {
-          "fx": "headline-box",
-          "desc": "Zoom vào kèm tít 2 dòng, dòng 2 trong hộp trắng"
-        },
-        {
-          "fx": "profile-wall",
-          "desc": "Lưới reel phủ kín tường sau lưng, bộ đếm chạy lên"
-        },
-        {
-          "fx": "tier-list",
-          "desc": "Bảng xếp hạng rơi xuống, Claude bay vào hạng S"
-        },
-        {
-          "fx": "broll-split",
-          "desc": "B-roll ở trên kèm nhãn giá, bạn ở dưới"
-        },
-        {
-          "fx": "phone-fan",
-          "desc": "Reels xoè ra như tay cầm bài dưới dòng tít"
-        },
-        {
           "fx": "dot-reveal",
           "desc": "Khung hình hiện dần từ chấm sáng rồi bật về hình thật"
-        },
-        {
-          "fx": "headline-wall",
-          "desc": "Tít bài của bạn chồng lên sau đầu, rồi hiện tổng"
-        },
-        {
-          "fx": "checklist",
-          "desc": "Danh sách việc kiểu Claude dưới cằm, từng bước quay rồi tích xanh"
-        },
-        {
-          "fx": "liquid-glass-graph",
-          "desc": "Thẻ kính lỏng dưới cằm, biểu đồ leo, số đếm lên"
-        },
-        {
-          "fx": "carousel-spin",
-          "desc": "Reels quay quanh bạn như băng chuyền 3D rồi dừng"
-        },
-        {
-          "fx": "match-cut",
-          "desc": "Trang báo cắt liên tục trên một từ, khoá trong hộp đỏ sau đầu"
-        },
-        {
-          "fx": "apple-toggles",
-          "desc": "Thẻ cài đặt iPhone bật từng công tắc một"
-        },
-        {
-          "fx": "led-sign",
-          "desc": "Đèn tắt, biển LED phát sáng tự gõ chữ sau lưng"
-        },
-        {
-          "fx": "slow-push",
-          "desc": "Đẩy chậm vào mặt, phòng nhoè dần"
-        },
-        {
-          "fx": "over-the-shoulder-zoom",
-          "desc": "Camera đẩy vào góc trên, biểu đồ kính bật cạnh đầu, rồi sang góc kia"
-        },
-        {
-          "fx": "messages",
-          "desc": "Thông báo iMessage bật lên lần lượt, xếp chồng"
-        },
-        {
-          "fx": "place-in-grid",
-          "desc": "Bạn thu vào ô giữa lưới 3x3, 8 reel bật quanh kèm lượt xem"
-        },
-        {
-          "fx": "tape-label",
-          "desc": "Dải băng dính vàng ghi câu của bạn dán ngang ngực"
-        },
-        {
-          "fx": "select-resize",
-          "desc": "Khung chọn xanh bắt lấy con số, con trỏ kéo to ra"
-        },
-        {
-          "fx": "wave-trim",
-          "desc": "Sóng âm giọng bạn, đoạn im lặng hai đầu co lại biến mất"
-        },
-        {
-          "fx": "huge-strike",
-          "desc": "Một chữ serif khổng lồ sau đầu bị gạch đỏ"
-        },
-        {
-          "fx": "crayon-write",
-          "desc": "Bút sáp đỏ viết chữ sau đầu, gạch chân rồi bay đi"
-        },
-        {
-          "fx": "fan-build",
-          "desc": "Bìa reel chia bài thành hình quạt sau đầu, từng lá một"
-        },
-        {
-          "fx": "cinema",
-          "desc": "Bìa phim tài liệu: người đen trắng, vòng tròn vàng, tít nảy từng chữ",
-          "extra": true
-        },
-        {
-          "fx": "cinema-v1",
-          "desc": "Bản 1 của cinema: tít lớn đập vào, hạt phim",
-          "extra": true
-        },
-        {
-          "fx": "split-graph",
-          "desc": "Thẻ trên cùng với biểu đồ 7 cột nảy lên, cột số 1 phát sáng có vương miện",
-          "extra": true
-        },
-        {
-          "fx": "split-graph-v1",
-          "desc": "Bản 1 của split-graph: cột mọc dần, số đếm lên, bạn ở 55% dưới",
-          "extra": true
-        },
-        {
-          "fx": "editor",
-          "desc": "Giao diện phần mềm dựng phim chi tiết bao quanh bạn, timeline 6 track",
-          "extra": true
-        },
-        {
-          "fx": "spotlight-type",
-          "desc": "Tắt đèn, một từ tự gõ từng chữ trên đầu",
-          "extra": true
-        },
-        {
-          "fx": "spotlight-neon",
-          "desc": "Phòng tối, chữ neon kính phát sáng bật từng chữ sau lưng",
-          "extra": true
-        },
-        {
-          "fx": "gold-collage",
-          "desc": "Người đen trắng, chữ vàng kim khổng lồ có vệt sáng, dòng chữ bên cạnh",
-          "extra": true
         }
-      ]
+      ],
+      "group": "fx"
     },
     {
       "id": "chuan-hoa-giong",
@@ -759,5 +1058,31 @@
         "install": "brew install ffmpeg · winget install ffmpeg · apt install ffmpeg"
       }
     ]
-  }
+  },
+  "fxPro": [
+    {
+      "id": "fx-pro-01",
+      "name": "FX Pro 01 · FX Reel",
+      "count": "20 hiệu ứng",
+      "desc": "Đọc liền 20 tên hiệu ứng trong 20 giây, mỗi hiệu ứng chạy ngay trên người nói: con trỏ AI, nhân bản, vòng chữ, tờ tiền, tan biến…"
+    },
+    {
+      "id": "fx-pro-02",
+      "name": "FX Pro 02 · Reels Edit",
+      "count": "8 hiệu ứng · 2 style",
+      "desc": "Hiệu ứng bật theo nội dung câu nói: từ khoá phát sáng, chữ sau đầu, vòng sáng đen trắng, khung REC, thẻ cảnh báo, thẻ icon."
+    },
+    {
+      "id": "fx-pro-03",
+      "name": "FX Pro 03 · Thẻ sau đầu",
+      "count": "10 hiệu ứng · 3 style",
+      "desc": "Thẻ kính nằm sau đầu, chữ hiện theo từng từ, đường neon, bước 01-02-03, khung tròn, SFX và rung khung."
+    },
+    {
+      "id": "fx-pro-04",
+      "name": "FX Pro 04 · Phễu cam",
+      "count": "9 hiệu ứng",
+      "desc": "Chữ tự nhiên kiểu editor (từ sáng dần theo lời nói), icon nét, sóng biểu đồ, nút sáng, đồng xu số, thu vào điện thoại."
+    }
+  ]
 }

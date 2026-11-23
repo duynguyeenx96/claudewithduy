@@ -4,7 +4,7 @@
     "name": "Claude with Duy",
     "url": "https://github.com/duynguyeenx96/claudewithduy"
   },
-  "description": "Các skill dựng video tách từ flow riêng: catalog nguồn tham khảo, hiệu ứng talking-head, auto-edit CapCut, short review phần mềm.",
+  "description": "Các skill dựng video tách từ flow riêng: catalog nguồn tham khảo, 6 gói hiệu ứng talking-head miễn phí, auto-edit CapCut, short review phần mềm.",
   "plugins": [
     {
       "name": "ref-catalog",
@@ -19,9 +19,74 @@
       ]
     },
     {
-      "name": "fx-pack",
-      "source": "./plugins/fx-pack",
-      "description": "59 hiệu ứng cho video người nói, bám theo mặt, chữ và ảnh chui ra sau đầu.",
+      "name": "fx-free-01",
+      "source": "./plugins/fx-free-01",
+      "description": "FX Free 01 · Camera & ánh sáng: 10 hiệu ứng miễn phí cho video người nói. Máy quay bám mặt, đẩy vào, tắt đèn, chỉnh màu điện ảnh.",
+      "category": "video",
+      "license": "MIT",
+      "keywords": [
+        "video",
+        "effects",
+        "talking-head",
+        "ffmpeg"
+      ]
+    },
+    {
+      "name": "fx-free-02",
+      "source": "./plugins/fx-free-02",
+      "description": "FX Free 02 · Chữ sau đầu: 10 hiệu ứng miễn phí cho video người nói. Chữ khổng lồ nằm sau lưng người nói: rơi xuống, gạch, viết sáp, đèn LED, neon, bìa tạp chí.",
+      "category": "video",
+      "license": "MIT",
+      "keywords": [
+        "video",
+        "effects",
+        "talking-head",
+        "ffmpeg"
+      ]
+    },
+    {
+      "name": "fx-free-03",
+      "source": "./plugins/fx-free-03",
+      "description": "FX Free 03 · Ảnh & reels quanh đầu: 10 hiệu ứng miễn phí cho video người nói. Ảnh, reels, bìa video bay quanh, xếp sau, xoè quạt, lấp tường.",
+      "category": "video",
+      "license": "MIT",
+      "keywords": [
+        "video",
+        "effects",
+        "talking-head",
+        "ffmpeg"
+      ]
+    },
+    {
+      "name": "fx-free-04",
+      "source": "./plugins/fx-free-04",
+      "description": "FX Free 04 · Thẻ & danh sách: 10 hiệu ứng miễn phí cho video người nói. Thẻ giao diện trên video: checklist, công tắc iPhone, hoá đơn, tier list, tin nhắn, comment, nút Follow.",
+      "category": "video",
+      "license": "MIT",
+      "keywords": [
+        "video",
+        "effects",
+        "talking-head",
+        "ffmpeg"
+      ]
+    },
+    {
+      "name": "fx-free-05",
+      "source": "./plugins/fx-free-05",
+      "description": "FX Free 05 · Số liệu & dựng: 9 hiệu ứng miễn phí cho video người nói. Biểu đồ, số đếm, timeline dựng, sóng âm, đồng hồ lật, B-roll.",
+      "category": "video",
+      "license": "MIT",
+      "keywords": [
+        "video",
+        "effects",
+        "talking-head",
+        "ffmpeg"
+      ]
+    },
+    {
+      "name": "fx-free-06",
+      "source": "./plugins/fx-free-06",
+      "description": "FX Free 06 · Nhãn & điểm nhấn: 10 hiệu ứng miễn phí cho video người nói. Băng dính, vẽ nguệch ngoạc, mũi tên dừng hình, con dấu, glitch, mưa phím, tiêu đề, hiện từ chấm.",
       "category": "video",
       "license": "MIT",
       "keywords": [

@@ -75,5 +75,26 @@ try:
 except Exception as e:  # thiếu file vẫn chạy được 51 hiệu ứng gốc
     print(f'(bỏ qua fx_custom: {e})', file=sys.stderr)
 
+# Gói tách nhỏ (fx-free-0N): pack.json ở gốc skill giới hạn các hiệu ứng có trong gói.
+_PACK = os.path.join(ROOT, 'pack.json')
+if os.path.exists(_PACK):
+    import json
+    _p = json.load(open(_PACK, encoding='utf-8'))
+    _keep = set(_p['effects'])
+    _where = _p.get('others', {})  # tên hiệu ứng -> gói chứa nó
+    for _k in list(fx.EFFECTS):
+        if _k not in _keep: del fx.EFFECTS[_k]
+    _main = fx.main
+    def _pack_main():
+        try: _main()
+        except SystemExit as e:
+            m = str(e.code or '')
+            if m.startswith('Unknown effect'):
+                n = m.split("'")[1]
+                hint = f" Hiệu ứng này nằm trong gói {_where[n]}." if n in _where else ''
+                sys.exit(f"Gói {_p['name']} không có hiệu ứng '{n}'.{hint} Chạy --list để xem {len(fx.EFFECTS)} hiệu ứng của gói này.")
+            raise
+    fx.main = _pack_main
+
 if __name__ == '__main__':
     fx.main()
