@@ -63,13 +63,6 @@ const showDonate = hasPublic(donate.qr);
 )}
 
 <script>
-  const fab = document.getElementById('fab');
-  if (fab) {
-    // Hiện khi đã cuộn qua phần đầu trang; các nút luôn mở sẵn
-    const onScroll = () => fab.classList.toggle('show', window.scrollY > Math.min(520, window.innerHeight * 0.6));
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-  }
   // Nút Ủng hộ: chạm/bấm để mở QR (điện thoại không có hover), bấm ra ngoài hoặc Esc để đóng
   const dn = document.getElementById('fab-dn');
   if (dn) {
@@ -87,9 +80,7 @@ const showDonate = hasPublic(donate.qr);
 </script>
 
 <style>
-  .fab{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(32px,env(safe-area-inset-bottom));z-index:50;display:flex;flex-direction:column;align-items:flex-end;gap:10px;
-    opacity:0;transform:translateY(16px);pointer-events:none;transition:opacity .25s ease,transform .25s ease}
-  .fab.show{opacity:1;transform:none;pointer-events:auto}
+  .fab{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(32px,env(safe-area-inset-bottom));z-index:50;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
   .fab-title{font:500 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--bg);background:var(--ink);padding:6px 10px;border-radius:999px}
   .fab-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
   .fab-list a{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none}
@@ -124,5 +115,5 @@ const showDonate = hasPublic(donate.qr);
     .fab-ico svg{width:24px;height:24px}
     .fab-pop{right:64px}
   }
-  @media (prefers-reduced-motion: reduce){.fab,.fab-ico,.fab-pop{transition:none}}
+  @media (prefers-reduced-motion: reduce){.fab-ico,.fab-pop{transition:none}}
 </style>
