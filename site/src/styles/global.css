@@ -43,12 +43,12 @@ header.top nav a[aria-current]{color:var(--accent)}
 @media (max-width:380px){header.top nav{gap:10px;font-size:12.5px}}
 
 section.band{border-top:1px solid var(--line)}
-section.pad{padding:96px 0}
-@media (max-width:600px){section.pad{padding:64px 0}}
+section.pad{padding-top:96px;padding-bottom:96px}
+@media (max-width:600px){section.pad{padding-top:64px;padding-bottom:64px}}
 
 /* code / copy */
-.cmd{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:13px;color:var(--accent);background:var(--bg2);border-radius:4px;padding:8px 8px 8px 12px}
-.cmd code{flex:1;overflow-x:auto;white-space:nowrap}
+.cmd{min-width:0;max-width:100%;display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:13px;color:var(--accent);background:var(--bg2);border-radius:4px;padding:8px 8px 8px 12px}
+.cmd code{flex:1;min-width:0;overflow-x:auto;white-space:nowrap}
 .cmd button{font:inherit;font-size:11px;color:var(--ink);background:var(--bg);border:1px solid var(--line2);border-radius:4px;padding:3px 8px;cursor:pointer;flex:none}
 .cmd button:hover{border-color:var(--ink)}
 .term{background:var(--bg3);border:1px solid var(--line2);border-radius:4px;overflow:hidden}
