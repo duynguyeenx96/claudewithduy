@@ -1,9 +1,22 @@
-// Cloudflare Workers (static assets). Build: npm ci && npm run build, deploy: npx wrangler deploy
+// Cloudflare Workers. Build: npm ci && npm run build, deploy: npx wrangler deploy
+// /api/* chạy worker/index.js (thanh toán SePay), còn lại là file tĩnh trong dist.
 {
   "name": "ke-module",
+  "main": "worker/index.js",
   "compatibility_date": "2026-10-01",
   "assets": {
     "directory": "./dist",
-    "not_found_handling": "404-page"
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/api/*"]
+  },
+  "d1_databases": [
+    { "binding": "DB", "database_name": "claudewithduy-shop", "database_id": "4658b351-0378-4e2b-82f4-6a5516fd6f49" }
+  ],
+  "vars": {
+    "SALES_OPEN": "0",
+    "SEPAY_ACC": "06516324401",
+    "SEPAY_BANK": "TPBank"
   }
+  // Secret (wrangler secret put): SEPAY_WEBHOOK_KEY
 }

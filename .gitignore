@@ -12,3 +12,7 @@ tools/*/output/
 PROGRESS.md
 QUAY-VIDEO.md
 .venv-tts/
+
+# khoá bí mật khi chạy wrangler dev
+site/.dev.vars
+site/.wrangler/
