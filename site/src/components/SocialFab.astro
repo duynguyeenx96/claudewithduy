@@ -6,6 +6,7 @@ const showDonate = hasPublic(donate.qr);
 ---
 {social.length > 0 && (
   <nav class="fab" id="fab" aria-label="Theo dõi Claude with Duy">
+   <div class="fab-body" id="fab-body">
     <span class="fab-title">Follow</span>
     <ul class="fab-list">
       {social.map(([k, href]) => (
@@ -59,10 +60,31 @@ const showDonate = hasPublic(donate.qr);
         </div>
       </div>
     )}
+   </div>
+    <button type="button" class="fab-toggle" aria-expanded="false" aria-controls="fab-body" aria-label="Mở mạng xã hội, hỗ trợ, ủng hộ">
+      <span class="fab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg></span>
+    </button>
+    <button type="button" class="fab-top" aria-label="Lên đầu trang">
+      <span class="fab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5" /></svg></span>
+    </button>
   </nav>
 )}
 
 <script>
+  // Mobile: cụm thu gọn, bấm nút + để mở/đóng
+  const fab = document.getElementById('fab');
+  if (fab) {
+    const tg = fab.querySelector<HTMLButtonElement>('.fab-toggle')!;
+    const setOpen = (o: boolean) => { fab.classList.toggle('open', o); tg.setAttribute('aria-expanded', String(o)); tg.setAttribute('aria-label', o ? 'Thu gọn' : 'Mở mạng xã hội, hỗ trợ, ủng hộ'); };
+    tg.addEventListener('click', () => setOpen(!fab.classList.contains('open')));
+    document.addEventListener('click', e => { if (!fab.contains(e.target as Node)) setOpen(false); });
+    // Nút lên đầu trang: hiện khi đã cuộn xuống
+    const top = fab.querySelector<HTMLButtonElement>('.fab-top')!;
+    top.addEventListener('click', () => window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }));
+    const onScroll = () => top.classList.toggle('show', window.scrollY > 400);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
   // Nút Ủng hộ: chạm/bấm để mở QR (điện thoại không có hover), bấm ra ngoài hoặc Esc để đóng
   const dn = document.getElementById('fab-dn');
   if (dn) {
@@ -81,6 +103,24 @@ const showDonate = hasPublic(donate.qr);
 
 <style>
   .fab{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(32px,env(safe-area-inset-bottom));z-index:50;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+  .fab-body{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+  .fab-toggle,.fab-top{background:none;border:0;padding:0;cursor:pointer;color:var(--ink)}
+  .fab-toggle{display:none}
+  .fab-toggle .fab-ico svg{transition:transform .2s ease}
+  .fab.open .fab-toggle .fab-ico{background:var(--ink);color:var(--bg)}
+  .fab.open .fab-toggle .fab-ico svg{transform:rotate(45deg)}
+  .fab-top{display:none}
+  .fab-top.show{display:block}
+  .fab-toggle:hover .fab-ico,.fab-top:hover .fab-ico{background:var(--ink);color:var(--bg)}
+  .fab-toggle:focus-visible,.fab-top:focus-visible{outline:none}
+  .fab-toggle:focus-visible .fab-ico,.fab-top:focus-visible .fab-ico{outline:2px solid var(--accent);outline-offset:3px}
+  /* Mobile / tablet: thu gọn mặc định, bấm + mới hiện */
+  @media (max-width:1024px){
+    .fab{bottom:max(20px,env(safe-area-inset-bottom))}
+    .fab-toggle{display:block}
+    .fab-body{display:none}
+    .fab.open .fab-body{display:flex}
+  }
   .fab-title{font:500 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--bg);background:var(--ink);padding:6px 10px;border-radius:999px}
   .fab-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
   .fab-list a{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none}
