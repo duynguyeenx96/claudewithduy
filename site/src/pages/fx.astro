@@ -56,8 +56,10 @@ const groups = full.map(f => ({ f, subs: fxFree.filter(m => (m as any).pack === 
         <div class="grid">
           {fxPro.map(p => (
             <article data-kind="pro">
-              <div class="vframe card pro-card">
-                <span class="big-lock"><svg class="lock" viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path fill="currentColor" d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm-3 8V7a3 3 0 1 1 6 0v3H9Z"/></svg></span>
+              <div class={p.video ? 'vframe dark card' : 'vframe card pro-card'} data-demo={p.video ? '' : undefined}>
+                {p.video && <video src={u(p.video)} muted loop playsinline preload="metadata" data-audio=""></video>}
+                {p.video && <SoundBtn />}
+                {!p.video && <span class="big-lock"><svg class="lock" viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path fill="currentColor" d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm-3 8V7a3 3 0 1 1 6 0v3H9Z"/></svg></span>}
                 {!price(p.id) && <span class="mark pro"><svg class="lock" viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path fill="currentColor" d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm-3 8V7a3 3 0 1 1 6 0v3H9Z"/></svg>Chưa mở</span>}
               </div>
               <div class="label" style="font-size:11px">{p.count}</div>

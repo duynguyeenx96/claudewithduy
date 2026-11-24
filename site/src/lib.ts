@@ -13,7 +13,7 @@ export const modules = data.modules as Mod[];
 export const flow = data.flow;
 export const topics = data.topics;
 export const templates = data.templates;
-export const fxPro = (data as any).fxPro as { id: string; name: string; count: string; desc: string }[];
+export const fxPro = (data as any).fxPro as { id: string; name: string; count: string; desc: string; video?: string }[];
 export const fxFree = (data.modules as Mod[]).filter(m => (m as any).group === 'fx');
 export const requirements = data.requirements;
 

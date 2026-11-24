@@ -1659,13 +1659,15 @@
       "id": "fx-pack-3",
       "name": "FX Pack 3 · FX Reel",
       "count": "20 hiệu ứng",
-      "desc": "Đọc liền 20 tên hiệu ứng trong 20 giây, mỗi hiệu ứng chạy ngay trên người nói: con trỏ AI, nhân bản, vòng chữ, tờ tiền, tan biến…"
+      "desc": "Đọc liền 20 tên hiệu ứng trong 20 giây, mỗi hiệu ứng chạy ngay trên người nói: con trỏ AI, nhân bản, vòng chữ, tờ tiền, tan biến…",
+      "video": "videos/modules/fx-pack-3.mp4"
     },
     {
       "id": "fx-pro-02",
       "name": "FX Pro 02 · Reels Edit",
       "count": "8 hiệu ứng · 2 style",
-      "desc": "Hiệu ứng bật theo nội dung câu nói: từ khoá phát sáng, chữ sau đầu, vòng sáng đen trắng, khung REC, thẻ cảnh báo, thẻ icon."
+      "desc": "Hiệu ứng bật theo nội dung câu nói: từ khoá phát sáng, chữ sau đầu, vòng sáng đen trắng, khung REC, thẻ cảnh báo, thẻ icon.",
+      "video": "videos/modules/fx-pro-02.mp4"
     },
     {
       "id": "fx-pro-03",
