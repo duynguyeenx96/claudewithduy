@@ -16,3 +16,6 @@ QUAY-VIDEO.md
 # khoá bí mật khi chạy wrangler dev
 site/.dev.vars
 site/.wrangler/
+
+# thư mục dựng video (project HyperFrames, tách nền, bản xuất), file nặng
+work/
