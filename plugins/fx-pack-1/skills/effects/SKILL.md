@@ -18,11 +18,12 @@ Run `bash "${CLAUDE_SKILL_DIR}/scripts/setup.sh"`. Its last line is `READY <pyth
 
 ## 2. Get the video and the effect
 - Video: the user drags the file into the chat, or gives a path. A vertical phone video works best.
-- Effect: from `/effects <name>`, or from what they describe. Match their words to the table below. Unsure? Show them the list.
+- Images (optional): if they also give screenshots or photos (a post, their page, a price list), use them with `screenshot` where a line mentions them. Never ask for images; no images is fine.
+- Effect: from `/effects <name>`, or from what they describe. Match their words to the table below. No effect named: choose them yourself with `catalog.md`.
 
-## 3. Find the timing
-- If they say "on the word X" or "when I say ...", run `$PY scripts/words.py <video>` and use those times.
-- If they give no timing, apply the effect for the whole clip, or ask which part (one short question).
+## 3. Decide what goes where
+- They name the effect and the moment ("lean-in on the word X", "when I say ..."): run `$PY scripts/words.py <video>` and use those times.
+- They give only the video, an effect with no moment, or say "make it look good" / "thêm hiệu ứng": **read `catalog.md` next to this file and follow its auto-edit flow.** You decide which lines get an effect, which effect and what text, from the meaning of each line. Don't ask, and don't spread one effect over the whole clip.
 - Short windows look best: 1.5 to 4 seconds per effect.
 
 ## 4. Draft, check, render
@@ -33,9 +34,10 @@ Run `bash "${CLAUDE_SKILL_DIR}/scripts/setup.sh"`. Its last line is `READY <pyth
      {"fx": "backdrop-word", "start": 14.0, "end": 16.3, "text": "CLAUDE"}
    ]}
    ```
-2. Check frames first (fast): `$PY custom/fx_vi.py --plan <plan.json> <video> <folder>/check.png --still 4.5,15.2`, using the middle of each effect. Look at the PNGs yourself. Fix the text, timing or options if something looks off (covers the face, cut off by the edge, unreadable).
+2. Check frames first (fast): `$PY custom/fx_vi.py --plan <plan.json> <video> <folder>/check.png --still 4.5,15.2`, using the middle of each effect. Look at the PNGs yourself. On a vertical video they show the phone UI in red: the top band (status bar, Dynamic Island, tabs, search), the caption band at the bottom and the button column on the right. Never cover the face (hard rule). Keep text out of the dark red; the light red is best avoided, but text may poke into it a little, e.g. in a close-up, rather than shrink or drop onto the face. Fix the text, timing or options if not.
+Every `--plan` run first checks the plan (`custom/plan_check.py`): it counts effects by what the viewer sees, not by name (e.g. `lean-in`, `slow-push`, `locked-on` and a pushing `spotlight` are all "zoom into the face", max 2 per minute), fixes extra zooms itself (keeps the text, drops the zoom) and prints `Soát plan, đã sửa: …` / `Soát plan, cảnh báo: …`. Mention the fixes to the user; for warnings, change the plan and run again.
 3. Render: `$PY custom/fx_vi.py --plan <plan.json> <video> <video-name>_effects.mp4`. The output keeps their original audio. It renders at 1080p by default; add `--width 2160` for 4K (slower).
-4. Tell them where the file is. Remind them in one line to watch it before posting: it drafts, they approve.
+4. Tell them where the file is, with a short table of what you chose (`second · effect · which line, why`). Remind them in one line to watch it before posting: it drafts, they approve.
 
 A single effect needs no plan: `$PY custom/fx_vi.py orbit <video> <out.mp4> --start 3 --end 6 --text "..." --opt key=value`.
 
@@ -46,7 +48,7 @@ A single effect needs no plan: `$PY custom/fx_vi.py orbit <video> <out.mp4> --st
 | 2 | `lineup` | Numbered tiles fan out in an arc above your head | `text` (tile names joined with `\|`) |
 | 3 | `locked-on` | Corner brackets snap onto your face, the camera follows you | `zoom` (default 1.35), `text` (tag) |
 | 4 | `orbit` | Your reels circle your head: in front at the bottom, behind at the top | `images`, `count`, `speed`, `size` |
-| 5 | `lean-in` | A fast punch-in on one word | `zoom` (default 1.45, max 2), `speed` |
+| 5 | `lean-in` | A fast punch-in on one word, optionally a number or key phrase pops up above your head | `zoom` (default 1.45, max 2), `speed`, `text`, `color` |
 | 6 | `backdrop-word` | A giant word drops in behind you | `text`, `color` (hex), `font` (`bold` or `serif`) |
 | 7 | `spotlight` | Kills the lights, keeps you lit | `text` (glowing word behind you), `color`, `push` |
 | 8 | `the-bill` | Prints your instructions like a receipt into the wall above your head | `text` (lines joined with `\|`) |
@@ -93,6 +95,7 @@ A single effect needs no plan: `$PY custom/fx_vi.py orbit <video> <out.mp4> --st
 | 49 | `huge-strike` | One huge serif word wipes in behind your head, then a red line crosses it out | `text`, `at` (seconds into the effect when the strike lands, default 0.6) |
 | 50 | `crayon-write` | A red crayon writes your word behind your head, then underlines it and flies off | `text` |
 | 51 | `fan-build` | Your reel covers deal into a fan behind your head, one card at a time | `images` (folder of your covers), `count` (default 13) |
+| 52 | `screenshot` | Your own screenshot (only when the user gives one) pops up as a card: it scrolls to the right spot, a highlighter marks a line, a cursor clicks a button | `image` (required), `highlight` and `click` (boxes from `scripts/find_text.py`), `hl_at`, `click_at`, `click_text`, `y` |
 
 **Named looks** (same effect, a fancier look; they don't add to the count):
 - `glitter-spotlight` = `spotlight` with `look=sparkle`: the room goes dark, golden rays burst from behind your head, a big gold word with a shine sweep, twinkling sparkles and a glow around you. `text` (the word), `color`, `push`.

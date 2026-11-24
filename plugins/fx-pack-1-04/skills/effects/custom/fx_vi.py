@@ -74,13 +74,17 @@ try:
     fx.FONT['jp'] = VN_BOLD  # các hiệu ứng thêm vốn dùng phông tiếng Nhật -> dùng phông có dấu tiếng Việt
 except Exception as e:  # thiếu file vẫn chạy được 51 hiệu ứng gốc
     print(f'(bỏ qua fx_custom: {e})', file=sys.stderr)
+try:
+    import fx_image  # noqa: E402,F401  (screenshot: ảnh người dùng đưa, tuỳ chọn)
+except Exception as e:
+    print(f'(bỏ qua fx_image: {e})', file=sys.stderr)
 
 # Gói tách nhỏ (fx-pack-N-0M): pack.json ở gốc skill giới hạn các hiệu ứng có trong gói.
 _PACK = os.path.join(ROOT, 'pack.json')
 if os.path.exists(_PACK):
     import json
     _p = json.load(open(_PACK, encoding='utf-8'))
-    _keep = set(_p['effects'])
+    _keep = set(_p['effects']) | set(_p.get('bonus', []))  # bonus: chuyển động máy kèm theo mọi gói
     _where = _p.get('others', {})  # tên hiệu ứng -> gói chứa nó
     for _k in list(fx.EFFECTS):
         if _k not in _keep: del fx.EFFECTS[_k]
@@ -97,4 +101,8 @@ if os.path.exists(_PACK):
     fx.main = _pack_main
 
 if __name__ == '__main__':
+    if '--plan' in sys.argv:  # soát luật họ hình ảnh, tự hạ zoom thừa (custom/plan_check.py)
+        import plan_check
+        _i = sys.argv.index('--plan'); _pos = [x for j, x in enumerate(sys.argv[1:], 1) if not x.startswith('--') and j != _i + 1 and not sys.argv[j - 1] in ('--still', '--width', '--start', '--end', '--text', '--images', '--opt')]
+        plan_check.run(sys.argv[_i + 1], _pos[0] if _pos else None)
     fx.main()

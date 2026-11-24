@@ -131,7 +131,7 @@ def head_top(c):
 
 def cinema_layout(c, e, lines):
     """Pick the free area for the title: above the head if there is room, else the wider side."""
-    W, H = c.W, c.H; safe = H * 0.075; top = head_top(c)
+    W, H = c.W, c.H; safe = H * fx.SAFE['top']; top = head_top(c)  # dưới dải giao diện trên cùng (trước 7.5% là nằm trong Dynamic Island)
     avail = top - safe - H * 0.025
     kick = 0.032 * W
     if avail > H * 0.15:

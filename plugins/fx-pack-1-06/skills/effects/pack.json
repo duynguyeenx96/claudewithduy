@@ -13,10 +13,13 @@
   "split-headline",
   "dot-reveal"
  ],
+ "bonus": [
+  "lean-in",
+  "slow-push",
+  "screenshot"
+ ],
  "others": {
   "locked-on": "fx-pack-1-01",
-  "lean-in": "fx-pack-1-01",
-  "slow-push": "fx-pack-1-01",
   "over-the-shoulder-zoom": "fx-pack-1-01",
   "spotlight": "fx-pack-1-01",
   "moody": "fx-pack-1-01",

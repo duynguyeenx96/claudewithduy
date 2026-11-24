@@ -29,6 +29,10 @@ PACKS = [
      ['tape-label', 'scribble', 'pause-point', 'reject-stamp', 'uninstall', 'reel-frame', 'shortcut-rain', 'headline-box', 'split-headline', 'dot-reveal']),
 ]
 
+# Phương án B (2026-11-24): gói nhỏ nào cũng kèm 2 chuyển động máy đặt được ở mọi câu, để chế độ tự dựng luôn có
+# hook và điểm nhấn con số. Không tính vào 10 hiệu ứng của gói.
+BONUS = ['lean-in', 'slow-push', 'screenshot']  # screenshot chỉ dùng khi người dùng đưa ảnh (tuỳ chọn)
+
 # 8 hiệu ứng thêm (custom/fx_custom.py) không có dòng trong bảng SKILL.md gốc
 EXTRA_ROWS = {
     'cinema': ('Documentary cover: B&W you, a glowing circle behind, a big headline bouncing in letter by letter over a drifting watermark, film grain',
@@ -40,6 +44,8 @@ EXTRA_ROWS = {
     'editor': ('A full video-editor screen around you: viewer, timecode, tools, inspector sliders, a 6-track timeline with a moving playhead', '`text` (title)'),
     'spotlight-type': ('The room goes dark and a crisp word types itself in above your head, one letter at a time', '`text`, `color`, `step` (seconds per letter), `type_at`'),
     'spotlight-neon': ('The room goes dark and a glowing neon word switches on letter by letter behind you, with bloom and wall spill', '`text`, `step` (seconds per letter), `type_at`'),
+    'screenshot': ('Your own screenshot (only when the user gives one) pops up as a card: it scrolls to the right spot, a highlighter marks a line, a cursor clicks a button',
+                   '`image` (required), `highlight` and `click` (boxes from `scripts/find_text.py`), `hl_at`, `click_at`, `click_text`, `y`'),
     'gold-collage': ('Black and white you over a dark room, a giant metallic gold word staggers in behind you with a shine sweep, kinetic lines beside you', '`text`, `lines` (with `\\|`), `tag`'),
 }
 NAMED_LOOKS = {  # dòng "Named looks" của SKILL gốc -> gói chứa hiệu ứng cha
@@ -77,7 +83,7 @@ description: FX Pack 1-{num} · {title}. Add one of {n} talking-head video effec
 
 # FX Pack 1-{num} · {title} ({n} hiệu ứng)
 
-Gói này nằm trong bộ FX Pack 1 của Claude with Duy (59 hiệu ứng miễn phí, chia 6 gói; gói đủ 59 là `fx-pack-1`). Gói này chỉ có {n} hiệu ứng bên dưới.
+Gói này nằm trong bộ FX Pack 1 của Claude with Duy (59 hiệu ứng miễn phí, chia 6 gói; gói đủ 59 là `fx-pack-1`). Gói này chỉ có {n} hiệu ứng bên dưới{bonus_note}.
 Người dùng nhắc tới hiệu ứng không có ở đây: nói nó nằm trong gói nào (xem cuối file) và cách cài, đừng cố làm thay bằng hiệu ứng khác.
 
 The user is usually not technical. Keep replies short and friendly, do the work for them, and never ask them to run commands themselves.
@@ -90,11 +96,12 @@ Run `bash "${{CLAUDE_SKILL_DIR}}/scripts/setup.sh"`. Its last line is `READY <py
 
 ## 2. Get the video and the effect
 - Video: the user drags the file into the chat, or gives a path. A vertical phone video works best.
-- Effect: from `/effects <name>`, or from what they describe. Match their words to the table below. Unsure? Show them the list.
+- Images (optional): if they also give screenshots or photos (a post, their page, a price list), use them with `screenshot` where a line mentions them. Never ask for images; no images is fine.
+- Effect: from `/effects <name>`, or from what they describe. Match their words to the table below. No effect named: choose them yourself with `catalog.md`.
 
-## 3. Find the timing
-- If they say "on the word X" or "when I say ...", run `$PY scripts/words.py <video>` and use those times.
-- If they give no timing, apply the effect for the whole clip, or ask which part (one short question).
+## 3. Decide what goes where
+- They name the effect and the moment ("lean-in on the word X", "when I say ..."): run `$PY scripts/words.py <video>` and use those times.
+- They give only the video, an effect with no moment, or say "make it look good" / "thêm hiệu ứng": **read `catalog.md` next to this file and follow its auto-edit flow.** You decide which lines get an effect, which effect and what text, from the meaning of each line. Don't ask, and don't spread one effect over the whole clip.
 - Short windows look best: 1.5 to 4 seconds per effect.
 
 ## 4. Draft, check, render
@@ -102,9 +109,10 @@ Run `bash "${{CLAUDE_SKILL_DIR}}/scripts/setup.sh"`. Its last line is `READY <py
    ```json
    {{"effects": [{{"fx": "{ex}", "start": 3.2, "end": 6.0}}]}}
    ```
-2. Check frames first (fast): `$PY custom/fx_vi.py --plan <plan.json> <video> <folder>/check.png --still 4.5`, using the middle of each effect. Look at the PNGs yourself. Fix the text, timing or options if something looks off (covers the face, cut off by the edge, unreadable).
+2. Check frames first (fast): `$PY custom/fx_vi.py --plan <plan.json> <video> <folder>/check.png --still 4.5`, using the middle of each effect. Look at the PNGs yourself. On a vertical video they show the phone UI in red: the top band (status bar, Dynamic Island, tabs, search), the caption band at the bottom and the button column on the right. Never cover the face (hard rule). Keep text out of the dark red; the light red is best avoided, but text may poke into it a little, e.g. in a close-up, rather than shrink or drop onto the face. Fix the text, timing or options if not.
+Every `--plan` run first checks the plan (`custom/plan_check.py`): it counts effects by what the viewer sees, not by name (e.g. `lean-in`, `slow-push`, `locked-on` and a pushing `spotlight` are all "zoom into the face", max 2 per minute), fixes extra zooms itself (keeps the text, drops the zoom) and prints `Soát plan, đã sửa: …` / `Soát plan, cảnh báo: …`. Mention the fixes to the user; for warnings, change the plan and run again.
 3. Render: `$PY custom/fx_vi.py --plan <plan.json> <video> <video-name>_effects.mp4`. The output keeps their original audio. It renders at 1080p by default; add `--width 2160` for 4K (slower).
-4. Tell them where the file is. Remind them in one line to watch it before posting: it drafts, they approve.
+4. Tell them where the file is, with a short table of what you chose (`second · effect · which line, why`). Remind them in one line to watch it before posting: it drafts, they approve.
 
 A single effect needs no plan: `$PY custom/fx_vi.py {ex} <video> <out.mp4> --start 3 --end 6 --text "..." --opt key=value`.
 Always run `custom/fx_vi.py` (Vietnamese text works), never `scripts/fx.py` directly.
@@ -141,22 +149,25 @@ def main():
         if dst.exists(): shutil.rmtree(dst)
         sk = dst / 'skills/effects'
         shutil.copytree(SRC, sk, ignore=lambda d, fs: [f for f in fs if f in SKIP])
-        (sk / 'pack.json').write_text(json.dumps({'name': f'fx-pack-1-{num}', 'title': title, 'effects': names,
-                                                  'others': {k: v for k, v in where.items() if k not in names}},
+        bonus = [b for b in BONUS if b not in names]
+        (sk / 'pack.json').write_text(json.dumps({'name': f'fx-pack-1-{num}', 'title': title, 'effects': names, 'bonus': bonus,
+                                                  'others': {k: v for k, v in where.items() if k not in names + bonus}},
                                                  ensure_ascii=False, indent=1), encoding='utf-8')
         tbl = '\n'.join(f'| {i} | `{n}` | {rows[n][0]} | {rows[n][1]} |' for i, n in enumerate(names, 1))
+        tbl += ''.join(f'\n| + | `{n}` | (kèm theo) {rows[n][0]} | {rows[n][1]} |' for n in bonus)
+        bonus_note = (f', cộng {len(bonus)} hiệu ứng kèm theo ({", ".join(bonus)}) (dùng chung mọi gói: điểm nhấn đặt được ở mọi câu, và thẻ ảnh khi người dùng đưa ảnh)') if bonus else ''
         lk = [it for n in names for it in looks.get(n, [])]
         lkb = ('\n**Named looks** (same effect, a fancier look; they don\'t add to the count):\n' + '\n'.join(f'- {x}' for x in lk) + '\n') if lk else ''
         others = '\n'.join(f'- `fx-pack-1-{p[0]}` · {p[1]}: ' + ', '.join(p[3]) for p in PACKS if p[0] != num)
         (sk / 'SKILL.md').write_text(SKILL_TMPL.format(num=num, title=title, n=len(names), names=', '.join(names), vi=VI[num],
-                                                       ex=names[0], rows=tbl, looks=lkb, others=others), encoding='utf-8')
+                                                       ex=names[0], rows=tbl, looks=lkb, others=others, bonus_note=bonus_note), encoding='utf-8')
         readme = (SRC / 'README.md').read_text(encoding='utf-8')
         readme = re.sub(r'^# .*$', f'# FX Pack 1-{num} · {title} ({len(names)} hiệu ứng)', readme, count=1, flags=re.M)
         readme = readme.replace('Nguồn: skill', f'Một trong 6 gói tách từ FX Pack 1 (59 hiệu ứng, gói đủ là `fx-pack-1`). Gói này: {", ".join(names)}.\n\nNguồn: skill', 1)
         (sk / 'README.md').write_text(readme, encoding='utf-8')
         (dst / '.claude-plugin').mkdir(parents=True)
         (dst / '.claude-plugin/plugin.json').write_text(json.dumps({
-            'name': f'fx-pack-1-{num}', 'version': '1.0.0',
+            'name': f'fx-pack-1-{num}', 'version': json.loads((SRC.parent.parent / '.claude-plugin/plugin.json').read_text(encoding='utf-8'))['version'],
             'description': f'FX Pack 1-{num} · {title}: {len(names)} hiệu ứng cho video người nói. {blurb}.',
             'author': {'name': 'Claude with Duy'},
             'homepage': f'https://github.com/duynguyeenx96/claudewithduy/tree/main/plugins/fx-pack-1-{num}',

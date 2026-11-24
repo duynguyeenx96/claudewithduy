@@ -24,7 +24,7 @@ $PYFX $FX/custom/fx_vi.py --plan plan.json <vào.mp4> <ra.mp4>                  
 FX Pack là một lần encode hình. Chạy nó lên clip người nói đã cắt lời **trước** khi dựng (đầu ra đưa vào làm A-roll),
 không chạy lên mp4 đã render xong. Vùng có hiệu ứng thì không đặt thêm chữ / chip đè lên (một hệ chữ mỗi đoạn).
 
-## Vùng an toàn (x 70–1010, y 250–1500), soát trên clip thử 2026-11-16, đầu ở giữa khung
+## Vùng an toàn (x 70–1010, y 250–1500; trong code: `SAFE` ở scripts/fx.py, khung kiểm tự tô đỏ vùng ngoài, tắt bằng `--no-guides`), soát trên clip thử 2026-11-16, đầu ở giữa khung
 Vị trí đa số bám theo đầu: đầu càng cao thì thẻ "trên đầu" càng dễ vượt mép trên. **Luôn xuất khung kiểm trước khi render.**
 
 - **Nằm trong vùng:** locked-on, orbit, lean-in, spotlight, moody, todo, shortcut-rain, scribble, broll-split, phone-fan, comment-box, match-cut,

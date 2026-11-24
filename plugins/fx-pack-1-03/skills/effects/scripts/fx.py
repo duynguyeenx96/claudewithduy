@@ -214,6 +214,62 @@ def cached(e, key, fn):
     return e.state[key]
 
 
+# ---------- vùng an toàn khung dọc 9:16 + đỉnh đầu (Claude with Duy, 2026-11-25) ----------
+# Trên 13%: thanh trạng thái + Dynamic Island, rồi tab "Đang follow / Dành cho bạn", nút tìm kiếm của TikTok / Reels / Shorts.
+# Dưới từ 78%: caption, tên kênh, nhạc. Bên phải 88%+ từ 45% xuống: cột nút like / comment / share.
+# 'top'/'bottom' là mép NÊN TRÁNH (lấn một chút được); 'hard_top'/'hard_bottom' là CẤM (thanh trạng thái + Dynamic Island, đáy màn hình).
+# Thứ tự ưu tiên: không che mặt > chữ đủ to > tránh vùng nên tránh. Quay cận mặt thì chữ được lấn lên dải trên.
+SAFE = {'top': 0.13, 'bottom': 0.78, 'hard_top': 0.055, 'hard_bottom': 0.88, 'left': 0.065, 'right': 0.935, 'buttons_x': 0.88, 'buttons_y': 0.45}
+
+
+def head_top(c, e=None):
+    """Đỉnh đầu thật (px), đo từ mặt nạ tách người quanh mặt; có e thì làm mượt theo thời gian cho chữ khỏi giật."""
+    x0, x1 = int(max(0, c.fx - c.fw * 0.6)), int(min(c.W, c.fx + c.fw * 0.6))
+    rows = np.where((c.m[:, x0:x1] > 0.5).mean(1) > 0.15)[0]
+    ht = float(rows[0]) if len(rows) else c.fy - c.fw * 1.0
+    if e is not None:
+        prev = e.state.get('_ht'); ht = ht if prev is None else prev * 0.8 + ht * 0.2; e.state['_ht'] = ht
+    return ht
+
+
+def on_head(c, h, e=None, tuck=0.3, ht=None):
+    """Tâm y + tỉ lệ cho một khối chữ cao h đặt NGAY TRÊN ĐỈNH ĐẦU: tóc chỉ che `tuck` phần dưới của khối
+    (khối chữ có lề ~20% nên tóc chỉ chạm chân chữ), không bao giờ lên dải giao diện trên cùng, chật thì thu nhỏ."""
+    ht = head_top(c, e) if ht is None else ht; need = max(1.0, h * (1 - tuck))
+    top = c.H * SAFE['top']
+    if (ht - top) / need < 0.8: top = max(c.H * SAFE['hard_top'], ht - need)  # chật (quay cận): lấn lên dải nên tránh, không vào thanh trạng thái
+    sc = clamp((ht - top) / need, 0.45, 1.0); hh = h * sc
+    return max(top + hh / 2, ht + tuck * hh - hh / 2), sc
+
+
+def word_spot(c, h, e=None, tuck=0.3):
+    """(cy, scale, behind) cho chữ to: ngay trên đỉnh đầu, giấu chân chữ sau tóc. Quay cận sát tới mức trên đầu hết chỗ
+    thì chữ giấu sau đầu là không đọc được: đưa ra PHÍA TRƯỚC, ngay dưới cằm (behind=False, gọi place với guard=True để né mặt)."""
+    ht = head_top(c, e)
+    if (ht - c.H * SAFE['hard_top']) / max(1.0, h * (1 - tuck)) >= 0.6:
+        cy, sc = on_head(c, h, None, tuck, ht); return cy, sc, True
+    chin = c.fy + c.fw * 0.75; bottom = c.H * SAFE['hard_bottom']
+    sc = clamp((bottom - chin) / (h * 1.05), 0.45, 1.0); hh = h * sc
+    return min(chin + hh * 0.55, bottom - hh / 2), sc, False
+
+
+def draw_guides(img):
+    """Vẽ vùng giao diện điện thoại che lên khung kiểm (chỉ khung kiểm, không vào video)."""
+    H, W = img.shape[:2]; im = Image.fromarray(img).convert('RGBA'); ov = Image.new('RGBA', im.size, (0, 0, 0, 0)); d = ImageDraw.Draw(ov)
+    red = (255, 40, 60); t, b = int(H * SAFE['top']), int(H * SAFE['bottom'])
+    ht_, hb_ = int(H * SAFE['hard_top']), int(H * SAFE['hard_bottom'])
+    d.rectangle([0, ht_, W, t], fill=red + (55,)); d.rectangle([0, b, W, hb_], fill=red + (55,))  # nên tránh: lấn một chút được
+    d.rectangle([0, 0, W, ht_], fill=red + (150,)); d.rectangle([0, hb_, W, H], fill=red + (150,))  # cấm
+    d.rectangle([int(W * SAFE['buttons_x']), int(H * SAFE['buttons_y']), W, b], fill=red + (70,))
+    d.rounded_rectangle([W * 0.35, H * 0.012, W * 0.65, H * 0.036], H * 0.012, fill=(0, 0, 0, 230))
+    for x in (int(W * SAFE['left']), int(W * SAFE['right'])): d.line([(x, t), (x, b)], fill=red + (160,), width=2)
+    f = font('ui', H * 0.016)
+    d.text((W * 0.03, H * 0.065), 'Tab, tìm kiếm (nên tránh, lấn chút được)', font=f, fill=(255, 255, 255, 235))
+    d.text((W * 0.03, b + H * 0.012), 'Caption, tên kênh, nhạc (nên tránh)', font=f, fill=(255, 255, 255, 235))
+    d.text((W * SAFE['buttons_x'] - W * 0.01, H * SAFE['buttons_y'] + H * 0.01), 'Nút', font=f, fill=(255, 255, 255, 235), anchor='ra')
+    return np.asarray(Image.alpha_composite(im, ov).convert('RGB'))
+
+
 # ---------- the 22 effects ----------
 @effect('noise', 'reels pile up behind your head, one every quarter second')
 def fx_noise(c, e):
@@ -273,8 +329,9 @@ def fx_locked_on(c, e):
         d.line([(px, py + dy * L), (px, py), (px + dx * L, py)], fill=(255, 255, 255, 255), width=wd, joint='curve')
     place(c, shadowed(im, 6, 2, 120), c.fx, c.fy, alpha=al)
     tag = text_img(e.o.get('text', 'LOCKED ON').upper(), c.W * 0.036, 'mono', INK)
-    pill = rrect(tag.width + 24, tag.height, tag.height / 2, (255, 255, 255, 240)); pill.alpha_composite(tag, (12, 0))
-    place(c, pill, c.fx, c.fy + s * 1.25 + pill.height, alpha=clamp((c.lt - 0.15) / 0.15) * al, guard=True)
+    pill = rrect(tag.width + 24, tag.height, tag.height / 2, (255, 255, 255, 255)); pill.alpha_composite(tag, (12, 0))  # đục hẳn: 240 để logo trên áo xuyên qua thành vệt
+    # Thẻ nằm dưới cằm. Không guard: vùng elip của guard kéo tới ~1.5 lần bề rộng mặt, khoét mất giữa thẻ.
+    place(c, pill, c.fx, c.fy + s * 1.25 + pill.height, alpha=clamp((c.lt - 0.15) / 0.15) * al)
 
 
 @effect('orbit', 'your reels circle your head: in front at the bottom, behind you at the top')
@@ -297,6 +354,13 @@ def fx_orbit(c, e):
 def fx_lean_in(c, e):
     z = float(e.o.get('zoom', 1.45))
     face_cam(c, 1 + (z - 1) * ease_out(c.lt / float(e.o.get('speed', 0.18))), 0.42)
+    if e.o.get('text'):  # con số / cụm khoá bật lên sau đầu đúng lúc giật zoom (Claude with Duy, 2026-11-24)
+        txt = str(e.o['text']); col = rgb(e.o.get('color'), YELLOW)
+        im = cached(e, 'w', lambda: fit_text(txt, c.W * 0.86, e.o.get('font', 'bold'), start=int(c.H * 0.1), fill=col, shadow=14))
+        k = ease_back((c.lt - 0.04) / 0.3) if c.lt > 0.04 else 0.0
+        # con số phải đọc trọn: đặt PHÍA TRƯỚC, hẳn trên đỉnh đầu; chật thì thu nhỏ chữ cho vừa, không giấu sau đầu
+        y, sc, _ = word_spot(c, im.height, e, tuck=0.12)
+        place(c, im, c.W / 2, y, sc * (0.55 + 0.45 * k), 0, clamp((c.lt - 0.04) / 0.08) * clamp((e.d - c.lt) / 0.2))
 
 
 @effect('backdrop-word', 'a giant word drops in behind you')
@@ -304,9 +368,9 @@ def fx_backdrop_word(c, e):
     word = e.o.get('text', 'CLAUDE')
     im = cached(e, 'w', lambda: fit_text(word, c.W * 0.94, e.o.get('font', 'bold'), fill=rgb(e.o.get('color'), CREAM), shadow=10))
     k = ease_back(c.lt / 0.42)
-    y_end = c.fy - c.fw * 1.05
+    y_end, sc, bh = word_spot(c, im.height, e)
     y = -im.height + (y_end + im.height) * k
-    place(c, im, c.W / 2 * 0.6 + c.fx * 0.4, y, alpha=clamp((e.d - c.lt) / 0.2), behind=True)
+    place(c, im, c.W / 2 * 0.6 + c.fx * 0.4, y, sc, alpha=clamp((e.d - c.lt) / 0.2), behind=bh, guard=not bh)
 
 
 _grid = {}
@@ -330,7 +394,8 @@ def fx_spotlight(c, e):
         word = e.o['text']; col = rgb(e.o.get('color'), PEACH)
         im = cached(e, 'w', lambda: fit_text(word, c.W * 0.9, e.o.get('font', 'serif'), fill=col, glow=(col, 26)))
         c.img *= f[..., None]
-        place(c, im, c.W / 2, c.fy - c.fw * 1.1, alpha=k, behind=True)
+        cy, sc, bh = word_spot(c, im.height, e)
+        place(c, im, c.W / 2, cy, sc, alpha=k, behind=bh, guard=not bh)
     else:
         c.img *= f[..., None]
 
@@ -623,7 +688,7 @@ def fx_countdown(c, e):
     elif f < 1:
         h = max(1, int(th / 2 * (2 * f - 1))); fl = hv[(cur, False)].resize((tw, h)); im.paste(fl, (0, th // 2))
     ImageDraw.Draw(im).line([(0, th // 2), (tw, th // 2)], fill=(0, 0, 0, 255), width=4)
-    y = max(th / 2 + c.H * 0.05, c.fy - c.fw * 2.3)
+    y = max(th / 2 + c.H * SAFE['top'], c.fy - c.fw * 2.3)
     place(c, shadowed(im, 16, 10, 120), c.W / 2 * 0.6 + c.fx * 0.4, y, 0.7 + 0.3 * ease_back(c.lt / 0.3), 0, clamp((e.d - c.lt) / 0.2), behind=True)
 
 
@@ -842,20 +907,27 @@ def fx_red_collage(c, e):
     red = rgb(e.o.get('color'), RED); al = fade(c, e)
     w = cached(e, 'w', lambda: fit_text(e.o.get('text', 'EDIT').upper(), c.W * 0.98, 'uib', 700, fill=red, glow=(red, 34)))
     s = 1.12 - 0.12 * ease_out(c.lt / 0.4)
-    place(c, w, c.W / 2, max(w.height * 0.42, c.fy - c.fw * 1.05), s, 0, clamp(c.lt / 0.12) * al, behind=True)
+    cy, sc, bh = word_spot(c, w.height, e)
+    place(c, w, c.W / 2, cy, s * sc, 0, clamp(c.lt / 0.12) * al, behind=bh, guard=not bh)
     lines = e.o.get('lines', 'ONE CLIP.|22 EFFECTS.|ZERO APPS.').split('|')
-    size = cached(e, 'sz', lambda: lines_fit(lines, c.W * 0.8, 'uib', int(c.W * 0.14)))
-    y = max(c.H * 0.5, c.fy + c.fw * 1.55)
+    # khối dòng chữ phải nằm trên vùng caption (SAFE bottom): chật thì thu nhỏ chữ
+    y0 = max(c.H * 0.5, c.fy + c.fw * 1.55); bottom = c.H * SAFE['bottom'] - c.H * 0.01
+    if bottom - y0 < c.H * 0.03 * len(lines) * 1.6: bottom = c.H * SAFE['hard_bottom']  # cận mặt: lấn xuống dải caption thay vì thu chữ quá nhỏ
+    size = cached(e, 'sz', lambda: int(min(lines_fit(lines, c.W * (SAFE['right'] - SAFE['left'] - 0.05), 'uib', int(c.W * 0.14)),
+                                             max(c.H * 0.03, (bottom - y0) / max(1, len(lines))))))
+    y = min(y0, bottom - size * len(lines))
     for j, ln in enumerate(lines):
         im = cached(e, ('l', j), lambda: text_img(ln, size, 'uib', red if j == 1 else (255, 255, 255), shadow=8))
         kk = clamp((c.lt - 0.18 - 0.13 * j) / 0.16)
-        if kk > 0: place(c, im, c.W * 0.05 + im.width / 2, y + im.height / 2, 1.4 - 0.4 * ease_out(kk), 0, kk * al, guard=True)
+        if kk > 0: place(c, im, c.W * SAFE['left'] + im.width / 2, y + im.height / 2, 1.4 - 0.4 * ease_out(kk), 0, kk * al, guard=True)
         y += size * 1.0
-    tag = cached(e, 'tag', lambda: text_img(e.o.get('tag', 'REC  ·  RED COLLAGE'), c.W * 0.027, 'mono', red))
+    if not e.o.get('tag'): return  # nhãn nhỏ góc dưới: chỉ khi người dùng đặt (mặc định cũ "REC · RED COLLAGE" là chữ Anh, nằm trong vùng caption)
+    tag = cached(e, 'tag', lambda: text_img(e.o.get('tag'), c.W * 0.027, 'mono', red))
     dot = Image.new('RGBA', (int(tag.height * 0.4),) * 2, (0, 0, 0, 0)); ImageDraw.Draw(dot).ellipse([0, 0, dot.width - 1, dot.width - 1], fill=red + (255,))
     blink = 1.0 if int(c.lt * 2.5) % 2 == 0 else 0.35
-    place(c, dot, c.W * 0.07, c.H * 0.93, alpha=al * k * blink, guard=True)
-    place(c, tag, c.W * 0.07 + dot.width + tag.width / 2, c.H * 0.93, alpha=al * k, guard=True)
+    ty = c.H * SAFE['top'] + tag.height
+    place(c, dot, c.W * SAFE['left'], ty, alpha=al * k * blink, guard=True)
+    place(c, tag, c.W * SAFE['left'] + dot.width + tag.width / 2, ty, alpha=al * k, guard=True)
 
 
 @effect('split-headline', 'a clean headline card slides down and pushes you into the bottom of the frame')
@@ -904,7 +976,8 @@ def fx_pastel_word(c, e):
     c.img = c.img * (1 - k) + (you * m + bg * (1 - m)) * k
     word = cached(e, 'w', lambda: fit_text(e.o.get('text', 'REELS').upper(), W * 0.96, 'uib', 700, fill=(255, 255, 255)))
     dk = ease_out(c.lt / 0.45)
-    place(c, shadowed(word, 24, 12, 60), W / 2, max(word.height * 0.45, c.fy - c.fw * 1.2) - (1 - dk) * H * 0.06, 1, 0, al * clamp(c.lt / 0.15), behind=True)
+    cy, sc, bh = word_spot(c, word.height, e)
+    place(c, shadowed(word, 24, 12, 60), W / 2, cy - (1 - dk) * H * 0.06, sc, 0, al * clamp(c.lt / 0.15), behind=bh, guard=not bh)
     cw, chh = W * 0.86, W * 0.15; cy = H * 0.865 + (1 - ease_out((c.lt - 0.15) / 0.35)) * H * 0.2
     card_ = rrect(cw, chh, chh * 0.3, (255, 255, 255, 248)); d = ImageDraw.Draw(card_)
     av = face_chip(c, e, chh * 0.64); card_.alpha_composite(av, (int(chh * 0.18), int((chh - av.height) / 2)))
@@ -1007,7 +1080,7 @@ def fx_headline_box(c, e):
     face_cam(c, 1 + (float(e.o.get('zoom', 1.2)) - 1) * ease_out(c.lt / 0.22), 0.45)
     W = c.W; al = fade(c, e); lines = e.o.get('text', 'How I got Claude|to edit my reels.').split('|')
     S = cached(e, 'sz', lambda: lines_fit(lines, W * 0.84, 'uib', int(W * 0.085)))
-    y = max(c.H * 0.06, c.fy - c.fw * 1.3 - S * 1.3 * len(lines))
+    y = max(c.H * SAFE['top'], c.fy - c.fw * 1.3 - S * 1.3 * len(lines))
     for j, ln in enumerate(lines):
         kj = clamp((c.lt - 0.1 - 0.12 * j) / 0.18)
         if kj <= 0: y += S * 1.3; continue
@@ -1613,7 +1686,7 @@ def match_page(c, e, j, wx, wy):
 def fx_match_cut(c, e):
     k = clamp(c.lt / 0.06) * fade(c, e, 0.12)
     face_cam(c, 1 + 0.06 * ease_out(c.lt / e.d), 0.44)
-    wx, wy = cached(e, 'anchor', lambda: (c.W / 2, max(c.H * 0.1, c.fy - c.fw * 1.55)))
+    wx, wy = cached(e, 'anchor', lambda: (c.W / 2, max(c.H * (SAFE['top'] + 0.04), c.fy - c.fw * 1.55)))
     durs = [0.15, 0.15, 0.17, 0.19, 0.22, 0.26, 0.3, 0.45]; t, j = c.lt, 0
     while j < len(durs) - 1 and t > durs[j]: t -= durs[j]; j += 1
     pg = cached(e, ('pg', j), lambda: match_page(c, e, j, wx, wy)).astype(np.float32) / 255
@@ -1758,7 +1831,8 @@ def spotlight_sparkle(c, e):
     w2 = wa.copy(); w2[..., :3] = np.clip(w2[..., :3] + band[..., None] * 0.9, 0, 1)
     s = 1.08 - 0.08 * ease_out(c.lt / 0.5)
     im = Image.fromarray((w2 * 255).astype(np.uint8), 'RGBA')
-    place(c, im, W / 2, max(wh * 0.5 + H * 0.06, c.fy - c.fw * 1.05 - wh * 0.28), s, 0, k, behind=True)
+    cy, sc, bh = word_spot(c, wh, e)
+    place(c, im, W / 2, cy, s * sc, 0, k, behind=bh, guard=not bh)
     def spots():
         rnd = random.Random(9)
         return [(rnd.uniform(0.04, 0.96), rnd.uniform(0.07, 0.62), rnd.uniform(0.025, 0.07), rnd.uniform(0, 6.3), rnd.uniform(5, 9), rnd.random() < 0.35) for _ in range(48)]
@@ -2270,6 +2344,7 @@ def main():
     ap.add_argument('--plan'); ap.add_argument('--start', type=float); ap.add_argument('--end', type=float)
     ap.add_argument('--text'); ap.add_argument('--images'); ap.add_argument('--opt', action='append', default=[], help='key=value')
     ap.add_argument('--still', help='comma-separated seconds: save PNG check frames instead of a video')
+    ap.add_argument('--no-guides', action='store_true', help='check frames without the phone UI overlay (top bar, caption, buttons)')
     ap.add_argument('--width', type=int, default=1080, help='short side of the output (1080 default, 2160 for 4K)')
     ap.add_argument('--list', action='store_true')
     a = ap.parse_args()
@@ -2337,6 +2412,7 @@ def main():
             frame = (np.clip(c.img, 0, 1) * 255 + 0.5).astype(np.uint8)
         if stills is not None:
             out = dst if len(stills) == 1 else dst.replace('.png', f'_{t:.2f}.png')
+            if not a.no_guides and H > W: frame = draw_guides(frame)  # khung dọc: tô vùng giao diện điện thoại che
             cv2.imwrite(out, cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)); print('saved', out)
         else:
             enc.stdin.write(frame.tobytes())

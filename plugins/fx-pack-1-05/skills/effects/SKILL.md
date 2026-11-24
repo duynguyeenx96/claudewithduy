@@ -7,7 +7,7 @@ description: FX Pack 1-05 · Số liệu & dựng. Add one of 9 talking-head vid
 
 # FX Pack 1-05 · Số liệu & dựng (9 hiệu ứng)
 
-Gói này nằm trong bộ FX Pack 1 của Claude with Duy (59 hiệu ứng miễn phí, chia 6 gói; gói đủ 59 là `fx-pack-1`). Gói này chỉ có 9 hiệu ứng bên dưới.
+Gói này nằm trong bộ FX Pack 1 của Claude with Duy (59 hiệu ứng miễn phí, chia 6 gói; gói đủ 59 là `fx-pack-1`). Gói này chỉ có 9 hiệu ứng bên dưới, cộng 3 hiệu ứng kèm theo (lean-in, slow-push, screenshot) (dùng chung mọi gói: điểm nhấn đặt được ở mọi câu, và thẻ ảnh khi người dùng đưa ảnh).
 Người dùng nhắc tới hiệu ứng không có ở đây: nói nó nằm trong gói nào (xem cuối file) và cách cài, đừng cố làm thay bằng hiệu ứng khác.
 
 The user is usually not technical. Keep replies short and friendly, do the work for them, and never ask them to run commands themselves.
@@ -20,11 +20,12 @@ Run `bash "${CLAUDE_SKILL_DIR}/scripts/setup.sh"`. Its last line is `READY <pyth
 
 ## 2. Get the video and the effect
 - Video: the user drags the file into the chat, or gives a path. A vertical phone video works best.
-- Effect: from `/effects <name>`, or from what they describe. Match their words to the table below. Unsure? Show them the list.
+- Images (optional): if they also give screenshots or photos (a post, their page, a price list), use them with `screenshot` where a line mentions them. Never ask for images; no images is fine.
+- Effect: from `/effects <name>`, or from what they describe. Match their words to the table below. No effect named: choose them yourself with `catalog.md`.
 
-## 3. Find the timing
-- If they say "on the word X" or "when I say ...", run `$PY scripts/words.py <video>` and use those times.
-- If they give no timing, apply the effect for the whole clip, or ask which part (one short question).
+## 3. Decide what goes where
+- They name the effect and the moment ("lean-in on the word X", "when I say ..."): run `$PY scripts/words.py <video>` and use those times.
+- They give only the video, an effect with no moment, or say "make it look good" / "thêm hiệu ứng": **read `catalog.md` next to this file and follow its auto-edit flow.** You decide which lines get an effect, which effect and what text, from the meaning of each line. Don't ask, and don't spread one effect over the whole clip.
 - Short windows look best: 1.5 to 4 seconds per effect.
 
 ## 4. Draft, check, render
@@ -32,9 +33,10 @@ Run `bash "${CLAUDE_SKILL_DIR}/scripts/setup.sh"`. Its last line is `READY <pyth
    ```json
    {"effects": [{"fx": "liquid-glass-graph", "start": 3.2, "end": 6.0}]}
    ```
-2. Check frames first (fast): `$PY custom/fx_vi.py --plan <plan.json> <video> <folder>/check.png --still 4.5`, using the middle of each effect. Look at the PNGs yourself. Fix the text, timing or options if something looks off (covers the face, cut off by the edge, unreadable).
+2. Check frames first (fast): `$PY custom/fx_vi.py --plan <plan.json> <video> <folder>/check.png --still 4.5`, using the middle of each effect. Look at the PNGs yourself. On a vertical video they show the phone UI in red: the top band (status bar, Dynamic Island, tabs, search), the caption band at the bottom and the button column on the right. Never cover the face (hard rule). Keep text out of the dark red; the light red is best avoided, but text may poke into it a little, e.g. in a close-up, rather than shrink or drop onto the face. Fix the text, timing or options if not.
+Every `--plan` run first checks the plan (`custom/plan_check.py`): it counts effects by what the viewer sees, not by name (e.g. `lean-in`, `slow-push`, `locked-on` and a pushing `spotlight` are all "zoom into the face", max 2 per minute), fixes extra zooms itself (keeps the text, drops the zoom) and prints `Soát plan, đã sửa: …` / `Soát plan, cảnh báo: …`. Mention the fixes to the user; for warnings, change the plan and run again.
 3. Render: `$PY custom/fx_vi.py --plan <plan.json> <video> <video-name>_effects.mp4`. The output keeps their original audio. It renders at 1080p by default; add `--width 2160` for 4K (slower).
-4. Tell them where the file is. Remind them in one line to watch it before posting: it drafts, they approve.
+4. Tell them where the file is, with a short table of what you chose (`second · effect · which line, why`). Remind them in one line to watch it before posting: it drafts, they approve.
 
 A single effect needs no plan: `$PY custom/fx_vi.py liquid-glass-graph <video> <out.mp4> --start 3 --end 6 --text "..." --opt key=value`.
 Always run `custom/fx_vi.py` (Vietnamese text works), never `scripts/fx.py` directly.
@@ -51,6 +53,9 @@ Always run `custom/fx_vi.py` (Vietnamese text works), never `scripts/fx.py` dire
 | 7 | `editor` | A full video-editor screen around you: viewer, timecode, tools, inspector sliders, a 6-track timeline with a moving playhead | `text` (title) |
 | 8 | `countdown-flip` | A 3, 2, 1 flip clock above your head | `from` |
 | 9 | `broll-split` | B-roll on top with a price-tag sticker, you below | `images`, `text` (tag) |
+| + | `lean-in` | (kèm theo) A fast punch-in on one word, optionally a number or key phrase pops up above your head | `zoom` (default 1.45, max 2), `speed`, `text`, `color` |
+| + | `slow-push` | (kèm theo) A slow cinematic push-in to your face while the room melts out of focus | `zoom` (default 1.6), `blur` |
+| + | `screenshot` | (kèm theo) Your own screenshot (only when the user gives one) pops up as a card: it scrolls to the right spot, a highlighter marks a line, a cursor clicks a button | `image` (required), `highlight` and `click` (boxes from `scripts/find_text.py`), `hl_at`, `click_at`, `click_text`, `y` |
 
 **Named looks** (same effect, a fancier look; they don't add to the count):
 - `liquid-glass-graph` with `look=bento`: the climbing graph moves to a smoked glass screen behind your head, with glass bento tiles in front of you (a donut, a KPI, bars). `text`, `from`, `to`, `donut` (`29%::label`), `kpi` (`672K::label`), `bars` (`197\|140\|124::label`).
