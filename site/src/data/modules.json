@@ -1560,7 +1560,9 @@
       "topic": "Review sản phẩm",
       "name": "Trước và sau",
       "video": "videos/truoc-va-sau.mp4",
-      "href": ""
+      "href": "",
+      "desc": "Cùng 1 clip quay: bên trái clip gốc, bên phải bản Claude dựng với chữ phát sáng, chữ sau đầu, thẻ cảnh báo, thẻ icon.",
+      "audio": true
     },
     {
       "topic": "Giáo dục",
