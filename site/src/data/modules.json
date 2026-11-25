@@ -38,8 +38,8 @@
         "Kế hoạch remake"
       ],
       "video": {
-        "before": "",
-        "after": ""
+        "main": "videos/modules/ref-catalog.mp4",
+        "audio": true
       },
       "credits": [
         {
@@ -74,7 +74,7 @@
         ],
         "cmd": "/ref-catalog:ref-catalog add <link video>",
         "plugin": "ref-catalog",
-        "note": "Muốn nghe được lời thoại thì cài thêm whisper-cli."
+        "note": "Cài xong gõ /ref-catalog:ref-catalog doctor để kiểm tra máy còn thiếu gì. Muốn nghe được lời thoại thì cài thêm whisper-cli."
       }
     },
     {

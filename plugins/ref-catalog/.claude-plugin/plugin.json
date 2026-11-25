@@ -1,8 +1,10 @@
 {
   "name": "ref-catalog",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Catalog tài nguyên, đối chiếu video tham khảo và kế hoạch remake.",
-  "author": { "name": "Claude with Duy" },
+  "author": {
+    "name": "Claude with Duy"
+  },
   "homepage": "https://github.com/duynguyeenx96/claudewithduy/tree/main/plugins/ref-catalog",
   "repository": "https://github.com/duynguyeenx96/claudewithduy"
 }

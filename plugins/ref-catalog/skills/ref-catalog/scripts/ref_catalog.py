@@ -2,12 +2,18 @@
 """ref-catalog: luồng nguồn tham khảo -> tải -> phân tích -> đối chiếu với tài nguyên hiện có -> kế hoạch remake.
 Catalog tài nguyên (library.json) là BẢN ĐỒ để agent đối chiếu nguồn với những gì bạn đang có.
 
+  Lần đầu sau khi cài:
+  ref_catalog.py doctor                    kiểm tra máy: hệ điều hành, công cụ đã có/thiếu, bản nào cần cập nhật, lệnh cài
   Bước 1, soạn catalog tài nguyên (làm trước):
-  ref_catalog.py library [--all]           quét thư mục tài nguyên: thumbs, lưới có tên, thêm mục mới vào library.json
+  ref_catalog.py lib-src                   liệt kê các nguồn tài nguyên đã chỉ định
+  ref_catalog.py lib-src add <thư-mục> [label=…]   thêm một nguồn (thư mục ở đâu cũng được, chủ đề gì cũng được)
+  ref_catalog.py lib-src rm <thư-mục|label>        bỏ một nguồn
+  ref_catalog.py lib-src new [thư-mục]     chưa có kho: tạo sẵn thư mục tài nguyên (video/ anh/ nhac/ sfx/ template/) và thêm làm nguồn
+  ref_catalog.py library [--all]           quét mọi nguồn: thumbs, lưới có tên, thêm mục mới vào library.json
   ref_catalog.py lib-set <id> desc=… tags=a,b note=…   ghi mô tả/tag cho một tài nguyên (Claude điền sau khi xem lưới)
   ref_catalog.py lib-check                 tài nguyên nào chưa mô tả (bản đồ chưa đủ dùng)
   Bước 2-4, nguồn:
-  ref_catalog.py init [thư-mục]            tạo workspace (config.json, refs/, library/)
+  ref_catalog.py init [thư-mục]            tạo workspace (config.json, refs/)
   ref_catalog.py add <link|file>…          thêm nguồn, tải, cắt khung, nghe tiếng -> in ID
   ref_catalog.py fetch <ID>                chạy lại bước tải/chuẩn bị tư liệu
   ref_catalog.py push <ID>                 kiểm analysis.json (match phải trỏ id có thật trong catalog), ghi catalog nguồn
@@ -229,7 +235,7 @@ def push(ws, rid):
     export(ws)
     gaps(ws)
     print(f"đã ghi {rid}: độ phủ {cov}")
-    und = [k for k, v in lib_db(ws)[1].items() if not v.get("desc")]
+    und = [k for k, v in lib_db(ws)[1].items() if not v.get("desc") and not v.get("missing_file")]
     if und:
         print(f"⚠ catalog tài nguyên còn {len(und)} mục chưa mô tả ({', '.join(und[:5])}…): độ phủ trên có thể sai")
 
@@ -265,29 +271,107 @@ def lib_db(ws):
 
 
 def lib_ids(ws):
-    return set(lib_db(ws)[1])
+    return {k for k, v in lib_db(ws)[1].items() if not v.get("missing_file")}
+
+
+AUDIO = {".mp3", ".wav", ".m4a", ".aac", ".ogg", ".flac"}
+IMAGE = {".png", ".jpg", ".jpeg", ".webp"}
+
+
+def lib_sources(ws):
+    """Các nguồn tài nguyên [{path, label}]. Hỗ trợ cấu hình cũ 'dir' (một thư mục trong workspace)."""
+    lc = ws.cfg.get("library", {})
+    src = [dict(x) for x in lc.get("sources", []) if x.get("path")]
+    if not src and lc.get("dir") and (ws.root / lc["dir"]).exists():
+        src = [{"path": lc["dir"], "label": lc["dir"]}]
+    for x in src:
+        pth = Path(x["path"]).expanduser()
+        x["abs"] = pth if pth.is_absolute() else (ws.root / pth).resolve()
+        x.setdefault("label", x["abs"].name)
+    return src
+
+
+def lib_src(ws, a):
+    lc = ws.cfg.setdefault("library", {})
+    src = lc.setdefault("sources", [])
+    if not a:
+        cur = lib_sources(ws)
+        if not cur:
+            print("chưa chỉ định nguồn tài nguyên nào. Hỏi người dùng tài nguyên nằm ở đâu rồi: lib-src add <thư-mục> [label=…]")
+        for x in cur:
+            print(f"{x['label']}\t{x['abs']}\t{'' if x['abs'].exists() else '(không tồn tại)'}")
+        return
+    op = a.pop(0)
+    if op == "add":
+        if not a:
+            die("thiếu thư mục: lib-src add <thư-mục> [label=…]")
+        pth = Path(a.pop(0)).expanduser().resolve()
+        if not pth.is_dir():
+            die(f"không thấy thư mục {pth}")
+        label = next((kv.split("=", 1)[1] for kv in a if kv.startswith("label=")), pth.name)
+        if any(Path(x["path"]).expanduser().resolve() == pth for x in src):
+            die(f"{pth} đã có trong nguồn")
+        src.append({"path": str(pth), "label": label})
+        print(f"đã thêm nguồn '{label}': {pth}. Chạy 'library' để quét.")
+    elif op == "new":
+        pth = Path(a[0]).expanduser().resolve() if a else ws.root / "tai-nguyen"
+        for sub in ("video", "anh", "nhac", "sfx", "template"):
+            (pth / sub).mkdir(parents=True, exist_ok=True)
+        if not any(Path(x["path"]).expanduser().resolve() == pth for x in src):
+            src.append({"path": str(pth), "label": pth.name})
+        print(f"đã tạo thư mục tài nguyên {pth} (video/ anh/ nhac/ sfx/ template/) và thêm làm nguồn '{pth.name}'. "
+              f"Bỏ tài nguyên vào đó (kể cả thứ tìm được theo GAPS.md) rồi chạy 'library'.")
+    elif op == "rm":
+        key = a[0] if a else die("thiếu thư mục hoặc label")
+        keep = [x for x in src if x.get("label") != key and Path(x["path"]).expanduser().resolve() != Path(key).expanduser().resolve()]
+        if len(keep) == len(src):
+            die(f"không có nguồn '{key}'")
+        lc["sources"] = keep
+        print(f"đã bỏ nguồn '{key}'. Chạy 'library' để cập nhật (mục cũ được đánh dấu missing_file).")
+    else:
+        die("lib-src [add <thư-mục> [label=…] | new [thư-mục] | rm <thư-mục|label>]")
+    ws.cfg_f.write_text(json.dumps(ws.cfg, ensure_ascii=False, indent=2) + "\n")
 
 
 def library(ws, force):
     from PIL import Image, ImageDraw
     lc = ws.cfg.get("library", {})
-    lib = ws.root / lc.get("dir", "library")
+    src = lib_sources(ws)
+    if not src:
+        die("chưa chỉ định nguồn tài nguyên. Hỏi người dùng tài nguyên (clip, ảnh, nhạc, template…) nằm ở thư mục nào, "
+            "có thể nhiều thư mục, chủ đề nào cũng được, rồi chạy: lib-src add <thư-mục> [label=…]. "
+            "Người dùng chưa có kho thì bỏ qua bước này: mọi thành phần của nguồn sẽ là 'thiếu'.")
     ext = {e.lower() for e in lc.get("extensions", [".mp4"])}
-    items = sorted(p for p in lib.rglob("*") if p.suffix.lower() in ext and "thumbs" not in p.parts) if lib.exists() else []
-    if not items:
-        die(f"không có tệp nào trong {lib} (đuôi {sorted(ext)})")
-    ids = [p.stem for p in items]
+    out = ws.root / "thumbs"
+    found = []  # (path, label)
+    for x in src:
+        if not x["abs"].exists():
+            print(f"⚠ bỏ qua nguồn '{x['label']}': không thấy {x['abs']}")
+            continue
+        for p in sorted(x["abs"].rglob("*")):
+            if p.suffix.lower() in ext and p.is_file() and out not in p.parents and not any(q.startswith(".") for q in p.parts):
+                found.append((p, x["label"]))
+    if not found:
+        die(f"không có tệp nào trong các nguồn ({', '.join(str(x['abs']) for x in src)}), đuôi {sorted(ext)}")
+    # id = tên tệp; trùng tên giữa các thư mục thì thêm tên thư mục cha
+    stems = [p.stem for p, _ in found]
+    items = []
+    for p, label in found:
+        i = p.stem if stems.count(p.stem) == 1 else f"{p.parent.name}-{p.stem}"
+        items.append((i, p, label))
+    ids = [i for i, _, _ in items]
     dup = {i for i in ids if ids.count(i) > 1}
     if dup:
-        die(f"trùng tên tệp (id phải duy nhất): {sorted(dup)}")
-    out = lib / "thumbs"
+        die(f"trùng tên tệp kể cả khi thêm tên thư mục (id phải duy nhất): {sorted(dup)}")
     out.mkdir(exist_ok=True)
     W = H = 300
-    for p in items:
-        t = out / f"{p.stem}.jpg"
+    for i, p, _ in items:
+        t = out / f"{i}.jpg"
         if t.exists() and not force:
             continue
-        if p.suffix.lower() in {".png", ".jpg", ".jpeg"}:
+        if p.suffix.lower() in AUDIO:
+            continue  # nhạc/âm thanh: không có hình, lưới chỉ in tên
+        if p.suffix.lower() in IMAGE:
             im = Image.open(p).convert("RGB")
             im.thumbnail((W, H))
             im.save(t, quality=85)
@@ -302,42 +386,53 @@ def library(ws, force):
     for g in range(0, len(items), per):
         sheet = Image.new("RGB", (c * W, r_ * (H + 22)), "white")
         d = ImageDraw.Draw(sheet)
-        for i, p in enumerate(items[g:g + per]):
-            x, y = (i % c) * W, (i // c) * (H + 22)
-            if (out / f"{p.stem}.jpg").exists():
-                im = Image.open(out / f"{p.stem}.jpg")
+        for k, (i, p, _) in enumerate(items[g:g + per]):
+            x, y = (k % c) * W, (k // c) * (H + 22)
+            if (out / f"{i}.jpg").exists():
+                im = Image.open(out / f"{i}.jpg")
                 sheet.paste(im, (x + (W - im.width) // 2, y))
-            d.text((x + 4, y + H + 3), p.stem[:38], font=fnt, fill="black")
+            else:
+                d.text((x + W // 2 - 30, y + H // 2 - 10), "(âm thanh)", font=fnt, fill="gray")
+            d.text((x + 4, y + H + 3), i[:38], font=fnt, fill="black")
         sheet.save(out / f"grid_{g // per + 1:02d}.jpg", quality=80)
     f, db = lib_db(ws)
     new = 0
-    for p in items:
-        kind = "ảnh" if p.suffix.lower() in {".png", ".jpg", ".jpeg"} else "video"
-        info = {"file": str(p.relative_to(ws.root)), "kind": kind}
-        if kind == "video":
+    for i, p, label in items:
+        sfx = p.suffix.lower()
+        kind = "ảnh" if sfx in IMAGE else "âm thanh" if sfx in AUDIO else "video"
+        info = {"file": str(p), "source": label, "kind": kind}
+        if kind != "ảnh":
             info["duration"] = probe(p)["duration"]
-        if p.stem not in db:
-            db[p.stem] = {"desc": "", "tags": [], "note": ""}
+        if i not in db:
+            db[i] = {"desc": "", "tags": [], "note": ""}
             new += 1
-        db[p.stem] |= info
-    gone = [k for k in db if k not in ids]
-    for k in gone:
-        db[k]["missing_file"] = True
+        db[i] |= info
+        db[i].pop("missing_file", None)
+    for k in db:
+        if k not in ids:
+            db[k]["missing_file"] = True
     f.write_text(json.dumps(db, ensure_ascii=False, indent=2))
     lib_md(ws)
-    print(f"{len(items)} tệp -> {out} ({(len(items) + per - 1) // per} lưới), {new} mục mới trong library.json, "
-          f"{sum(1 for v in db.values() if not v['desc'])} mục chưa mô tả (chạy lib-check)")
+    by = {}
+    for _, _, label in items:
+        by[label] = by.get(label, 0) + 1
+    print(f"{len(items)} tệp từ {len(by)} nguồn ({', '.join(f'{k}: {v}' for k, v in by.items())}) -> {out} "
+          f"({(len(items) + per - 1) // per} lưới), {new} mục mới trong library.json, "
+          f"{sum(1 for v in db.values() if not v['desc'] and not v.get('missing_file'))} mục chưa mô tả (chạy lib-check)")
 
 
 def lib_md(ws):
     _, db = lib_db(ws)
+    db = {k: v for k, v in db.items() if not v.get("missing_file")}
     L = ["# Catalog tài nguyên", "", f"{len(db)} mục. Sinh từ library.json (sửa bằng `lib-set`, đừng sửa tay). "
          "Agent dùng `id` ở đầu mỗi dòng khi đối chiếu (`matches[].match`).", ""]
-    for k in sorted(db):
+    for k in sorted(db, key=lambda k: (db[k].get("source", ""), k)):
         v = db[k]
+        if v.get("missing_file"):
+            continue
         tg = ", ".join(v.get("tags", []))
         L.append(f"- `{k}` [{v.get('kind')}{', ' + str(v['duration']) + 's' if v.get('duration') else ''}]: "
-                 f"{v.get('desc') or '(chưa mô tả)'}" + (f" · tag: {tg}" if tg else "") + (f" · ⚠ {v['note']}" if v.get("note") else ""))
+                 f"{v.get('desc') or '(chưa mô tả)'}" + (f" · nguồn: {v['source']}" if v.get("source") else "") + (f" · tag: {tg}" if tg else "") + (f" · ⚠ {v['note']}" if v.get("note") else ""))
     (ws.root / "LIBRARY.md").write_text("\n".join(L) + "\n")
 
 
@@ -362,8 +457,9 @@ def lib_set(ws, a):
 
 def lib_check(ws):
     _, db = lib_db(ws)
+    db = {k: v for k, v in db.items() if not v.get("missing_file")}
     if not db:
-        die("chưa có catalog tài nguyên, chạy 'library' trước")
+        die("chưa có catalog tài nguyên: chỉ định nguồn bằng 'lib-src add <thư-mục>' rồi chạy 'library'")
     todo = [k for k, v in sorted(db.items()) if not v.get("desc")]
     print(f"{len(db) - len(todo)}/{len(db)} mục đã mô tả" + ("" if not todo else ". Chưa mô tả: " + ", ".join(todo)))
 
@@ -387,20 +483,126 @@ def gaps(ws):
     print(f"GAPS.md: {sum(len(v) for v in rows.values())} mục từ {len({r for v in rows.values() for r, _ in v})} nguồn")
 
 
+# ---------- doctor: kiểm tra máy ----------
+PLUGIN_JSON_URL = "https://raw.githubusercontent.com/duynguyeenx96/claudewithduy/main/plugins/ref-catalog/.claude-plugin/plugin.json"
+
+
+def _fetch_json(url):
+    import urllib.request
+    try:
+        with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": "ref-catalog-doctor"}), timeout=4) as r:
+            return json.loads(r.read().decode())
+    except Exception:
+        return None
+
+
+def _ver(v):
+    return tuple(int(x) for x in "".join(c if c.isdigit() or c == "." else " " for c in v).split()[0].split(".") if x) if v else ()
+
+
+def doctor(ws_root):
+    import platform
+    osname = {"Darwin": "macOS", "Linux": "Linux", "Windows": "Windows"}.get(platform.system(), platform.system())
+    mac, win = osname == "macOS", osname == "Windows"
+    inst = (lambda pkg_brew, pkg_apt, pkg_win: f"brew install {pkg_brew}" if mac else f"winget install {pkg_win}" if win
+            else f"sudo apt install {pkg_apt}")
+    rows, missing, stale = [], [], []
+
+    def row(ok, name, ver, note=""):
+        rows.append(("✓" if ok is True else "⚠" if ok == "warn" else "✗", name, ver, note))
+
+    print(f"Hệ điều hành: {osname} {platform.mac_ver()[0] if mac else platform.release()} ({platform.machine()})")
+    py = sys.version.split()[0]
+    row(sys.version_info >= (3, 9), "python3", py, "" if sys.version_info >= (3, 9) else "cần 3.9 trở lên")
+    try:
+        import PIL
+        row(True, "Pillow", PIL.__version__)
+    except ImportError:
+        row(False, "Pillow", "-", f"{sys.executable} -m pip install Pillow")
+        missing.append("Pillow")
+    for tool in ("ffmpeg", "ffprobe"):
+        if shutil.which(tool):
+            v = (run([tool, "-version"]).stdout.split("\n") or [""])[0].split(" ")[2] if run([tool, "-version"]).stdout else "?"
+            row(True if (_ver(v) or (99,))[0] >= 5 else "warn", tool, v, "" if (_ver(v) or (99,))[0] >= 5 else "bản cũ, nên cập nhật")
+        else:
+            row(False, tool, "-", inst("ffmpeg", "ffmpeg", "Gyan.FFmpeg"))
+            missing.append(tool)
+    if shutil.which("yt-dlp"):
+        v = run(["yt-dlp", "--version"]).stdout.strip()
+        latest = (_fetch_json("https://pypi.org/pypi/yt-dlp/json") or {}).get("info", {}).get("version")
+        try:
+            age = (date.today() - date(*[int(x) for x in v.split(".")[:3]])).days
+        except Exception:
+            age = None
+        real = os.path.realpath(shutil.which("yt-dlp"))
+        how = ("brew upgrade yt-dlp" if "/Cellar/" in real or "homebrew" in real.lower()
+               else "pip install -U yt-dlp" if "python" in real.lower() or "site-packages" in real or "/.local/" in real
+               else "winget upgrade yt-dlp.yt-dlp" if win else "yt-dlp -U")
+        if latest and _ver(latest) > _ver(v):
+            row("warn", "yt-dlp", v, f"có bản mới {latest}: {how} (YouTube/TikTok hay đổi, bản cũ dễ tải lỗi)")
+            stale.append("yt-dlp")
+        elif not latest and age is not None and age > 60:
+            row("warn", "yt-dlp", v, f"đã {age} ngày, nên cập nhật: {how}")
+            stale.append("yt-dlp")
+        else:
+            row(True, "yt-dlp", v, "bản mới nhất" if latest else "")
+    else:
+        row(False, "yt-dlp", "-", "brew install yt-dlp" if mac else "winget install yt-dlp.yt-dlp" if win else "pip install -U yt-dlp")
+        missing.append("yt-dlp")
+    cfg = {}
+    if (ws_root / "config.json").exists():
+        cfg = json.loads((ws_root / "config.json").read_text())
+    model = Path(cfg.get("transcribe", {}).get("model") or json.loads((HERE.parent / "config.example.json").read_text())["transcribe"]["model"]).expanduser()
+    if shutil.which("whisper-cli"):
+        row(True if model.exists() else "warn", "whisper-cli", "có", "" if model.exists() else
+            f"thiếu model {model.name}: tải về {model} (huggingface.co/ggerganov/whisper.cpp), không có vẫn chạy được nhưng không nghe lời")
+    else:
+        row("warn", "whisper-cli (tuỳ chọn)", "-", ("brew install whisper-cpp" if mac else "build whisper.cpp") +
+            "; không có thì chỉ phân tích bằng khung hình")
+    here_v = json.loads((HERE.parent.parent.parent / ".claude-plugin" / "plugin.json").read_text()).get("version", "?") \
+        if (HERE.parent.parent.parent / ".claude-plugin" / "plugin.json").exists() else "?"
+    remote = (_fetch_json(PLUGIN_JSON_URL) or {}).get("version")
+    if remote and _ver(remote) > _ver(here_v):
+        row("warn", "plugin ref-catalog", here_v, f"có bản {remote}: chạy /plugin rồi cập nhật ref-catalog")
+        stale.append("plugin")
+    else:
+        row(True, "plugin ref-catalog", here_v, "bản mới nhất" if remote else "(không kiểm tra được bản mới: offline?)")
+    w = max(len(r[1]) for r in rows)
+    for mark, name, ver, note in rows:
+        print(f"  {mark} {name.ljust(w)}  {ver:<12} {note}".rstrip())
+    if cfg:
+        src = lib_sources(WS(ws_root))
+        print(f"Workspace: {ws_root} · {len(src)} nguồn tài nguyên" + ("" if src else " (chưa chỉ định: lib-src add <thư-mục> hoặc lib-src new)"))
+    else:
+        print(f"Workspace: chưa có ở {ws_root} (chạy init)")
+    if missing:
+        print("THIẾU: " + ", ".join(missing) + ". Cài theo lệnh ở trên rồi chạy lại doctor.")
+    elif stale:
+        print("CHẠY ĐƯỢC, nên cập nhật: " + ", ".join(stale))
+    else:
+        print("SẴN SÀNG")
+
+
 def main():
     a = sys.argv[1:]
     if not a or a[0] in ("-h", "--help"):
         print(__doc__)
         return
     cmd = a.pop(0)
+    if cmd == "doctor":
+        root = os.environ.get("REF_CATALOG_WS", ".")
+        if "--ws" in a:
+            root = a[a.index("--ws") + 1]
+        doctor(Path(root).expanduser().resolve())
+        return
     if cmd == "init":
         root = Path(a[0] if a else ".").expanduser().resolve()
         root.mkdir(parents=True, exist_ok=True)
         if not (root / "config.json").exists():
             shutil.copy(HERE.parent / "config.example.json", root / "config.json")
         (root / "refs").mkdir(exist_ok=True)
-        (root / json.loads((root / "config.json").read_text()).get("library", {}).get("dir", "library")).mkdir(exist_ok=True)
-        print(f"workspace: {root}\nSửa {root / 'config.json'} (niche, model Whisper, các trường phân tích) rồi chạy 'add <link>'")
+        print(f"workspace: {root}\nChỉ định nguồn tài nguyên: 'lib-src add <thư-mục> [label=…]' (bao nhiêu thư mục cũng được), "
+              f"rồi 'library'. Sửa {root / 'config.json'} nếu cần (Whisper, các trường phân tích).")
         return
     ws = open_ws(a)
     if cmd == "add":
@@ -412,6 +614,9 @@ def main():
                 print(f"{src} đã có: {dup}")
                 continue
             fetch(ws, ws.next_id(), src)
+        if not lib_sources(ws):
+            print("⚠ chưa chỉ định nguồn tài nguyên: hỏi người dùng tài nguyên nằm ở thư mục nào (có thể nhiều thư mục) "
+                  "rồi 'lib-src add <thư-mục> label=…' + 'library'. Chưa có kho thì đối chiếu sẽ ra toàn 'thiếu'.")
     elif cmd == "fetch":
         fetch(ws, a[0])
     elif cmd == "push":
@@ -432,6 +637,8 @@ def main():
     elif cmd == "export":
         export(ws)
         print("đã xuất CATALOG.md + catalog.csv")
+    elif cmd == "lib-src":
+        lib_src(ws, a)
     elif cmd == "library":
         library(ws, "--all" in a)
     elif cmd == "lib-set":

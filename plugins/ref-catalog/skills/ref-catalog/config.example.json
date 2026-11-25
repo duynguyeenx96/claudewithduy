@@ -1,6 +1,6 @@
 {
   "name": "Kho nguồn tham khảo của tôi",
-  "niche": "Mô tả ngắn ngách / kênh của bạn (Claude đọc dòng này để đánh giá reel hợp hay không)",
+  "niche": "",
   "sources": {
     "cookies_browser": "chrome",
     "note": "Reel giới hạn thì yt-dlp dùng phiên đăng nhập của trình duyệt này. Bỏ trống nếu không muốn."
@@ -8,25 +8,29 @@
   "transcribe": {
     "engine": "whisper-cli",
     "model": "~/.cache/hyperframes/whisper/models/ggml-medium.bin",
-    "language": "vi",
+    "language": "auto",
     "note": "engine: whisper-cli (whisper.cpp) | none. Không có model thì đặt none, Claude vẫn phân tích bằng khung hình."
   },
   "library": {
-    "dir": "library",
+    "sources": [],
     "extensions": [
       ".mp4",
       ".mov",
       ".webm",
       ".png",
       ".jpg",
-      ".jpeg"
+      ".jpeg",
+      ".webp",
+      ".mp3",
+      ".wav",
+      ".m4a"
     ],
     "match_labels": [
       "có",
       "gần giống",
       "thiếu"
     ],
-    "note": "Bản đồ tài nguyên bạn đang có (clip, ảnh nền, nhạc, template…). Soạn TRƯỚC khi phân tích nguồn: chạy 'library', xem lưới, 'lib-set' mô tả + tag. match_labels theo thứ tự: [khớp đúng, thay được, thiếu]."
+    "note": "Nguồn tài nguyên bạn đang có: bao nhiêu thư mục cũng được, ở đâu cũng được, chủ đề gì cũng được (b-roll, nhạc, template, clip cũ…). Thêm bằng 'lib-src add <thư-mục> label=…', không sửa tay. Plugin chỉ đọc, không ghi vào các thư mục này. match_labels theo thứ tự: [khớp đúng, thay được, thiếu]."
   },
   "analysis": {
     "fields": [
@@ -91,5 +95,6 @@
         "hint": "theo cảnh: {scene, t, use (id trong catalog hoặc null), gap (thiếu gì nếu use null), note}"
       }
     ]
-  }
+  },
+  "niche_note": "Tuỳ chọn: một dòng về kênh để chấm 'vì sao ăn' sát hơn. Bỏ trống thì đánh giá chung."
 }
