@@ -386,8 +386,10 @@
           const k = ramp(t, ap, ap + 0.5);
           const sc = k > 0 ? backOut(k) : 0;
           const vis = (s.ok && s.x > -80 && s.x < W + 80 && s.y > -80 && s.y < H + 80 ? 1 : 0) * mapK;
+          // intro: POI pins that land on the title/address block (bottom-left) stay hidden until their beat
+          const inTitle = t < T.intro.start + T.intro.dur && !isProj && s.y > 1000 && s.y < 1600 && s.x < 960;
           place(it.pin, s.x - 32, s.y - 78);
-          it.pin.style.opacity = vis * clamp(k * 2, 0, 1);
+          it.pin.style.opacity = (inTitle ? 0 : vis) * clamp(k * 2, 0, 1);
           it.pin.style.scale = sc;
           it.pin.style.transformOrigin = "50% 100%";
           // ring pulse on active
