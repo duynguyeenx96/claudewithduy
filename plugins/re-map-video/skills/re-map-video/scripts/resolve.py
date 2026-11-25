@@ -33,34 +33,13 @@ def from_link(url):
     return {"name": name, "lat": float(m.group(1)), "lon": float(m.group(2)), "url": final}
 
 
-def photon(q, near=None, limit=3):
-    """Fallback geocoder (Komoot Photon, OSM data) for networks where Nominatim is blocked or down."""
-    params = {"q": q, "limit": limit}
-    if near:
-        params["lat"], params["lon"] = near
-    u = "https://photon.komoot.io/api/?" + urllib.parse.urlencode(params)
-    feats = json.load(urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": UA}), timeout=30))["features"]
-    out = []
-    for f in feats:
-        p = f["properties"]
-        if p.get("countrycode", "VN") != "VN":
-            continue
-        lon, lat = f["geometry"]["coordinates"]
-        parts = [p.get(k) for k in ("name", "housenumber", "street", "district", "city", "state")]
-        out.append({"lat": lat, "lon": lon, "display_name": ", ".join(x for x in parts if x)})
-    return out
-
-
 def nominatim(q, near=None, limit=3):
     params = {"q": q, "format": "json", "limit": limit, "countrycodes": "vn"}
     if near:
         la, lo = near
         params["viewbox"] = f"{lo-0.35},{la+0.3},{lo+0.35},{la-0.3}"
     u = "https://nominatim.openstreetmap.org/search?" + urllib.parse.urlencode(params)
-    try:
-        res = json.load(urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": UA}), timeout=30))
-    except OSError:  # DNS blocked by some ISPs, rate limit, outage
-        return photon(q, near, limit)
+    res = json.load(urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": UA}), timeout=30))
     time.sleep(1.1)  # Nominatim policy: 1 req/s
     return res
 

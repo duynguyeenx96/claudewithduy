@@ -1390,8 +1390,9 @@
         "Link Google Maps"
       ],
       "video": {
-        "main": "videos/modules/bat-dong-san.mp4",
-        "audio": true
+        "before": "videos/modules/bat-dong-san-before.mp4",
+        "after": "videos/modules/bat-dong-san-after.mp4",
+        "audio": "after"
       },
       "credits": [
         {
