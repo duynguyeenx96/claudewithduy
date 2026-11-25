@@ -19,3 +19,6 @@ site/.wrangler/
 
 # thư mục dựng video (project HyperFrames, tách nền, bản xuất), file nặng
 work/
+
+# thư viện plugin cài khi chạy tay (dạng plugin nằm ở CLAUDE_PLUGIN_DATA)
+plugins/*/skills/*/.deps/

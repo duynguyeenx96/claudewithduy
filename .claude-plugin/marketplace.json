@@ -19,6 +19,20 @@
       ]
     },
     {
+      "name": "xoa-logo-gemini",
+      "source": "./plugins/xoa-logo-gemini",
+      "description": "Xoá dấu sao Gemini/Veo trên ảnh và video, chạy ngay trên máy. Kéo file vào Claude Code là xong.",
+      "category": "video",
+      "license": "MIT",
+      "keywords": [
+        "gemini",
+        "veo",
+        "watermark",
+        "video",
+        "ảnh"
+      ]
+    },
+    {
       "name": "fx-pack-1",
       "source": "./plugins/fx-pack-1",
       "description": "FX Pack 1: đủ 59 hiệu ứng cho video người nói, bám theo mặt, chữ và ảnh chui ra sau đầu. Muốn từng nhóm 10 hiệu ứng thì cài fx-pack-1-01 … 06.",

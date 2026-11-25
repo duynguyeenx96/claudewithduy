@@ -1,0 +1,10 @@
+{
+  "name": "xoa-logo-gemini-deps",
+  "private": true,
+  "description": "Bản gwr cố định đã audit (commit ddd67a7, npm 1.0.46) + sharp; playwright để gwr xử lý video.",
+  "dependencies": {
+    "@pilio/gemini-watermark-remover": "1.0.46",
+    "sharp": "0.35.5",
+    "playwright": "1.63.0"
+  }
+}

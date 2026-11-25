@@ -1,0 +1,9 @@
+{
+  "name": "xoa-logo-gemini",
+  "version": "1.0.0",
+  "description": "Xoá dấu sao Gemini/Veo trên ảnh và video, chạy ngay trên máy. Kéo file vào Claude Code là xong.",
+  "author": { "name": "Claude with Duy" },
+  "homepage": "https://github.com/duynguyeenx96/claudewithduy/tree/main/plugins/xoa-logo-gemini",
+  "repository": "https://github.com/duynguyeenx96/claudewithduy",
+  "license": "MIT"
+}

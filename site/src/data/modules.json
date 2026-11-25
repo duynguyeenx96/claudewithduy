@@ -1300,15 +1300,15 @@
     {
       "id": "xoa-logo-gemini",
       "name": "Xoá logo Gemini",
-      "desc": "Xoá dấu sao Gemini/Veo trên ảnh và video, ngay trên máy.",
+      "desc": "Xoá dấu sao Gemini/Veo trên ảnh và video, ngay trên máy. Kéo file vào Claude Code là xong, kể cả dấu sao nhỏ nhấp nháy của Veo.",
       "chips": [
-        "Kéo thả",
+        "Kéo file vào Claude Code",
         "Ảnh và video",
         "Chạy local"
       ],
       "video": {
-        "before": "videos/modules/xoa-logo-gemini-before.mp4",
-        "after": "videos/modules/xoa-logo-gemini-after.mp4"
+        "main": "videos/modules/xoa-logo-gemini.mp4",
+        "audio": true
       },
       "credits": [
         {
@@ -1327,13 +1327,16 @@
         }
       ],
       "status": "ready",
-      "tool": {
-        "line": "Kéo ảnh hoặc video vào. Không thấy dấu sao thì giữ nguyên.",
+      "skill": {
         "req": [
-          "Python",
-          "Node.js"
+          "Claude Code",
+          "Node.js",
+          "FFmpeg",
+          "Python 3"
         ],
-        "zip": "xoa-logo-gemini"
+        "cmd": "/xoa-logo-gemini:xoa-logo <kéo ảnh hoặc video vào>",
+        "plugin": "xoa-logo-gemini",
+        "note": "Kéo file vào Claude Code là đường dẫn tự dán vào. Lần đầu plugin tự cài thư viện, và Chromium (khoảng 150 MB) để xử lý video."
       }
     },
     {
